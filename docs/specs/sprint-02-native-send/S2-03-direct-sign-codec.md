@@ -4,6 +4,17 @@
 **Depends on:** S2-01/S2-02 snapshot types
 **Produces:** deterministic SignDoc, digest, TxRaw, and local transaction hash; no signer ownership or network broadcast
 
+> **Amended.** The gas limit below is no longer what the codec uses. A send declares
+> `6_000_000` and a deposit `600_000_000`, both matching the Android kit, which is the
+> reference for anything the two kits can do alike. THORChain charges a fixed native fee
+> rather than metering gas, so the declared limit does not change what a send costs. The
+> THORNode example cited here remains the origin of the wire shape — message type, empty
+> `Fee.amount`, denom — but no longer of the limit. Pinned digests were re-approved
+> against the current limits.
+>
+> `MsgDeposit` was added after this slice: it carries its own memo inside the message
+> while `TxBody.memo` stays empty, and it has no recipient.
+
 ## Verification policy
 
 All builds, tests, mutants, simulator checks, Maestro checks, and other

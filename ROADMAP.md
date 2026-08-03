@@ -17,20 +17,20 @@ Protocol fact
 
 ## Major Milestones
 
-| Sprint | In-app outcome | Core capabilities | Live gate |
+| Sprint | Status | In-app outcome | Core capabilities |
 |---|---|---|---|
-| 1. Foundation + read-only RUNE | The user enables RUNE and sees the correct `thor1…` address and balance after restart | package, evolving `iOS Example`, Maestro acceptance, network identity, derivation/address, THORNode reads, account sync, UW manager/adapter/parser, MarketKit metadata | Example Maestro fixture suite + Unstoppable AppTests/manual create/import → enable RUNE → address/balance → terminate/relaunch/App Status → repeat sync |
-| 2. Native RUNE send | The user sends RUNE and receives a tx hash | account number/sequence, fee, protobuf sign doc, signer boundary, broadcast, preflight validation | mainnet transfer between controlled accounts and inclusion confirmation |
-| 3. Transaction history and status | The wallet displays inbound/outbound RUNE transactions and their statuses | Cosmos tx search, pagination, normalized transaction model, pending reconciliation, explorer | the transaction sent in Sprint 2 transitions from pending → success after relaunch |
-| 4. Native THOR actions | The THOR-native deposit/memo operations required by the wallet are supported | `MsgDeposit`, memo validation, dynamic native fee, halt/Mimir/inbound checks, refund semantics | safe minimal mainnet action with outcome confirmation |
-| 5. THOR assets and token model | The wallet correctly displays permitted THORChain denoms beyond native RUNE | opaque/slash denoms, metadata resolution, pagination, decimals, synth/trade-asset policy | one confirmed non-RUNE denom syncs and survives relaunch |
-| 6. Provider reliability | User-supplied and public nodes work predictably | custom endpoints, health/identity probe, failover, rate limiting, backoff, telemetry, privacy policy | controlled wrong-chain/stale/429/503 scenarios and recovery without state loss |
-| 7. Native swap v2 | The existing multichain swap provider gains an internal THOR-native implementation | quote/inbound/memo/streaming swap, no allowance for the native path, action tracking/refund | real small swap with quote → broadcast → Midgard final state |
-| 8. Release hardening | The kit is ready for a separate public repository and release | API stability, migrations, fuzz/fixtures, performance, security review, final docs/demo polish, CI matrix | clean install, cold start, long-running sync, upgrade from prior cache schema |
+| 1. Foundation + read-only RUNE | done | The user enables RUNE and sees the correct `thor1…` address and balance after restart | package, `iOS Example`, network identity, derivation/address, THORNode reads, account sync, UW manager/adapter/parser, MarketKit metadata |
+| 2. Native RUNE send | done | The user sends RUNE and receives a tx hash | account number/sequence, fee, protobuf sign doc, signer boundary, broadcast, preflight quote |
+| 3. Transaction history and status | done | The wallet displays inbound/outbound transactions and their statuses | Midgard actions, pagination, normalized transaction model, pending reconciliation, explorer |
+| 4. Native THOR actions | done | The wallet performs deposit/memo operations | `MsgDeposit`, memo validation, native fee, halt/mimir checks |
+| 5. THOR assets and token model | done | The wallet displays THORChain denoms beyond native RUNE | opaque and `x/` denoms, decimals, per-denom balance and send, RUNE-charged fee |
+| 6. Provider reliability | partial | User-supplied and public nodes work predictably | endpoint pool, health/identity probe, failover, backoff, rate-limit reporting. Telemetry and a published privacy policy are still open |
+| 7. Native swap v2 | not started | The multichain swap provider gains an internal THOR-native implementation | quote/inbound/memo/streaming swap, action tracking and refunds. The wallet currently swaps through the existing THORChain/Maya providers, which use this kit only to sign and broadcast |
+| 8. Release hardening | partial | The kit ships from a public repository | released as `1.0.0` from `horizontalsystems/ThorChainKit.Swift`. API stability, fuzz/fixtures, performance, and a security review are still open |
 
 ## Version Boundaries
 
-- `v1`: native RUNE account, send, history/status, basic THOR actions, production-grade provider behavior.
+- `v1`: native RUNE account, send, history/status, THOR deposits, THORChain tokens, production-grade provider behavior.
 - `v2`: internal THOR-native swap. The existing multichain THORChain provider continues to operate until a separate migration decision is made.
 - Key handling follows TronKit and EvmKit: the kit owns derivation and signing through a conventional `Signer`, built with `Signer.instance(seed:)` or `Signer.instance(privateKey:)`, with `Signer.address(seed:)` for address lookup. Anything TronKit does this way, ThorChainKit does the same way.
 - Vultisig MPC/TSS stays outside that conventional path. `ISigner` is the seam a substitute signer implements, so an external device or a test double can drive the send pipeline without holding a seed.
@@ -43,14 +43,11 @@ Protocol fact
 - Significant state is not published from a stale lifecycle generation.
 - Integration goes through the standard Unstoppable adapter contract without a hidden special case, unless the spec explicitly proves otherwise.
 - A real user scenario is completed on a controlled account, with the endpoint, block height/tx ID, and outcome recorded.
-- The Maestro acceptance flow for the added `iOS Example` scenario is green; fixture/live mode is distinguishable in artifacts. Maestro is neither added to nor run against Unstoppable.
-- Gimle evidence is updated; remaining index defects and fallbacks are documented.
+- Whatever the Android kit already does is done the same way, unless a platform fact forces otherwise and the spec says which.
 
-## Critical Cross-Repository Dependencies
+## Cross-Repository State
 
-`ThorChainKit` is created separately. However, the end-to-end release will require coordinated changes:
-
-1. New `ThorChainKit.Swift` repository and release.
-2. MarketKit: new `BlockchainType`, RUNE chain/token metadata, decimals `8`, explorer template, backend/cache support, release.
-3. Unstoppable `WalletCore`: dependency bump, manager/wrapper/adapter/parser/factory/Core wiring.
-4. App-level `AppTests` and manual product acceptance; UI for custom nodes and advanced THOR actions if needed. Maestro remains only in the kit repository.
+1. `ThorChainKit.Swift` — public at `horizontalsystems/ThorChainKit.Swift`, released as `1.0.0`.
+2. MarketKit — `BlockchainType.thorChain`, RUNE and THORChain token metadata, decimals `8`, explorer template: in place.
+3. Unstoppable `WalletCore` — consumes the kit by tag; manager, wrapper, adapters, transaction converter, send and swap wiring: in place.
+4. App-level acceptance and the UI for custom nodes: in place. Advanced THOR actions beyond deposit remain open.

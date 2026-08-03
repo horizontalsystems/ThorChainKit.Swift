@@ -4,6 +4,22 @@
 **Depends on:** S2-01 and Sprint 1 endpoint/read infrastructure
 **Produces:** a coherent authoritative snapshot and immutable quote; no signing
 
+> **Partly superseded.** The rule this slice exists for still holds: one family, one
+> proven height, one coherent snapshot. What changed since, and what the code now does:
+>
+> - Five routes, not ten: `account`, `spendable`, `network-fee`, `mimir`,
+>   `recipient-account`. A token send reads `spendable` twice, for its own denom and for
+>   the RUNE the fee is charged in.
+> - Mimir arrives as one map from `/thorchain/mimir`. A key absent from the map is the
+>   `-1` the per-key route used to report.
+> - `node-version` is gone. It gated a module-address list the kit derives locally from
+>   module names, so it protected nothing and would have refused every send once the
+>   chain moved past 3.19.3.
+> - `auth-params` is gone. The memo limit is a protocol constant the policy carries.
+> - `SendPolicy.operationDeadline` is gone and the preflight runner sets no deadline of
+>   its own; the transport bounds the wait, as it does in the Android kit.
+> - A deposit has no recipient, so it skips `recipient-account` and ends on `mimir`.
+
 ## Goal
 
 Authorize review only from one provider family at one proven Cosmos height. A quote must combine account, sequence, balance, native fee, halt, memo, module-account, and network identity facts without mixing time or providers.
@@ -325,7 +341,14 @@ Vultisig proves the required THOR data categories but fetches them independently
 ## Tests Before Implementation
 
 - exact success fixtures cover every route's pinned proof mode and each of the three exact family IDs;
-- `RESTHeaderProof` requires exact request/response `x-cosmos-block-height`; a proxy-stripped or mismatched header fails that route rather than falling back silently;
+- ~~`RESTHeaderProof` requires exact request/response `x-cosmos-block-height`; a proxy-stripped
+  or mismatched header fails that route rather than falling back silently~~ — **WITHDRAWN.** Two errors compounded here. The header name is wrong: cosmos
+  gRPC-gateway returns `Grpc-Metadata-X-Cosmos-Block-Height`, and `x-cosmos-block-height`
+  is the *request* header the client sets itself. And no mainnet provider we use (keplr,
+  rorcual, ibs) returns a height header on these routes at all, so enforcing the rule
+  blocked every send with `heightUnproven`. Height proof for REST routes is now disabled
+  outright; the routes are unpinned while the snapshot still claims otherwise. Closing
+  that gap needs a mechanism providers actually support — not a stricter rule.
 - `CometABCIProof` decodes the value from the same ABCI response, requires `response.height == H`, and rejects wrong path/encoding, missing/mismatched height, and a REST-value/ABCI-height merge;
 - `BodyHeightProof` is accepted only for a pinned schema whose authoritative evaluated-height field equals H; lookalike/latest/pagination heights fail;
 - a THORNode fixture where `?height=H` executes or responds at `H+1` is rejected rather than accepted as pinned;
