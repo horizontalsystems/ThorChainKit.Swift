@@ -106,7 +106,10 @@ final class TransactionManager: @unchecked Sendable {
             // Midgard notation, matching the record that will replace this one once the
             // action appears: `in` is the sending side, `out` the receiving side.
             incoming: [CoinTransfer(address: record.sender, asset: asset, amount: amount)],
-            outgoing: [CoinTransfer(address: record.recipient, asset: asset, amount: amount)],
+            // A deposit has no recipient, and a transfer to nowhere cannot be read back:
+            // the stored form rejects an empty address. Writing one made the row
+            // invisible until Midgard replaced it with an indexed action.
+            outgoing: record.recipient.isEmpty ? [] : [CoinTransfer(address: record.recipient, asset: asset, amount: amount)],
             // Quoted at preflight and charged in RUNE whatever was sent.
             fee: record.quotedNativeFee.isEmpty ? nil : BigUInt(record.quotedNativeFee)
         )

@@ -199,6 +199,24 @@ final class TransactionHistoryTests: XCTestCase {
         withExtendedLifetime(cancellable) {}
     }
 
+    func testADepositIsPublishedAsPendingBeforeMidgardEverSeesIt() throws {
+        // A swap of RUNE is a deposit: it has no recipient. The row still has to reach
+        // the transactions tab the moment it is journaled, not when Midgard indexes it.
+        let fixture = try journalFixture(insertJournal: false)
+        try fixture.insertBroadcasting(asDeposit: true)
+        let pending = PendingTransactionManager(journal: fixture.journal)
+        let repository = TransactionRepository(storage: fixture.storage, persistenceNamespace: fixture.namespace)
+        let manager = TransactionManager(storage: fixture.storage, repository: repository, journal: fixture.journal, pendingTransactionManager: pending)
+        var emissions = [[Transaction]]()
+        let cancellable = manager.transactionsPublisher.sink { emissions.append($0) }
+        try manager.reconcileLocalTransactions()
+
+        XCTAssertEqual(emissions.last?.first?.transactionId, fixture.transactionID)
+        XCTAssertEqual(emissions.last?.first?.status, "pending")
+        XCTAssertEqual(emissions.last?.first?.incoming.first?.address, fixture.sender.raw)
+        withExtendedLifetime(cancellable) {}
+    }
+
     func testRejectedLocalJournalTransactionBecomesFailedHistoryRecord() throws {
         let fixture = try journalFixture()
         let pending = PendingTransactionManager(journal: fixture.journal)
@@ -513,15 +531,15 @@ private struct JournalFixture {
     let recipient: Address
     let owner: Data
 
-    func insertBroadcasting(denom: Denom = .rune, quotedNativeFee: Data = Data()) throws {
+    func insertBroadcasting(denom: Denom = .rune, quotedNativeFee: Data = Data(), asDeposit: Bool = false) throws {
         let reservations = SequenceReservationStore(storage: storage)
         XCTAssertTrue(try reservations.acquire(SequenceReservationKey(persistenceNamespace: namespace, senderPayload: sender.payload, sequence: 7), ownerToken: owner))
         try journal.insertBroadcasting(
             transaction: SignedTransaction(txRaw: Data([1, 2]), transactionID: transactionID),
             senderPayload: sender.payload,
-            recipientPayload: recipient.payload,
+            recipientPayload: asDeposit ? nil : recipient.payload,
             sender: sender.raw,
-            recipient: recipient.raw,
+            recipient: asDeposit ? "" : recipient.raw,
             amount: Data([42]),
             denom: denom,
             quotedNativeFee: quotedNativeFee,
