@@ -288,7 +288,6 @@ actor TransactionSender {
         guard let address else { throw SendError.operationUnavailable }
         if let exact = amount.exactAmount, exact == 0 { throw SendError.invalidAmount }
         guard recipient.network == address.network else { throw SendError.invalidRecipient }
-        guard recipient != address else { throw SendError.selfRecipient }
         try Task.checkCancellation()
         _ = memo
         throw SendError.operationUnavailable

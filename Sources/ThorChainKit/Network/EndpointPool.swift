@@ -50,8 +50,17 @@ actor EndpointPool {
         }
     }
 
+    // The height carried by a lease the identity probe has just produced is seconds old
+    // at most, and asking for it again cost a second round trip on every read — on a slow
+    // node that was seven seconds of the thirty a cold start took.
+    private static let leaseHeightFreshness: TimeInterval = 5
+
     func readLease(excludingFamilyIds: Set<String>) async throws -> EndpointLease {
+        let started = Date()
         let cachedLease = try await lease(excludingFamilyIds: excludingFamilyIds)
+        if let cacheDate, clock.now < cacheDate.advanced(seconds: Self.leaseHeightFreshness) {
+            return cachedLease
+        }
         let latestBlock = await probe.latestBlock(family: cachedLease.family)
         if case let .success(block) = latestBlock,
            block.chainId == cachedLease.verifiedChainId,

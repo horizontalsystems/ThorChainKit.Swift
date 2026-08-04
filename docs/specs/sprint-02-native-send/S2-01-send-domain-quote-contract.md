@@ -4,6 +4,12 @@
 **Depends on:** completed Sprint 1 public/network/address foundation
 **Produces:** the complete public send type graph and an input-validating quote facade; no signing or broadcast yet
 
+
+> **Amended.** `selfRecipient` is gone: sending to one's own address is refused by no
+> other chain in the wallet, and the Android wallet forbids it only for TRX and ZEC,
+> both for protocol reasons THORChain does not share. The chain accepts the transfer
+> and charges the fee, and the history model already renders it as sent-to-self.
+
 ## Goal
 
 Define one host-neutral API that separates mutable UI input, immutable review data, user authorization, and broadcast outcome. The API cannot expose secret material or allow the host to assemble authoritative fee/sequence/sign bytes.
@@ -280,7 +286,6 @@ public enum BroadcastCodespaceCategory: String, Sendable {
 public enum SendError: Error, Equatable, Sendable {
     case invalidAmount
     case invalidRecipient
-    case selfRecipient
     case recipientIsModule
     case memoTooLong(maxUTF8Bytes: Int)
     case chainHalted

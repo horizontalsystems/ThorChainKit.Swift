@@ -17,7 +17,6 @@ final class Syncer: @unchecked Sendable {
     private var loopTask: Task<Void, Never>?
     private var refreshTask: Task<Void, Never>?
     private var refreshInFlight = false
-    private var refreshRequested = false
 
     init(
         accountInfoManager: AccountInfoManager,
@@ -84,7 +83,6 @@ final class Syncer: @unchecked Sendable {
             refreshTask?.cancel()
             refreshTask = nil
             refreshInFlight = false
-            refreshRequested = false
             publish(.idle(cached: accountInfoManager.accountState != nil))
             return activeGeneration
         }
@@ -96,10 +94,18 @@ final class Syncer: @unchecked Sendable {
 
     private func refreshOnDispatcher() {
         guard running else { return }
-        if refreshInFlight { refreshRequested = true; return }
+        // A tick landing on a running refresh is dropped, not queued: replaying it the
+        // moment the slow one finishes turns a bad network into back-to-back syncing with
+        // no pause at all. The Android kit drops it the same way.
+        if refreshInFlight { return }
         refreshInFlight = true
         let activeGeneration = generation
-        publish(.syncing(previous: accountInfoManager.accountState))
+        // A tick never downgrades a synced state: announcing every refresh made the
+        // balance blink into "syncing" every fifteen seconds. TronKit and the Android
+        // kit both set Syncing only when the timer becomes ready, never per tick.
+        if case .synced = publishing.snapshot.syncState {} else {
+            publish(.syncing(previous: accountInfoManager.accountState))
+        }
         // Midgard history is independent of the THORNode account/balance read.
         // This mirrors TronKit: a failed balance refresh must not leave history stale.
         transactionSyncer?.sync()
@@ -136,7 +142,6 @@ final class Syncer: @unchecked Sendable {
         guard self.generation == generation else { return }
         refreshInFlight = false
         refreshTask = nil
-        if refreshRequested { refreshRequested = false; refreshOnDispatcher() }
     }
 
 

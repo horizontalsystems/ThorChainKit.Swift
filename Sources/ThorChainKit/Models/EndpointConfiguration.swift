@@ -18,7 +18,10 @@ public struct EndpointConfiguration: Sendable {
         families: [EndpointFamilyDescriptor],
         midgardURLs: [URL] = [],
         clientId: String? = nil,
-        requestTimeout: TimeInterval = 60,
+        // One sync interval. A stalled socket is bound by this and nothing else, so a
+        // longer value parks the wallet in "syncing" across several ticks; the Android
+        // kit affords 60 only because OkHttp caps connection setup separately at 10.
+        requestTimeout: TimeInterval = 15,
         policy: EndpointPolicy = .default
     ) throws {
         guard !families.isEmpty else {

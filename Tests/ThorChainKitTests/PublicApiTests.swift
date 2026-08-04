@@ -67,7 +67,7 @@ final class PublicApiTests: XCTestCase {
 
         XCTAssertEqual(family.id, "primary")
         XCTAssertEqual(configuration.clientId, "client-1")
-        XCTAssertEqual(configuration.requestTimeout, 60)
+        XCTAssertEqual(configuration.requestTimeout, 15)
         XCTAssertEqual(configuration.policy, .default)
         XCTAssertEqual(configuration.effectiveMaximumAttempts, 1)
         XCTAssertEqual(EndpointPolicy.default.maximumHeightLag, 5)

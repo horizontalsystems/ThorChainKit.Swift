@@ -18,10 +18,10 @@ struct LiveThorNodeClient: INodeApiProvider {
         self.maximumBalancePageCount = max(1, maximumBalancePageCount)
     }
 
-    func account(address: Address, using lease: EndpointLease) async throws -> AccountTransport? {
+    func account(address: Address, using lease: EndpointLease, timeout: TimeInterval? = nil) async throws -> AccountTransport? {
         let request = RequestBuilder(
             baseURL: lease.family.cosmosRestURL,
-            requestTimeout: requestTimeout,
+            requestTimeout: timeout ?? requestTimeout,
             clientId: clientId
         ).request(
             path: ["cosmos", "auth", "v1beta1", "accounts", address.raw],
@@ -60,7 +60,7 @@ struct LiveThorNodeClient: INodeApiProvider {
         return AccountTransport(accountNumber: accountNumber, sequence: sequence)
     }
 
-    func balances(address: Address, using lease: EndpointLease) async throws -> [BalanceTransport] {
+    func balances(address: Address, using lease: EndpointLease, timeout: TimeInterval? = nil) async throws -> [BalanceTransport] {
         var nextKey: String?
         var seenKeys = Set<String>()
         var values = [BalanceTransport]()
@@ -73,7 +73,7 @@ struct LiveThorNodeClient: INodeApiProvider {
             }
             let request = RequestBuilder(
                 baseURL: lease.family.cosmosRestURL,
-                requestTimeout: requestTimeout,
+                requestTimeout: timeout ?? requestTimeout,
                 clientId: clientId
             ).request(
                 path: ["cosmos", "bank", "v1beta1", "balances", address.raw],

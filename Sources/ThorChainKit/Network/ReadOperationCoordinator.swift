@@ -39,6 +39,11 @@ struct ReadOperationCoordinator: IAccountProvider {
     // which reads as a long loading rather than an error the user cannot act on.
     private static let retryDelays: [TimeInterval] = [1, 2]
 
+    // A dead connection answers nothing at all, while a healthy read has never taken
+    // more than eight seconds. The first attempt is therefore impatient and the later
+    // ones are not, so a stalled socket costs eight seconds instead of fifteen.
+    private static let attemptTimeouts: [TimeInterval] = [8]
+
     func read(address: Address) async throws -> AccountReadTransport {
         let attempts = configuration.policy.maximumAttempts ?? Self.retryDelays.count + 1
 
@@ -50,6 +55,7 @@ struct ReadOperationCoordinator: IAccountProvider {
             let outcome = await runAttempt(
                 address: address,
                 lease: lease,
+                timeout: attempt <= Self.attemptTimeouts.count ? Self.attemptTimeouts[attempt - 1] : nil,
                 retryableStatusCodes: configuration.policy.retryableStatusCodes
             )
             if Task.isCancelled { throw CancellationError() }
@@ -90,13 +96,14 @@ struct ReadOperationCoordinator: IAccountProvider {
     private func runAttempt(
         address: Address,
         lease: EndpointLease,
+        timeout: TimeInterval?,
         retryableStatusCodes: Set<Int>
     ) async -> AttemptOutcome {
         await withTaskGroup(of: ChildOutcome.self) { group in
             group.addTask {
                 guard !Task.isCancelled else { return .account(.failure(.cancelled)) }
                 do {
-                    return .account(.success(try await client.account(address: address, using: lease)))
+                    return .account(.success(try await client.account(address: address, using: lease, timeout: timeout)))
                 } catch {
                     return .account(.failure(ReadFailure(error: error)))
                 }
@@ -104,7 +111,7 @@ struct ReadOperationCoordinator: IAccountProvider {
             group.addTask {
                 guard !Task.isCancelled else { return .balances(.failure(.cancelled)) }
                 do {
-                    return .balances(.success(try await client.balances(address: address, using: lease)))
+                    return .balances(.success(try await client.balances(address: address, using: lease, timeout: timeout)))
                 } catch {
                     return .balances(.failure(ReadFailure(error: error)))
                 }

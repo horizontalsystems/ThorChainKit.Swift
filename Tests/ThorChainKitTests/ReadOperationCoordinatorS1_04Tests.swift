@@ -133,7 +133,7 @@ private actor ScriptedReadClient: INodeApiProvider {
 
     func setOutcome(for family: String, outcome: Outcome) { outcomes[family] = outcome }
 
-    func account(address: Address, using lease: EndpointLease) async throws -> AccountTransport? {
+    func account(address: Address, using lease: EndpointLease, timeout _: TimeInterval?) async throws -> AccountTransport? {
         familyCalls.append(lease.family.id)
         if outcomes[lease.family.id] == .retryable {
             throw ThorNodeReadError.httpStatus(operation: .account, code: 503, retryAfterSeconds: nil)
@@ -141,7 +141,7 @@ private actor ScriptedReadClient: INodeApiProvider {
         return AccountTransport(accountNumber: 1, sequence: 2)
     }
 
-    func balances(address: Address, using lease: EndpointLease) async throws -> [BalanceTransport] {
+    func balances(address: Address, using lease: EndpointLease, timeout _: TimeInterval?) async throws -> [BalanceTransport] {
         familyCalls.append(lease.family.id)
         if outcomes[lease.family.id] == .retryable {
             return []

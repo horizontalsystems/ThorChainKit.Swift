@@ -39,7 +39,7 @@ public struct BroadcastRejection: Equatable, Sendable {
 }
 
 public enum SendError: Error, Equatable, Sendable, LocalizedError, CustomStringConvertible, CustomDebugStringConvertible, CustomReflectable {
-    case invalidAmount, invalidRecipient, selfRecipient, recipientIsModule
+    case invalidAmount, invalidRecipient, recipientIsModule
     case memoTooLong(maxUTF8Bytes: Int)
     case chainHalted, accountUnavailable, insufficientBalance, providerUnavailable
     case heightUnproven, policyUnavailable, kitNotStarted, operationUnavailable
@@ -64,7 +64,6 @@ public enum SendError: Error, Equatable, Sendable, LocalizedError, CustomStringC
         switch self {
         case .invalidAmount: return "invalidAmount"
         case .invalidRecipient: return "invalidRecipient"
-        case .selfRecipient: return "selfRecipient"
         case .recipientIsModule: return "recipientIsModule"
         case let .memoTooLong(max): return "memoTooLong(maxUTF8Bytes: \(max))"
         case .chainHalted: return "chainHalted"
