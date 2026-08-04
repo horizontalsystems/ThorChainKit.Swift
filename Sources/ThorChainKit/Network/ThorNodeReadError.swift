@@ -29,7 +29,9 @@ enum ThorNodeReadError: Error, Equatable, Sendable {
 
     func isRetryable(statusCodes: Set<Int>) -> Bool {
         switch self {
-        case let .httpStatus(_, code, _): statusCodes.contains(code)
+        // Anything from 500 up is the provider failing, not answering; only a client
+        // error is a definitive answer. Same rule as the Android kit.
+        case let .httpStatus(_, code, _): statusCodes.contains(code) || code >= 500
         case .transport: true
         default: false
         }

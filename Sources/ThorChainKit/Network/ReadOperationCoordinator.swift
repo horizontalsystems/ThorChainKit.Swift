@@ -34,15 +34,18 @@ struct ReadOperationCoordinator: IAccountProvider {
         self.wallClock = wallClock
     }
 
-    func read(address: Address) async throws -> AccountReadTransport {
-        var excluded = Set<String>()
-        let attempts = configuration.effectiveMaximumAttempts
+    // Retries stay on the same provider: it is chosen in settings, and quietly moving to
+    // another one would contradict that choice. Three tries, a second apart then two,
+    // which reads as a long loading rather than an error the user cannot act on.
+    private static let retryDelays: [TimeInterval] = [1, 2]
 
-        for attempt in 1...attempts {
+    func read(address: Address) async throws -> AccountReadTransport {
+        let attempts = configuration.policy.maximumAttempts ?? Self.retryDelays.count + 1
+
+        for attempt in 1 ... attempts {
             try Task.checkCancellation()
-            let lease = try await pool.readLease(excludingFamilyIds: excluded)
+            let lease = try await pool.readLease(excludingFamilyIds: [])
             try Task.checkCancellation()
-            excluded.insert(lease.family.id)
 
             let outcome = await runAttempt(
                 address: address,
@@ -71,25 +74,13 @@ struct ReadOperationCoordinator: IAccountProvider {
                 )
             case let .failure(failure):
                 if case .cancelled = failure { throw CancellationError() }
-                guard failure.isRetryable(statusCodes: configuration.policy.retryableStatusCodes) else {
-                    throw failure.error
-                }
+                // The last failure is what the user is shown, so it is thrown as it came
+                // rather than flattened into "attempts exhausted".
+                guard failure.isRetryable(statusCodes: configuration.policy.retryableStatusCodes),
+                      attempt < attempts
+                else { throw failure.error }
 
-                let delay = TimeInterval(failure.retryAfterSeconds ?? min(1 << (attempt - 1), 8))
-                let retryNotBefore = endpointClock.now.advanced(seconds: delay)
-                let endpointFailure: EndpointFailure
-                switch failure {
-                case let .read(.httpStatus(_, code, _)):
-                    endpointFailure = .retryableStatus(code: code, retryNotBefore: retryNotBefore)
-                default:
-                    endpointFailure = .transport(retryNotBefore: retryNotBefore)
-                }
-                guard await pool.recordFailure(for: lease, failure: endpointFailure) else {
-                    throw ThorNodeReadError.staleLease
-                }
-                guard attempt < attempts else {
-                    throw ThorNodeReadError.attemptsExhausted
-                }
+                let delay = failure.retryAfterSeconds.map(TimeInterval.init) ?? Self.retryDelays[min(attempt - 1, Self.retryDelays.count - 1)]
                 try await sleeper(delay)
             }
         }

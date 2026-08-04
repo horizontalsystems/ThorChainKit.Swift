@@ -37,12 +37,12 @@ final class ReadOperationCoordinatorS1_04Tests: XCTestCase {
         }
     }
 
-    func testInitialWholeFamilyRetryRepeatsCompleteOperationWithoutCrossFamilyMixing() async throws {
+    func testAFailingProviderIsRetriedInPlaceAndNeverSwappedForAnother() async throws {
         let first = try family(id: "first")
         let second = try family(id: "second")
         let configuration = try EndpointConfiguration(
             families: [first, second],
-            policy: try EndpointPolicy(maximumAttempts: 2, maximumBalancePageCount: 4)
+            policy: try EndpointPolicy(maximumBalancePageCount: 4)
         )
         let client = ScriptedReadClient()
         await client.setOutcome(for: "first", outcome: .retryable)
@@ -60,15 +60,23 @@ final class ReadOperationCoordinatorS1_04Tests: XCTestCase {
             sleeper: { await delays.append($0) }
         )
 
-        let result = try await coordinator.read(address: try address())
+        // The provider is picked in settings. A second family answering is not a reason
+        // to move there behind the user's back, so all three tries go to the same one
+        // and the failure is then reported as it came.
+        do {
+            _ = try await coordinator.read(address: try address())
+            XCTFail("a provider that keeps failing must surface its error")
+        } catch let error as ThorNodeReadError {
+            guard case let .httpStatus(_, code, _) = error else { return XCTFail("unexpected \(error)") }
+            XCTAssertEqual(code, 503)
+        }
 
         let familyCalls = await client.familyCalls
+        XCTAssertEqual(Set(familyCalls), ["first"])
+        // Three attempts, each reading the account and the balances.
+        XCTAssertEqual(familyCalls.count, 6)
         let recordedDelays = await delays.values
-        XCTAssertEqual(result.familyId, "second")
-        XCTAssertEqual(familyCalls, ["first", "first", "second", "second"])
-        XCTAssertEqual(recordedDelays, [1])
-        XCTAssertEqual(result.account?.accountNumber, 1)
-        XCTAssertEqual(result.balances.map(\.denom), [.rune])
+        XCTAssertEqual(recordedDelays, [1, 2])
     }
 
     private func family(id: String) throws -> EndpointFamilyDescriptor {
