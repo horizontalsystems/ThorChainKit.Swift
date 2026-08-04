@@ -25,7 +25,6 @@ final class SendQuoteTests: XCTestCase {
         let tampered = SendQuote(
             recipient: quote.recipient,
             amountMagnitude: SendMagnitude(101).data,
-            isMaximum: quote.isMaximum,
             nativeFeeMagnitude: SendMagnitude(2).data,
             totalDebitMagnitude: SendMagnitude(103).data,
             memo: quote.memo,

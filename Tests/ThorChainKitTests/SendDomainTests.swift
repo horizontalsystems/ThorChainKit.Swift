@@ -9,9 +9,6 @@ final class SendDomainTests: XCTestCase {
         value += 1
 
         XCTAssertEqual(amount.exactAmount, BigUInt("18446744073709551617"))
-        XCTAssertFalse(amount.isMaximum)
-        XCTAssertTrue(SendAmount.maximum.isMaximum)
-        XCTAssertNil(SendAmount.maximum.exactAmount)
     }
 
 

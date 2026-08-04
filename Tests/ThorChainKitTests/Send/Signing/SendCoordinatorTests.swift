@@ -14,7 +14,7 @@ final class SendCoordinatorTests: XCTestCase {
         let snapshot = try SendSnapshot(
             familyID: "rorcual-mainnet", chainID: "thorchain-1", height: 12,
             sender: sender.raw, recipient: recipient.raw, accountNumber: 1, sequence: 2,
-            amount: 100, nativeFee: 2, spendableRune: 102,
+            amount: 100, nativeFee: 2,
             mimir: MimirSnapshot(haltChainGlobal: -1, nodePauseChainGlobal: -1, haltTHORChain: -1, solvencyHaltTHORChain: -1),
             memoMaximumBytes: 256,
             accountPublicKey: "/cosmos.crypto.secp256k1.PubKey", accountPublicKeyData: publicKey
@@ -39,7 +39,7 @@ final class SendCoordinatorTests: XCTestCase {
         let snapshot = try SendSnapshot(
             familyID: "rorcual-mainnet", chainID: "thorchain-1", height: 12,
             sender: sender.raw, recipient: "", accountNumber: 1, sequence: 2,
-            amount: 100, nativeFee: 2, spendableRune: 102,
+            amount: 100, nativeFee: 2,
             mimir: MimirSnapshot(haltChainGlobal: -1, nodePauseChainGlobal: -1, haltTHORChain: -1, solvencyHaltTHORChain: -1),
             memoMaximumBytes: 256,
             accountPublicKey: "/cosmos.crypto.secp256k1.PubKey", accountPublicKeyData: publicKey
@@ -71,7 +71,7 @@ final class SendCoordinatorTests: XCTestCase {
         let snapshot = try SendSnapshot(
             familyID: "rorcual-mainnet", chainID: "thorchain-1", height: 12,
             sender: sender.raw, recipient: recipient.raw, accountNumber: 1, sequence: 2,
-            amount: 100, nativeFee: 2, spendable: 100, spendableRune: 102, denom: tcy,
+            amount: 100, nativeFee: 2, denom: tcy,
             mimir: MimirSnapshot(haltChainGlobal: -1, nodePauseChainGlobal: -1, haltTHORChain: -1, solvencyHaltTHORChain: -1),
             memoMaximumBytes: 256,
             accountPublicKey: "/cosmos.crypto.secp256k1.PubKey", accountPublicKeyData: publicKey
@@ -101,7 +101,7 @@ final class SendCoordinatorTests: XCTestCase {
         let snapshot = try SendSnapshot(
             familyID: "rorcual-mainnet", chainID: "thorchain-1", height: 12,
             sender: sender.raw, recipient: recipient.raw, accountNumber: 1, sequence: 2,
-            amount: 100, nativeFee: 2, spendableRune: 102,
+            amount: 100, nativeFee: 2,
             mimir: MimirSnapshot(haltChainGlobal: -1, nodePauseChainGlobal: -1, haltTHORChain: -1, solvencyHaltTHORChain: -1),
             memoMaximumBytes: 256,
             accountPublicKey: "/cosmos.crypto.secp256k1.PubKey", accountPublicKeyData: publicKey
@@ -215,7 +215,6 @@ final class SendCoordinatorTests: XCTestCase {
             sequence: 2,
             amount: 100,
             nativeFee: 2,
-            spendableRune: 102,
             mimir: MimirSnapshot(haltChainGlobal: -1, nodePauseChainGlobal: -1, haltTHORChain: -1, solvencyHaltTHORChain: -1),
             memoMaximumBytes: 256,
             accountPublicKey: "/cosmos.crypto.secp256k1.PubKey",
@@ -255,7 +254,7 @@ final class SendCoordinatorTests: XCTestCase {
         let snapshot = try SendSnapshot(
             familyID: "rorcual-mainnet", chainID: "thorchain-1", height: 12,
             sender: sender.raw, recipient: recipient.raw, accountNumber: 1, sequence: 2,
-            amount: 100, nativeFee: 2, spendableRune: 102,
+            amount: 100, nativeFee: 2,
             mimir: MimirSnapshot(haltChainGlobal: -1, nodePauseChainGlobal: -1, haltTHORChain: -1, solvencyHaltTHORChain: -1),
             memoMaximumBytes: 256,
             accountPublicKey: "/cosmos.crypto.secp256k1.PubKey", accountPublicKeyData: publicKey
@@ -276,7 +275,7 @@ final class SendCoordinatorTests: XCTestCase {
         let snapshot = try SendSnapshot(
             familyID: "thorchain-mainnet", chainID: "thorchain-1", height: 1,
             sender: sender, recipient: recipient, accountNumber: 123_456, sequence: 1,
-            amount: 100_000_000, nativeFee: 0, spendableRune: 100_000_000,
+            amount: 100_000_000, nativeFee: 0,
             mimir: MimirSnapshot(haltChainGlobal: -1, nodePauseChainGlobal: -1, haltTHORChain: -1, solvencyHaltTHORChain: -1),
             memoMaximumBytes: 256,
             accountPublicKey: "/cosmos.crypto.secp256k1.PubKey", accountPublicKeyData: publicKey
@@ -486,7 +485,6 @@ private func coordinatorChanged(_ snapshot: SendSnapshot, height: Int64? = nil, 
         sequence: sequence ?? snapshot.sequence,
         amount: snapshot.amount,
         nativeFee: snapshot.nativeFee,
-        spendableRune: snapshot.spendableRune,
         mimir: snapshot.mimir,
         memoMaximumBytes: snapshot.memoMaximumBytes,
         recipientClassification: snapshot.recipientClassification,

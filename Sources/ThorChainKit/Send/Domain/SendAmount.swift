@@ -12,27 +12,20 @@ struct SendMagnitude: Sendable, Hashable {
 }
 
 public struct SendAmount: Sendable {
-    private enum Kind: Equatable, Sendable { case exact, maximum }
+    private let exactMagnitude: Data
 
-    private let kind: Kind
-    private let exactMagnitude: Data?
-
-    private init(kind: Kind, exactMagnitude: Data?) {
-        self.kind = kind
+    private init(exactMagnitude: Data) {
         self.exactMagnitude = exactMagnitude
     }
 
     public static func exact(_ amount: BigUInt) -> SendAmount {
-        SendAmount(kind: .exact, exactMagnitude: SendMagnitude(amount).data)
+        SendAmount(exactMagnitude: SendMagnitude(amount).data)
     }
 
-    public static var maximum: SendAmount {
-        SendAmount(kind: .maximum, exactMagnitude: nil)
-    }
-
+    // There is no maximum: resolving one needs a balance, and the balance the caller was
+    // showing is the one that must be spent from. The caller subtracts the fee itself,
+    // as the Android wallet does on its send screen.
     public var exactAmount: BigUInt? {
-        exactMagnitude.map { $0.isEmpty ? 0 : BigUInt($0) }
+        exactMagnitude.isEmpty ? 0 : BigUInt(exactMagnitude)
     }
-
-    public var isMaximum: Bool { kind == .maximum }
 }

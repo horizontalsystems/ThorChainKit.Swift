@@ -125,7 +125,6 @@ final class KitCompositionTests: XCTestCase {
             sequence: 2,
             amount: 100,
             nativeFee: 2,
-            spendableRune: 102,
             mimir: MimirSnapshot(haltChainGlobal: -1, nodePauseChainGlobal: -1, haltTHORChain: -1, solvencyHaltTHORChain: -1),
             memoMaximumBytes: 256,
             accountPublicKey: "/cosmos.crypto.secp256k1.PubKey",

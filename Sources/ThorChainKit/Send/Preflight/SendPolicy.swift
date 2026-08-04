@@ -29,30 +29,13 @@ struct SendPolicy: Equatable, Sendable {
         }
     }
 
-    /// `spendable` funds the amount, `spendableRune` funds the fee. They are the same
-    /// balance when sending RUNE and two different ones otherwise, which is why the
-    /// two are checked separately rather than against a single total.
-    func resolve(amount: SendAmount, spendable: BigUInt, spendableRune: BigUInt, nativeFee: BigUInt, feeSharesBalance: Bool) throws -> BigUInt {
-        guard spendableRune >= nativeFee else { throw SendError.insufficientBalance }
-        // Only a RUNE send has the fee competing with the amount for the same coins.
-        // Taken from the denom, not from comparing the two balances: they can be equal
-        // by coincidence, and that must not silently shrink the maximum.
-        // BigUInt underflow traps rather than throwing, and the caller's guarantee that
-        // the two balances are the same one when the fee shares them is not expressible here.
-        guard !feeSharesBalance || spendable >= nativeFee else { throw SendError.insufficientBalance }
-        let headroom = feeSharesBalance ? spendable - nativeFee : spendable
-        let resolved: BigUInt
-        if let exact = amount.exactAmount {
-            guard exact > 0 else { throw SendError.invalidAmount }
-            resolved = exact
-        } else {
-            guard headroom > 0 else { throw SendError.insufficientBalance }
-            resolved = headroom
-        }
-        guard resolved > 0, resolved <= headroom else {
-            throw SendError.insufficientBalance
-        }
-        return resolved
+    /// The balance is not read here. It is the one the user was looking at when they
+    /// chose the amount, and a second read moments later disagrees with the screen —
+    /// which is how a send the wallet had shown as affordable failed after Face ID. The
+    /// chain rejects a send it cannot cover, and the Android kit relies on exactly that.
+    func resolve(amount: SendAmount) throws -> BigUInt {
+        guard let exact = amount.exactAmount, exact > 0 else { throw SendError.invalidAmount }
+        return exact
     }
 }
 

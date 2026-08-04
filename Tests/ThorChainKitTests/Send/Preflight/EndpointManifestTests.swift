@@ -18,13 +18,13 @@ final class EndpointManifestTests: XCTestCase {
         XCTAssertFalse(HeightProof.body(expected: 10, actual: nil).isExact)
     }
 
-    func testCapabilityManifestIsExactlyThreeFamiliesAndFiveReadOnlyRoutes() {
+    func testCapabilityManifestIsExactlyThreeFamiliesAndFourReadOnlyRoutes() {
         let capabilities = NativeRuneEndpointRegistry.capabilities()
         XCTAssertEqual(capabilities.count, 3)
         XCTAssertEqual(capabilities.map(\.familyID), NativeRuneEndpointRegistry.familyIDs)
         for capability in capabilities {
-            XCTAssertEqual(capability.routes.count, 5)
-            XCTAssertEqual(Set(capability.routes.map(\.route)), ["account", "spendable", "network-fee", "mimir", "recipient-account"])
+            XCTAssertEqual(capability.routes.count, 4)
+            XCTAssertEqual(Set(capability.routes.map(\.route)), ["account", "network-fee", "mimir", "recipient-account"])
             XCTAssertEqual(capability.status, .unrun)
             XCTAssertFalse(capability.isSendCapable)
             XCTAssertTrue(capability.routes.allSatisfy { $0.capabilityStatus == .unrun })
@@ -32,12 +32,8 @@ final class EndpointManifestTests: XCTestCase {
             XCTAssertTrue(capability.routes.allSatisfy { !$0.path.isEmpty && !$0.supportedNodeRevision.isEmpty })
             // The whole mimir map comes back in one response, so no route pins a key.
             XCTAssertTrue(capability.routes.allSatisfy { $0.queryKey == nil })
-            let spendable = capability.routes.first { $0.route == "spendable" }!
-            XCTAssertEqual(spendable.path, "/cosmos/bank/v1beta1/spendable_balances/{address}/by_denom")
-            XCTAssertEqual(spendable.queryParameterName, "denom")
-            // The denom is caller-supplied, so the manifest pins the name and not the value.
-            XCTAssertNil(spendable.queryParameterValue)
-            XCTAssertNil(spendable.historicalHeightParameter)
+            // No route carries a caller-supplied parameter any more.
+            XCTAssertTrue(capability.routes.allSatisfy { $0.queryParameterName == nil && $0.queryParameterValue == nil })
             let mimir = capability.routes.first { $0.route == "mimir" }!
             XCTAssertEqual(mimir.path, "/thorchain/mimir")
             XCTAssertEqual(mimir.historicalHeightParameter, "height")
@@ -52,12 +48,12 @@ final class EndpointManifestTests: XCTestCase {
     }
 
     func testEveryFamilyPinsEveryRouteToOneProofAndEncoding() {
-        let expectedRoutes = Set(["account", "spendable", "network-fee", "mimir", "recipient-account"])
+        let expectedRoutes = Set(["account", "network-fee", "mimir", "recipient-account"])
         for family in NativeRuneEndpointRegistry.capabilities() {
             XCTAssertEqual(Set(family.routes.map(\.route)), expectedRoutes)
             XCTAssertEqual(family.routes.filter { $0.proofMode == .cometABCI }.count, 3)
             XCTAssertEqual(family.routes.filter { $0.proofMode == .bodyHeight }.count, 0)
-            XCTAssertEqual(family.routes.filter { $0.proofMode == .restHeader }.count, 2)
+            XCTAssertEqual(family.routes.filter { $0.proofMode == .restHeader }.count, 1)
             XCTAssertTrue(family.routes.allSatisfy { $0.requestEncoding == ($0.proofMode == .cometABCI ? .protobufABCI : .jsonREST) })
         }
     }

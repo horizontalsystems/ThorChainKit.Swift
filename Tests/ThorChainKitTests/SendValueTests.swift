@@ -14,9 +14,4 @@ final class SendValueTests: XCTestCase {
         XCTAssertEqual(fee.current, BigUInt("18446744073709551618"))
     }
 
-    func testMaximumIsDistinctFromAnExactNumericValue() {
-        XCTAssertTrue(SendAmount.maximum.isMaximum)
-        XCTAssertNil(SendAmount.maximum.exactAmount)
-        XCTAssertFalse(SendAmount.exact(0).isMaximum)
-    }
 }

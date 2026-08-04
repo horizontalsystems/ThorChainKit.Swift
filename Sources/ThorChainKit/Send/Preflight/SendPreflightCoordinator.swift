@@ -200,13 +200,6 @@ struct ThorNodeSendPreflightProvider: ISendPreflightProvider {
         let recipientRequest = try request.recipient.map { try CosmosQueryCodec.accountRequest(address: $0.raw) }
         let networkRequest = try CosmosQueryCodec.networkRequest(height: height)
         let account = try await read("account", address: request.sender.raw, requestData: accountRequest)
-        let balance = try await read("spendable", address: request.sender.raw, requestData: try CosmosQueryCodec.spendableRequest(address: request.sender.raw, denom: request.denom.rawValue), queryParameterValue: request.denom.rawValue)
-        // The fee is charged in RUNE, so a token send needs the RUNE balance too. It is
-        // read here rather than later because the preflight requires recipient-account to
-        // be the last route touched.
-        let runeBalance = request.denom == .rune
-            ? nil
-            : try await read("spendable", address: request.sender.raw, requestData: try CosmosQueryCodec.spendableRequest(address: request.sender.raw, denom: Denom.rune.rawValue), queryParameterValue: Denom.rune.rawValue)
         let fee = try await read("network-fee", requestData: networkRequest)
         let mimirValues = try SendRouteDecoders.mimir(try await read("mimir").value)
         // A deposit has no recipient, so this read and its classification are skipped.
@@ -219,16 +212,6 @@ struct ThorNodeSendPreflightProvider: ISendPreflightProvider {
               accountValue.typeURL != "/cosmos.auth.v1beta1.ModuleAccount",
               accountValue.address == request.sender.raw else {
             throw SendError.accountUnavailable
-        }
-        let balanceValue = try SendRouteDecoders.balance(balance.value, expecting: request.denom.rawValue)
-        guard let spendable = BigUInt(balanceValue.amount) else { throw SendError.insufficientBalance }
-        let spendableRune: BigUInt
-        if let runeBalance {
-            let runeValue = try SendRouteDecoders.balance(runeBalance.value, expecting: Denom.rune.rawValue)
-            guard let value = BigUInt(runeValue.amount) else { throw SendError.insufficientBalance }
-            spendableRune = value
-        } else {
-            spendableRune = spendable
         }
         let nativeFee = try SendRouteDecoders.networkFee(fee.value)
         let mimirSnapshot = MimirSnapshot(
@@ -247,9 +230,9 @@ struct ThorNodeSendPreflightProvider: ISendPreflightProvider {
         } else {
             classification = .user
         }
-        let amount = try policy.resolve(amount: request.amount, spendable: spendable, spendableRune: spendableRune, nativeFee: nativeFee, feeSharesBalance: request.denom == .rune)
+        let amount = try policy.resolve(amount: request.amount)
         try policy.validate(memo: request.memo)
-        return SendSnapshotResult(snapshot: try SendSnapshot(familyID: lease.family.id, chainID: lease.verifiedChainId, height: height, sender: request.sender.raw, recipient: request.recipient?.raw ?? "", accountNumber: accountValue.accountNumber, sequence: accountValue.sequence, amount: amount, nativeFee: nativeFee, spendable: spendable, spendableRune: spendableRune, denom: request.denom, mimir: mimirSnapshot, memoMaximumBytes: memoMaximum, recipientClassification: classification, policyRevision: forbidden.revision, accountPublicKey: accountValue.publicKeyTypeURL, accountPublicKeyData: accountValue.publicKeyData, restEndpoint: lease.family.cosmosRestURL.absoluteString, rpcEndpoint: lease.family.cometBftURL.absoluteString, manifestRevision: capability?.manifestRevision ?? ""), attempt: routeAttempt)
+        return SendSnapshotResult(snapshot: try SendSnapshot(familyID: lease.family.id, chainID: lease.verifiedChainId, height: height, sender: request.sender.raw, recipient: request.recipient?.raw ?? "", accountNumber: accountValue.accountNumber, sequence: accountValue.sequence, amount: amount, nativeFee: nativeFee, denom: request.denom, mimir: mimirSnapshot, memoMaximumBytes: memoMaximum, recipientClassification: classification, policyRevision: forbidden.revision, accountPublicKey: accountValue.publicKeyTypeURL, accountPublicKeyData: accountValue.publicKeyData, restEndpoint: lease.family.cosmosRestURL.absoluteString, rpcEndpoint: lease.family.cometBftURL.absoluteString, manifestRevision: capability?.manifestRevision ?? ""), attempt: routeAttempt)
     }
 
     // The map omits keys that were never set; the per-key route reported those as -1.

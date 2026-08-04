@@ -15,18 +15,17 @@ final class SendSnapshotTests: XCTestCase {
         let base = try SendSnapshot.fixture(height: 42)
         let withKey = try SendSnapshot(
             familyID: base.familyID, chainID: base.chainID, height: base.height, sender: base.sender, recipient: base.recipient,
-            accountNumber: base.accountNumber, sequence: base.sequence, amount: base.amount, nativeFee: base.nativeFee,
-            spendableRune: base.spendableRune, mimir: base.mimir, memoMaximumBytes: base.memoMaximumBytes,
+            accountNumber: base.accountNumber, sequence: base.sequence, amount: base.amount, nativeFee: base.nativeFee, mimir: base.mimir, memoMaximumBytes: base.memoMaximumBytes,
             policyRevision: base.policyRevision, accountPublicKey: "/cosmos.crypto.secp256k1.PubKey", accountPublicKeyData: Data([2] + Array(repeating: 1, count: 32))
         )
         XCTAssertNotEqual(base.digest, withKey.digest)
-        XCTAssertEqual(withKey.digestHex, "2a17c9aed3b970f1600a1a0487b56aa2411f03e8ec679d791a26739eb0b406d2")
+        XCTAssertEqual(withKey.digestHex, "cfe885d3c24d80d774f97810b2cac37fecf291e17d779b2377e91f324ff4d18c")
     }
 
     func testDigestMatchesTheApprovedFixedVector() throws {
-        // Re-approved when the node version left the snapshot: the preflight no longer
-        // reads /thorchain/version, so the digest cannot bind what it never saw.
-        XCTAssertEqual(try SendSnapshot.fixture(height: 42).digestHex, "5c0debb7ac331484b77c9b0f8e762fcfbc057a49c2688db00f2277c4eb14a3c6")
+        // Re-approved when the balances left the snapshot: the preflight no longer reads
+        // them, so the digest cannot bind what it never saw.
+        XCTAssertEqual(try SendSnapshot.fixture(height: 42).digestHex, "329049031ca55e169e2017006425f49cbbca55059aacea1b36b9f29c0015d6c3")
     }
 
     func testPublicKeyStateRejectsImpossibleAndUncompressedValues() throws {
@@ -38,8 +37,7 @@ final class SendSnapshotTests: XCTestCase {
         ] {
             XCTAssertThrowsError(try SendSnapshot(
                 familyID: base.familyID, chainID: base.chainID, height: base.height, sender: base.sender, recipient: base.recipient,
-                accountNumber: base.accountNumber, sequence: base.sequence, amount: base.amount, nativeFee: base.nativeFee,
-                spendableRune: base.spendableRune, mimir: base.mimir, memoMaximumBytes: base.memoMaximumBytes,
+                accountNumber: base.accountNumber, sequence: base.sequence, amount: base.amount, nativeFee: base.nativeFee, mimir: base.mimir, memoMaximumBytes: base.memoMaximumBytes,
                 policyRevision: base.policyRevision, accountPublicKey: typeURL, accountPublicKeyData: data
             ))
         }

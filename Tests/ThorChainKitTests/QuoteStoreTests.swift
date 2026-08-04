@@ -12,7 +12,6 @@ final class QuoteStoreTests: XCTestCase {
             sender: try sendTestAddress(),
             recipient: try sendOtherAddress(),
             amountMagnitude: SendMagnitude(3).data,
-            isMaximum: false,
             nativeFeeMagnitude: SendMagnitude(1).data,
             totalDebitMagnitude: SendMagnitude(4).data,
             memo: nil,
@@ -93,7 +92,6 @@ final class QuoteStoreTests: XCTestCase {
                 sender: try sendTestAddress(),
                 recipient: try sendTestAddress(),
                 amountMagnitude: SendMagnitude(3).data,
-                isMaximum: false,
                 nativeFeeMagnitude: SendMagnitude(2).data,
                 totalDebitMagnitude: SendMagnitude(4).data,
                 memo: nil,
@@ -125,7 +123,6 @@ final class QuoteStoreTests: XCTestCase {
                     sender: sender,
                     recipient: recipient,
                     amountMagnitude: amount,
-                    isMaximum: false,
                     nativeFeeMagnitude: fee,
                     totalDebitMagnitude: totalDebit,
                     memo: nil,
@@ -147,7 +144,6 @@ final class QuoteStoreTests: XCTestCase {
                 sender: try sendTestAddress(),
                 recipient: try sendOtherAddress(),
                 amountMagnitude: SendMagnitude(3).data,
-                isMaximum: false,
                 nativeFeeMagnitude: SendMagnitude(2).data,
                 totalDebitMagnitude: SendMagnitude(5).data,
                 memo: nil,
@@ -167,7 +163,6 @@ final class QuoteStoreTests: XCTestCase {
         let projection = SendQuote(
             recipient: quote.recipient,
             amountMagnitude: SendMagnitude(100).data,
-            isMaximum: quote.isMaximum,
             nativeFeeMagnitude: SendMagnitude(2).data,
             totalDebitMagnitude: SendMagnitude(102).data,
             memo: quote.memo,
@@ -185,14 +180,12 @@ final class QuoteStoreTests: XCTestCase {
         let store = QuoteStore()
         let quote = try store.issue(
             sender: try Address(snapshot.sender, network: .mainnet), recipient: try Address(snapshot.recipient, network: .mainnet),
-            amountMagnitude: SendMagnitude(snapshot.amount).data, isMaximum: false,
-            nativeFeeMagnitude: SendMagnitude(snapshot.nativeFee).data, totalDebitMagnitude: SendMagnitude(snapshot.totalDebit).data,
+            amountMagnitude: SendMagnitude(snapshot.amount).data, nativeFeeMagnitude: SendMagnitude(snapshot.nativeFee).data, totalDebitMagnitude: SendMagnitude(snapshot.totalDebit).data,
             memo: nil, acceptedHeight: snapshot.height, generation: 7, providerFamilyID: snapshot.familyID, preflightContext: snapshot
         )
         let record = quote.internalAuthorityRecord
         let invalidSnapshot = QuoteReviewSnapshot(
             sender: record.snapshot.sender, recipient: record.snapshot.recipient,
-            requestedAmountIsMaximum: record.snapshot.requestedAmountIsMaximum,
             amountMagnitude: record.snapshot.amountMagnitude, nativeFeeMagnitude: record.snapshot.nativeFeeMagnitude,
             totalDebitMagnitude: record.snapshot.totalDebitMagnitude, memo: record.snapshot.memo,
             acceptedHeight: record.snapshot.acceptedHeight, expiresAt: record.snapshot.expiresAt,
@@ -201,8 +194,7 @@ final class QuoteStoreTests: XCTestCase {
             preflightDigest: Data(repeating: 0, count: 32)
         )
         let invalid = SendQuote(
-            recipient: quote.recipient, amountMagnitude: record.snapshot.amountMagnitude, isMaximum: quote.isMaximum,
-            nativeFeeMagnitude: record.snapshot.nativeFeeMagnitude, totalDebitMagnitude: record.snapshot.totalDebitMagnitude,
+            recipient: quote.recipient, amountMagnitude: record.snapshot.amountMagnitude, nativeFeeMagnitude: record.snapshot.nativeFeeMagnitude, totalDebitMagnitude: record.snapshot.totalDebitMagnitude,
             memo: quote.memo, acceptedHeight: quote.acceptedHeight, expiresAt: quote.expiresAt,
             authorityRecord: QuoteAuthorityRecord(envelope: record.envelope, snapshot: invalidSnapshot), sender: snapshot.sender
         )
@@ -215,7 +207,6 @@ final class QuoteStoreTests: XCTestCase {
         let invalidSnapshot = QuoteReviewSnapshot(
             sender: record.snapshot.sender,
             recipient: record.snapshot.recipient,
-            requestedAmountIsMaximum: record.snapshot.requestedAmountIsMaximum,
             amountMagnitude: Data([0, 100]),
             nativeFeeMagnitude: record.snapshot.nativeFeeMagnitude,
             totalDebitMagnitude: Data([0, 102]),
@@ -229,7 +220,6 @@ final class QuoteStoreTests: XCTestCase {
         let invalid = SendQuote(
             recipient: quote.recipient,
             amountMagnitude: invalidSnapshot.amountMagnitude,
-            isMaximum: quote.isMaximum,
             nativeFeeMagnitude: invalidSnapshot.nativeFeeMagnitude,
             totalDebitMagnitude: invalidSnapshot.totalDebitMagnitude,
             memo: quote.memo,
@@ -250,7 +240,6 @@ final class QuoteStoreTests: XCTestCase {
             let snapshot = QuoteReviewSnapshot(
                 sender: record.snapshot.sender,
                 recipient: record.snapshot.recipient,
-                requestedAmountIsMaximum: record.snapshot.requestedAmountIsMaximum,
                 amountMagnitude: amount,
                 nativeFeeMagnitude: fee,
                 totalDebitMagnitude: total,
@@ -264,7 +253,6 @@ final class QuoteStoreTests: XCTestCase {
             return SendQuote(
                 recipient: quote.recipient,
                 amountMagnitude: amount,
-                isMaximum: quote.isMaximum,
                 nativeFeeMagnitude: fee,
                 totalDebitMagnitude: total,
                 memo: quote.memo,
@@ -296,7 +284,6 @@ final class QuoteStoreTests: XCTestCase {
         let invalidSnapshot = QuoteReviewSnapshot(
             sender: record.snapshot.sender,
             recipient: record.snapshot.recipient,
-            requestedAmountIsMaximum: record.snapshot.requestedAmountIsMaximum,
             amountMagnitude: record.snapshot.amountMagnitude,
             nativeFeeMagnitude: record.snapshot.nativeFeeMagnitude,
             totalDebitMagnitude: record.snapshot.totalDebitMagnitude,
@@ -310,7 +297,6 @@ final class QuoteStoreTests: XCTestCase {
         let invalid = SendQuote(
             recipient: quote.recipient,
             amountMagnitude: invalidSnapshot.amountMagnitude,
-            isMaximum: quote.isMaximum,
             nativeFeeMagnitude: invalidSnapshot.nativeFeeMagnitude,
             totalDebitMagnitude: invalidSnapshot.totalDebitMagnitude,
             memo: quote.memo,

@@ -302,7 +302,6 @@ actor TransactionSender {
             sender: request.sender,
             recipient: request.recipient,
             amountMagnitude: SendMagnitude(amount).data,
-            isMaximum: request.amount.isMaximum,
             nativeFeeMagnitude: SendMagnitude(fee).data,
             totalDebitMagnitude: SendMagnitude(snapshot.totalDebit).data,
             memo: request.memo,

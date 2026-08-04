@@ -104,18 +104,6 @@ final class DirectSignCodecTests: XCTestCase {
         XCTAssertTrue(key.ecdsa.isValidSignature(parsedSignature, for: SHA256.hash(data: payload.signDocBytes)))
     }
 
-    func testCodecSignsAMaximumRequestBecauseItsAmountIsAlreadyResolved() throws {
-        let snapshot = try makeSnapshot()
-
-        // `isMaximum` records how the user asked, not an unresolved amount: SendPolicy
-        // resolved it into a concrete number before the quote existed. Refusing here
-        // stranded every "send all", which for a token is the normal case — the fee is
-        // charged in RUNE and does not reduce the token balance.
-        let maximum = try makePayload(snapshot: snapshot, isMaximum: true)
-        let exact = try makePayload(snapshot: snapshot, isMaximum: false)
-        XCTAssertEqual(maximum.signDocBytes, exact.signDocBytes)
-    }
-
     func testCodecRejectsMemoOverflowAndMalformedPublicKeyFraming() throws {
         let snapshot = try makeSnapshot()
         XCTAssertThrowsError(try makePayload(snapshot: snapshot, memo: String(repeating: "a", count: 257)))
@@ -169,8 +157,8 @@ final class DirectSignCodecTests: XCTestCase {
         XCTAssertNotEqual(payload.signDocBytes, runePayload.signDocBytes)
     }
 
-    private func makePayload(snapshot: SendSnapshot, publicKey: Data? = nil, isMaximum: Bool = false, memo: String? = nil) throws -> SignPayload {
-        let quote = try makeQuote(sender: snapshot.sender, isMaximum: isMaximum, memo: memo, preflightContext: snapshot)
+    private func makePayload(snapshot: SendSnapshot, publicKey: Data? = nil, memo: String? = nil) throws -> SignPayload {
+        let quote = try makeQuote(sender: snapshot.sender, memo: memo, preflightContext: snapshot)
         return try DirectSignCodec.makeSignPayload(
             snapshot: snapshot,
             quote: PreparedQuote(quote: quote, snapshot: snapshot),
@@ -194,7 +182,6 @@ final class DirectSignCodecTests: XCTestCase {
             sequence: 1,
             amount: BigUInt(100_000_000),
             nativeFee: 0,
-            spendableRune: BigUInt(100_000_000),
             denom: denom,
             mimir: MimirSnapshot(haltChainGlobal: -1, nodePauseChainGlobal: -1, haltTHORChain: -1, solvencyHaltTHORChain: -1),
             memoMaximumBytes: 256,
@@ -203,13 +190,12 @@ final class DirectSignCodecTests: XCTestCase {
         )
     }
 
-    private func makeQuote(sender: String = "thor1w508d6qejxtdg4y5r3zarvary0c5xw7ku6wp68", isMaximum: Bool = false, memo: String? = nil, preflightContext: SendSnapshot? = nil) throws -> SendQuote {
+    private func makeQuote(sender: String = "thor1w508d6qejxtdg4y5r3zarvary0c5xw7ku6wp68", memo: String? = nil, preflightContext: SendSnapshot? = nil) throws -> SendQuote {
         let clock = TestSendClock()
         return try QuoteStore(clock: clock).issue(
             sender: try Address(sender, network: .mainnet),
             recipient: try Address(recipient, network: .mainnet),
             amountMagnitude: SendMagnitude(BigUInt(100_000_000)).data,
-            isMaximum: isMaximum,
             nativeFeeMagnitude: Data(),
             totalDebitMagnitude: SendMagnitude(BigUInt(100_000_000)).data,
             memo: memo,

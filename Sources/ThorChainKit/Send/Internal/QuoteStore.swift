@@ -26,7 +26,6 @@ final class QuoteStore: Sendable {
         sender: Address,
         recipient: Address?,
         amountMagnitude: Data,
-        isMaximum: Bool,
         nativeFeeMagnitude: Data,
         totalDebitMagnitude: Data,
         memo: String?,
@@ -68,7 +67,6 @@ final class QuoteStore: Sendable {
                     snapshot: QuoteReviewSnapshot(
                         sender: sender.raw,
                         recipient: recipient?.raw ?? "",
-                        requestedAmountIsMaximum: isMaximum,
                         amountMagnitude: amountMagnitude,
                         nativeFeeMagnitude: nativeFeeMagnitude,
                         totalDebitMagnitude: totalDebitMagnitude,
@@ -87,7 +85,6 @@ final class QuoteStore: Sendable {
                 return SendQuote(
                     recipient: recipient,
                     amountMagnitude: amountMagnitude,
-                    isMaximum: isMaximum,
                     nativeFeeMagnitude: nativeFeeMagnitude,
                     totalDebitMagnitude: totalDebitMagnitude,
                     memo: memo,

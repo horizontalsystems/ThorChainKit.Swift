@@ -4,7 +4,7 @@ import SwiftProtobuf
 @testable import ThorChainKit
 
 final class ThorNodeSendPreflightProviderTests: XCTestCase {
-    func testTokenSendReadsBothBalancesAndStillEndsOnRecipientAccount() async throws {
+    func testATokenSendReadsNoBalanceAndStillEndsOnRecipientAccount() async throws {
         let sender = "thor1x0jkvqdh2hlpeztd5zyyk70n3efx6mhudkmnn2"
         let recipient = "thor1tgxm5jw6hrlvslrd6lqpk4jwuu4g29dxytrean"
         var account = Cosmos_Auth_V1beta1_BaseAccount(); account.address = sender; account.accountNumber = 7; account.sequence = 9
@@ -28,17 +28,13 @@ final class ThorNodeSendPreflightProviderTests: XCTestCase {
 
         let snapshot = try await provider.snapshot(request: request, lease: lease, height: 42, policy: .standard, attempt: SendPreflightAttempt(clientID: UUID(), generation: 1, attemptID: UUID(), familyID: family.id, routeID: nil))
 
-        // The amount comes from the token balance, the fee from RUNE.
-        XCTAssertEqual(snapshot.spendable, 500)
-        XCTAssertEqual(snapshot.spendableRune, 1_000)
         XCTAssertEqual(snapshot.denom.rawValue, "tcy")
-        // Both balances are read, and recipient-account stays last: the preflight binds
-        // the attempt to that route, so slipping another read in after it fails closed.
-        XCTAssertEqual(transport.routeNames, ["account", "spendable", "spendable", "network-fee", "mimir", "recipient-account"])
-        XCTAssertEqual(transport.routeNames.last, "recipient-account")
-
+        // No balance is read for either denom, and recipient-account stays last: the
+        // preflight binds the attempt to that route, so slipping a read in after it
+        // fails closed.
+        XCTAssertEqual(transport.routeNames, ["account", "network-fee", "mimir", "recipient-account"])
         let denoms = transport.requests.compactMap { URLComponents(url: $0.url!, resolvingAgainstBaseURL: false)?.queryItems?.first(where: { $0.name == "denom" })?.value }
-        XCTAssertEqual(denoms, ["tcy", "rune"])
+        XCTAssertEqual(denoms, [])
     }
 
     func testSendManifestRejectsUnregisteredFixtureFamily() throws {
@@ -76,9 +72,8 @@ final class ThorNodeSendPreflightProviderTests: XCTestCase {
         XCTAssertEqual(snapshot.accountNumber, 7)
         XCTAssertEqual(snapshot.sequence, 9)
         XCTAssertEqual(snapshot.nativeFee, 7)
-        XCTAssertEqual(snapshot.spendableRune, 1_000)
-        XCTAssertEqual(transport.routeNames, ["account", "spendable", "network-fee", "mimir", "recipient-account"])
-        XCTAssertEqual(transport.requests.count, 5)
+        XCTAssertEqual(transport.routeNames, ["account", "network-fee", "mimir", "recipient-account"])
+        XCTAssertEqual(transport.requests.count, 4)
         XCTAssertFalse(transport.bulkModuleAccountsCalled, "the broken bulk ModuleAccounts route is a regression counterexample")
         for request in transport.requests {
             let components = URLComponents(url: request.url!, resolvingAgainstBaseURL: false)!
@@ -121,7 +116,7 @@ final class ThorNodeSendPreflightProviderTests: XCTestCase {
                 valid.map { $0.familyID == family.id ? SendFamilyCapability(familyID: $0.familyID, manifestRevision: $0.manifestRevision, routes: $0.routes.map { route in routeCopy(route, record: SendManifestRecord(familyID: family.id, role: route.record.role == .rest ? .rpc : .rest, scheme: route.record.scheme, host: route.record.host, port: route.record.port, path: route.record.path)) }) : $0 },
                 valid.map { $0.familyID == family.id ? SendFamilyCapability(familyID: $0.familyID, manifestRevision: $0.manifestRevision, routes: $0.routes.map { route in routeCopy(route, record: SendManifestRecord(familyID: family.id, role: route.record.role, scheme: route.record.scheme, host: "wrong.example", port: route.record.port, path: route.record.path)) }) : $0 }
             ]
-            XCTAssertEqual(canonical.routes.count, 5)
+            XCTAssertEqual(canonical.routes.count, 4)
             for capabilities in mutations {
                 let provider = ThorNodeSendPreflightProvider(node: ThorNodeSendClient(transport: MatrixSendTransport(account: Data(), recipient: Data(), network: Data())), leaseProvider: { lease }, capabilities: capabilities)
                 do {

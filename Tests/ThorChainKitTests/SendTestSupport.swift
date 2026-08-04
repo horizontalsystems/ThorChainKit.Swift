@@ -75,7 +75,6 @@ func issueTestQuote(
         sender: try sendTestAddress(),
         recipient: try sendTestAddress(),
         amountMagnitude: amountMagnitude,
-        isMaximum: false,
         nativeFeeMagnitude: nativeFeeMagnitude,
         totalDebitMagnitude: totalDebitMagnitude,
         memo: memo,

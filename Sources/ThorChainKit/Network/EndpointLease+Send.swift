@@ -3,7 +3,7 @@ import Foundation
 enum SendEndpointRole: String, Sendable { case rest, rpc }
 
 enum SendRequestEncoding: String, Sendable { case jsonREST, protobufABCI }
-enum SendResponseDecoder: String, Sendable { case spendableBalance, accountQueryAny, network, mimir }
+enum SendResponseDecoder: String, Sendable { case accountQueryAny, network, mimir }
 
 enum SendCapabilityStatus: String, Sendable, Equatable { case pass, fail, unrun }
 
@@ -36,7 +36,7 @@ struct SendManifestRoute: Equatable, Sendable {
         route: String,
         path: String = "",
         requestEncoding: SendRequestEncoding = .jsonREST,
-        decoder: SendResponseDecoder = .spendableBalance,
+        decoder: SendResponseDecoder = .accountQueryAny,
         proofMode: HeightProofMode,
         schemaRevision: String,
         supportedNodeRevision: String = "3.19.0..3.19.3",
@@ -58,7 +58,7 @@ struct SendFamilyCapability: Equatable, Sendable {
     let manifestRevision: String
     let routes: [SendManifestRoute]
     var status: SendCapabilityStatus {
-        guard routes.count == 5 else { return .unrun }
+        guard routes.count == 4 else { return .unrun }
         if routes.contains(where: { $0.capabilityStatus == .fail }) { return .fail }
         return routes.allSatisfy { $0.capabilityStatus == .pass } ? .pass : .unrun
     }
@@ -92,9 +92,6 @@ enum NativeRuneEndpointRegistry {
             let familyRecords = records().filter { $0.familyID == familyID }
             let definitions: [(String, String, SendRequestEncoding, SendResponseDecoder, HeightProofMode, SendEndpointRole, String?, String?, String?, String?)] = [
                 ("account", "/cosmos.auth.v1beta1.Query/Account", .protobufABCI, .accountQueryAny, .cometABCI, .rpc, nil, nil, nil, nil),
-                // The denom is supplied per call, not pinned: one route serves RUNE and
-                // every THORChain asset. A nil value keeps manifest verification exact.
-                ("spendable", "/cosmos/bank/v1beta1/spendable_balances/{address}/by_denom", .jsonREST, .spendableBalance, .restHeader, .rest, nil, nil, "denom", nil),
                 ("network-fee", "/types.Query/Network", .protobufABCI, .network, .cometABCI, .rpc, nil, nil, nil, nil),
                 // The node returns every mimir key in one response; reading four keys
                 // one at a time cost four requests for the same data.

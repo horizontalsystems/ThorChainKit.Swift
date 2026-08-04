@@ -43,43 +43,6 @@ final class ThorNodeSendClientTests: XCTestCase {
         XCTAssertEqual(components?.queryItems?.first(where: { $0.name == "data" })?.value, "0x0102")
     }
 
-    func testPinnedNetworkAndSpendableRoutesUseTheirExactWireInputs() async throws {
-        var network = Types_QueryNetworkResponse()
-        network.nativeTxFeeRune = "7"
-        let networkValue = try network.serializedData().base64EncodedString()
-        let networkBody = "{\"jsonrpc\":\"2.0\",\"id\":-1,\"result\":{\"response\":{\"code\":0,\"height\":\"42\",\"value\":\"" + networkValue + "\"}}}"
-        let networkTransport = ScriptedSendTransport(data: Data(networkBody.utf8), headers: ["Content-Type": "application/json"])
-        let networkRoute = try XCTUnwrap(NativeRuneEndpointRegistry.capabilities().first?.routes.first { $0.route == "network-fee" })
-        let requestData = try CosmosQueryCodec.networkRequest(height: 42)
-        _ = try await ThorNodeSendClient(transport: networkTransport).read(route: networkRoute, using: try lease(), height: 42, requestData: requestData)
-        let networkQuery = URLComponents(url: try XCTUnwrap(networkTransport.requests.first?.url), resolvingAgainstBaseURL: false)?.queryItems
-        XCTAssertEqual(networkQuery?.first(where: { $0.name == "path" })?.value, "\"/types.Query/Network\"")
-        XCTAssertEqual(networkQuery?.first(where: { $0.name == "data" })?.value, CometABCIEncoding.hex(requestData))
-
-        let spendableTransport = ScriptedSendTransport(data: Data(#"{"balance":{"denom":"rune","amount":"3"}}"#.utf8), headers: ["Content-Type": "application/json", "Grpc-Metadata-X-Cosmos-Block-Height": "42"])
-        let spendableRoute = try XCTUnwrap(NativeRuneEndpointRegistry.capabilities().first?.routes.first { $0.route == "spendable" })
-        _ = try await ThorNodeSendClient(transport: spendableTransport).read(route: spendableRoute, using: try lease(), height: 42, address: "thor1sender", queryParameterValue: "rune")
-        let spendableURL = try XCTUnwrap(spendableTransport.requests.first?.url)
-        let spendableComponents = URLComponents(url: spendableURL, resolvingAgainstBaseURL: false)
-        XCTAssertEqual(spendableComponents?.path, "/cosmos/bank/v1beta1/spendable_balances/thor1sender/by_denom")
-        XCTAssertEqual(spendableComponents?.queryItems?.first(where: { $0.name == "denom" })?.value, "rune")
-    }
-
-    func testSpendableRouteRefusesToQueryWithoutADenom() async throws {
-        let transport = ScriptedSendTransport(data: Data(#"{"balance":{"denom":"rune","amount":"3"}}"#.utf8), headers: ["Content-Type": "application/json", "Grpc-Metadata-X-Cosmos-Block-Height": "42"])
-        let route = try XCTUnwrap(NativeRuneEndpointRegistry.capabilities().first?.routes.first { $0.route == "spendable" })
-
-        // The manifest pins no denom, so omitting it at the call must fail closed rather
-        // than query every balance and read the answer as this denom's.
-        do {
-            _ = try await ThorNodeSendClient(transport: transport).read(route: route, using: try lease(), height: 42, address: "thor1sender")
-            XCTFail("expected the denom-less read to throw")
-        } catch {
-            XCTAssertEqual(error as? SendError, .policyUnavailable)
-        }
-        XCTAssertTrue(transport.requests.isEmpty)
-    }
-
     func testEveryFamilyRouteRejectsMissingAndMismatchedContractFields() throws {
         for family in try NativeRuneEndpointRegistry.families() {
             let routes = NativeRuneEndpointRegistry.capabilities().first { $0.familyID == family.id }!.routes

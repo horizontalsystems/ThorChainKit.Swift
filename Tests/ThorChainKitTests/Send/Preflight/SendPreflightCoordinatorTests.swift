@@ -137,7 +137,6 @@ private func changed(
     sequence: UInt64? = nil,
     accountPublicKey: String? = nil,
         accountPublicKeyData: Data? = nil,
-        spendableRune: BigUInt? = nil,
         nativeFee: BigUInt? = nil,
         mimir: MimirSnapshot? = nil,
         memoMaximumBytes: Int? = nil,
@@ -150,8 +149,7 @@ private func changed(
     try SendSnapshot(
         familyID: familyID ?? snapshot.familyID, chainID: chainID ?? snapshot.chainID, height: height ?? snapshot.height,
         sender: snapshot.sender, recipient: snapshot.recipient, accountNumber: accountNumber ?? snapshot.accountNumber,
-        sequence: sequence ?? snapshot.sequence, amount: snapshot.amount, nativeFee: nativeFee ?? snapshot.nativeFee,
-        spendableRune: spendableRune ?? snapshot.spendableRune, mimir: mimir ?? snapshot.mimir,
+        sequence: sequence ?? snapshot.sequence, amount: snapshot.amount, nativeFee: nativeFee ?? snapshot.nativeFee, mimir: mimir ?? snapshot.mimir,
         memoMaximumBytes: memoMaximumBytes ?? snapshot.memoMaximumBytes,
         recipientClassification: recipientClassification ?? snapshot.recipientClassification,
         policyRevision: policyRevision ?? snapshot.policyRevision, accountPublicKey: accountPublicKey ?? snapshot.accountPublicKey,
