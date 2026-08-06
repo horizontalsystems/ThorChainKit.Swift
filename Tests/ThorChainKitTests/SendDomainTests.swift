@@ -14,7 +14,7 @@ final class SendDomainTests: XCTestCase {
 
     func testErrorDebugProjectionDoesNotExposeSensitiveText() {
         let error = SendError.broadcastRejected(
-            BroadcastRejection(code: 7, codespace: "secret://wallet", sanitizedLog: .invalidResponse)
+            BroadcastRejection(code: 7, codespace: "secret://wallet", sanitizedLog: "insufficient funds")
         )
 
         let rendered = "\(error) \(String(reflecting: error))"

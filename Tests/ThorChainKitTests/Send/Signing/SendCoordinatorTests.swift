@@ -52,7 +52,7 @@ final class SendCoordinatorTests: XCTestCase {
         )
 
         let payload = try DirectSignCodec.makeDepositSignPayload(
-            context: snapshot.depositContext, asset: .rune, amount: quote.amount, memo: "=:BTC.BTC:bc1", publicKey: publicKey
+            context: snapshot.depositContext(sequence: snapshot.sequence), asset: .rune, amount: quote.amount, memo: "=:BTC.BTC:bc1", publicKey: publicKey
         )
         let body = try Cosmos_Tx_V1beta1_TxBody(serializedBytes: payload.bodyBytes)
 
@@ -86,7 +86,8 @@ final class SendCoordinatorTests: XCTestCase {
         let payload = try DirectSignCodec.makeSignPayload(
             snapshot: snapshot,
             quote: PreparedQuote(quote: quote, snapshot: snapshot),
-            publicKey: publicKey
+            publicKey: publicKey,
+            sequence: snapshot.sequence
         )
         let body = try Cosmos_Tx_V1beta1_TxBody(serializedBytes: payload.bodyBytes)
         let message = try Types_MsgSend(serializedBytes: body.messages[0].value)
@@ -173,6 +174,106 @@ final class SendCoordinatorTests: XCTestCase {
         let freshSigner = CountingSigner(publicKey: publicKey)
         _ = await SendCoordinator(runtime: runtime).execute(quote: freshQuote, signer: freshSigner)
         XCTAssertEqual(freshSigner.callCount, 1)
+    }
+
+    func testAFreshAccountNumberMismatchFailsBeforeSigning() async throws {
+        let sender = try sendOtherAddress()
+        let recipient = try sendTestAddress()
+        let publicKey = Data(hex: "02a9ac9f7a97da41559e1684011b6a9b0b9c0445297d5f51dea0897fd4a39c31c7")
+        let snapshot = try SendSnapshot(
+            familyID: "rorcual-mainnet", chainID: "thorchain-1", height: 12,
+            sender: sender.raw, recipient: recipient.raw, accountNumber: 1, sequence: 2,
+            amount: 100, nativeFee: 2,
+            mimir: MimirSnapshot(haltChainGlobal: -1, nodePauseChainGlobal: -1, haltTHORChain: -1, solvencyHaltTHORChain: -1),
+            memoMaximumBytes: 256,
+            accountPublicKey: "/cosmos.crypto.secp256k1.PubKey", accountPublicKeyData: publicKey
+        )
+        let runtime = SendRuntime(
+            address: sender,
+            persistenceNamespace: "coordinator-fresh-account",
+            sendAccountOperation: { _, _ in SendAccountInfo(accountNumber: 99, sequence: 5) }
+        )
+        await runtime.activate(generation: 1)
+        let quote = try await runtime.issuePreflightQuote(
+            request: SendQuoteRequest(sender: sender, recipient: recipient, amount: .exact(snapshot.amount), memo: nil),
+            snapshot: snapshot
+        )
+        let signer = CountingSigner(publicKey: publicKey)
+
+        let result = await SendCoordinator(runtime: runtime).execute(quote: quote, signer: signer)
+
+        XCTAssertEqual(result.failure, .accountUnavailable)
+        XCTAssertEqual(signer.callCount, 0)
+    }
+
+    func testAFreshSequenceBehindTheQuoteFailsBeforeSigning() async throws {
+        let sender = try sendOtherAddress()
+        let recipient = try sendTestAddress()
+        let publicKey = Data(hex: "02a9ac9f7a97da41559e1684011b6a9b0b9c0445297d5f51dea0897fd4a39c31c7")
+        let snapshot = try SendSnapshot(
+            familyID: "rorcual-mainnet", chainID: "thorchain-1", height: 12,
+            sender: sender.raw, recipient: recipient.raw, accountNumber: 1, sequence: 2,
+            amount: 100, nativeFee: 2,
+            mimir: MimirSnapshot(haltChainGlobal: -1, nodePauseChainGlobal: -1, haltTHORChain: -1, solvencyHaltTHORChain: -1),
+            memoMaximumBytes: 256,
+            accountPublicKey: "/cosmos.crypto.secp256k1.PubKey", accountPublicKeyData: publicKey
+        )
+        let runtime = SendRuntime(
+            address: sender,
+            persistenceNamespace: "coordinator-lagging-node",
+            sendAccountOperation: { _, _ in SendAccountInfo(accountNumber: 1, sequence: 1) }
+        )
+        await runtime.activate(generation: 1)
+        let quote = try await runtime.issuePreflightQuote(
+            request: SendQuoteRequest(sender: sender, recipient: recipient, amount: .exact(snapshot.amount), memo: nil),
+            snapshot: snapshot
+        )
+        let signer = CountingSigner(publicKey: publicKey)
+
+        let result = await SendCoordinator(runtime: runtime).execute(quote: quote, signer: signer)
+
+        XCTAssertEqual(result.failure, .providerUnavailable)
+        XCTAssertEqual(signer.callCount, 0)
+    }
+
+    func testAFailingFreshReadLeavesTheQuoteAndAccountUsable() async throws {
+        let sender = try sendOtherAddress()
+        let recipient = try sendTestAddress()
+        let publicKey = Data(hex: "02a9ac9f7a97da41559e1684011b6a9b0b9c0445297d5f51dea0897fd4a39c31c7")
+        let snapshot = try SendSnapshot(
+            familyID: "rorcual-mainnet", chainID: "thorchain-1", height: 12,
+            sender: sender.raw, recipient: recipient.raw, accountNumber: 1, sequence: 2,
+            amount: 100, nativeFee: 2,
+            mimir: MimirSnapshot(haltChainGlobal: -1, nodePauseChainGlobal: -1, haltTHORChain: -1, solvencyHaltTHORChain: -1),
+            memoMaximumBytes: 256,
+            accountPublicKey: "/cosmos.crypto.secp256k1.PubKey", accountPublicKeyData: publicKey
+        )
+        let runtime = SendRuntime(
+            address: sender,
+            persistenceNamespace: "coordinator-read-failure",
+            sendAccountOperation: { _, _ in throw SendError.providerUnavailable }
+        )
+        await runtime.activate(generation: 1)
+        let quote = try await runtime.issuePreflightQuote(
+            request: SendQuoteRequest(sender: sender, recipient: recipient, amount: .exact(snapshot.amount), memo: nil),
+            snapshot: snapshot
+        )
+        let signer = CountingSigner(publicKey: publicKey)
+
+        let result = await SendCoordinator(runtime: runtime).execute(quote: quote, signer: signer)
+
+        XCTAssertEqual(result.failure, .providerUnavailable)
+        XCTAssertEqual(signer.callCount, 0)
+        // The failure happened before quote consumption, so the quote survives a transient
+        // network error, and the account hold is released.
+        do {
+            _ = try await runtime.consumeQuote(quote)
+        } catch {
+            XCTFail("quote must remain usable after a failed fresh read: \(error)")
+        }
+        let admitted = await runtime.beginAccountAttempt(sender.raw)
+        XCTAssertTrue(admitted)
+        await runtime.endAccountAttempt(sender.raw)
     }
 
     func testAdmissionAndOperationHoldPrecedeQuoteAccess() async throws {

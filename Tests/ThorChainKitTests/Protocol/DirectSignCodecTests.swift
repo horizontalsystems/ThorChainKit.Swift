@@ -104,6 +104,21 @@ final class DirectSignCodecTests: XCTestCase {
         XCTAssertTrue(key.ecdsa.isValidSignature(parsedSignature, for: SHA256.hash(data: payload.signDocBytes)))
     }
 
+    func testSignedSequenceFollowsTheParameterNotTheSnapshot() throws {
+        let snapshot = try makeSnapshot()
+        let quote = try makeQuote(preflightContext: snapshot)
+        let payload = try DirectSignCodec.makeSignPayload(
+            snapshot: snapshot,
+            quote: PreparedQuote(quote: quote, snapshot: snapshot),
+            publicKey: publicKey,
+            sequence: 9
+        )
+        let auth = try Cosmos_Tx_V1beta1_AuthInfo(serializedBytes: payload.authInfoBytes)
+
+        XCTAssertEqual(snapshot.sequence, 1)
+        XCTAssertEqual(auth.signerInfos.first?.sequence, 9)
+    }
+
     func testCodecRejectsMemoOverflowAndMalformedPublicKeyFraming() throws {
         let snapshot = try makeSnapshot()
         XCTAssertThrowsError(try makePayload(snapshot: snapshot, memo: String(repeating: "a", count: 257)))
@@ -120,7 +135,7 @@ final class DirectSignCodecTests: XCTestCase {
         let asset = Asset(chain: "THOR", symbol: "TCY", ticker: "TCY")
 
         let payload = try DirectSignCodec.makeDepositSignPayload(
-            context: snapshot.depositContext, asset: asset, amount: 100_000_000, memo: "=:BTC.BTC:bc1...", publicKey: publicKey
+            context: snapshot.depositContext(sequence: snapshot.sequence), asset: asset, amount: 100_000_000, memo: "=:BTC.BTC:bc1...", publicKey: publicKey
         )
 
         let body = try Cosmos_Tx_V1beta1_TxBody(serializedBytes: payload.bodyBytes)
@@ -136,8 +151,9 @@ final class DirectSignCodecTests: XCTestCase {
     }
 
     func testDepositRefusesAnEmptyMemoBecauseItIsTheInstruction() throws {
+        let snapshot = try makeSnapshot()
         XCTAssertThrowsError(try DirectSignCodec.makeDepositSignPayload(
-            context: try makeSnapshot().depositContext, asset: .rune, amount: 1, memo: "", publicKey: publicKey
+            context: snapshot.depositContext(sequence: snapshot.sequence), asset: .rune, amount: 1, memo: "", publicKey: publicKey
         ))
     }
 
@@ -162,7 +178,8 @@ final class DirectSignCodecTests: XCTestCase {
         return try DirectSignCodec.makeSignPayload(
             snapshot: snapshot,
             quote: PreparedQuote(quote: quote, snapshot: snapshot),
-            publicKey: publicKey ?? self.publicKey
+            publicKey: publicKey ?? self.publicKey,
+            sequence: snapshot.sequence
         )
     }
 

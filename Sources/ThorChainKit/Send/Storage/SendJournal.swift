@@ -28,7 +28,7 @@ struct SendJournalRecord: Sendable, Equatable {
     let retryBlockedReason: RetryBlockedReason?
     let checkTxCode: UInt32?
     let codespace: String?
-    let sanitizedLog: BroadcastDiagnostic?
+    let sanitizedLog: String?
     let createdAt: Date
     let updatedAt: Date
 }
@@ -167,7 +167,7 @@ final class SendJournal: @unchecked Sendable {
         blockedReason: RetryBlockedReason? = nil,
         code: UInt32? = nil,
         codespace: String? = nil,
-        sanitizedLog: BroadcastDiagnostic? = nil
+        sanitizedLog: String? = nil
     ) throws -> Bool {
         let changed = try storage.write { db in
             var changed = false
@@ -180,7 +180,7 @@ final class SendJournal: @unchecked Sendable {
                 """,
                 arguments: [
                     state.rawValue, Int64(generation), blockedReason?.rawValue, code.map { Int64($0) },
-                    codespace, sanitizedLog?.rawValue, now(), persistenceNamespace, transactionID.hash,
+                    codespace, sanitizedLog, now(), persistenceNamespace, transactionID.hash,
                     expectedState.rawValue, Int64(expectedGeneration)
                 ]
             )
@@ -266,9 +266,8 @@ final class SendJournal: @unchecked Sendable {
         let rawCode: Int64? = row["check_tx_code"]
         let code = rawCode.flatMap { $0 >= 0 ? UInt32(exactly: $0) : nil }
         let rawReason: String? = row["retry_blocked_reason"]
-        let rawDiagnostic: String? = row["sanitized_log"]
+        let diagnostic: String? = row["sanitized_log"]
         let reason = rawReason.flatMap(RetryBlockedReason.init(rawValue:))
-        let diagnostic = rawDiagnostic.flatMap(BroadcastDiagnostic.init(rawValue:))
         return SendJournalRecord(
             persistenceNamespace: persistenceNamespace, transactionID: transactionID, signedTxRaw: raw,
             sender: sender, recipient: recipient, amount: amount,

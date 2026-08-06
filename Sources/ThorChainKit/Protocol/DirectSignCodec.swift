@@ -37,7 +37,7 @@ enum DirectSignCodec {
     // Mirrors the Android kit, which pairs 6_000_000 for a send with 600_000_000 here.
     private static let depositGasLimit: UInt64 = 600_000_000
 
-    static func makeSignPayload(snapshot: SendSnapshot, quote prepared: PreparedQuote, publicKey: Data) throws -> SignPayload {
+    static func makeSignPayload(snapshot: SendSnapshot, quote prepared: PreparedQuote, publicKey: Data, sequence: UInt64) throws -> SignPayload {
         let quote = prepared.quote
         guard prepared.snapshot == snapshot,
               quote.hasConsistentAuthorityProjection,
@@ -58,7 +58,7 @@ enum DirectSignCodec {
         let sender = try addressPayload(snapshot.sender)
         let recipient = try addressPayload(snapshot.recipient)
         let message = try msgSend(sender: sender, recipient: recipient, amount: quote.amount, denom: snapshot.denom)
-        return try assemble(message: message, typeURL: msgSendTypeURL, memo: quote.memo ?? "", gasLimit: gasLimit, context: snapshot.depositContext, publicKey: publicKey)
+        return try assemble(message: message, typeURL: msgSendTypeURL, memo: quote.memo ?? "", gasLimit: gasLimit, context: snapshot.depositContext(sequence: sequence), publicKey: publicKey)
     }
 
     /// A deposit has no recipient: it addresses the chain itself, and its instruction

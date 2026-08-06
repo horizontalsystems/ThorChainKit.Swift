@@ -45,6 +45,9 @@ public extension Kit {
         let lookupClients = Dictionary(uniqueKeysWithValues: endpoints.families.map { family in
             (family.id, CosmosTransactionLookupClient(baseURL: family.cosmosRestURL))
         })
+        let accountClients = Dictionary(uniqueKeysWithValues: endpoints.families.map { family in
+            (family.id, CosmosAccountClient(baseURL: family.cosmosRestURL))
+        })
         let reader = ReadOperationCoordinator(
             pool: pool,
             client: liveClient,
@@ -90,6 +93,10 @@ public extension Kit {
             lookupOperation: { familyID, transactionID in
                 guard let client = lookupClients[familyID] else { return .providerInconsistent }
                 return await client.lookup(transactionID: transactionID)
+            },
+            sendAccountOperation: { familyID, sender in
+                guard let client = accountClients[familyID] else { throw SendError.accountUnavailable }
+                return try await client.fetchAccount(address: sender)
             },
             // Not requestTimeout: this bounds how long a broadcast may stay undecided
             // before it is reported as unknown, and Android resolves that in ~15s too.
@@ -190,6 +197,9 @@ public extension Kit {
         let lookupClients = Dictionary(uniqueKeysWithValues: endpoints.families.map { family in
             (family.id, CosmosTransactionLookupClient(baseURL: family.cosmosRestURL, transport: adapter))
         })
+        let accountClients = Dictionary(uniqueKeysWithValues: endpoints.families.map { family in
+            (family.id, CosmosAccountClient(baseURL: family.cosmosRestURL, transport: adapter))
+        })
         let reader = ReadOperationCoordinator(
             pool: pool,
             client: liveClient,
@@ -237,6 +247,10 @@ public extension Kit {
             lookupOperation: { familyID, transactionID in
                 guard let client = lookupClients[familyID] else { return .providerInconsistent }
                 return await client.lookup(transactionID: transactionID)
+            },
+            sendAccountOperation: { familyID, sender in
+                guard let client = accountClients[familyID] else { throw SendError.accountUnavailable }
+                return try await client.fetchAccount(address: sender)
             },
             // Not requestTimeout: this bounds how long a broadcast may stay undecided
             // before it is reported as unknown, and Android resolves that in ~15s too.

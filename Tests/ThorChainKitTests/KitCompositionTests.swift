@@ -146,6 +146,14 @@ final class KitCompositionTests: XCTestCase {
         XCTAssertEqual(submission.state, .checkTxAccepted)
         XCTAssertEqual(postCount, 1)
         XCTAssertEqual(requestPath, "/cosmos/tx/v1beta1/txs")
+
+        // The quote carried sequence 2; the transport's account read reports 9. The
+        // signed transaction must use the fresh value, not the quoted one.
+        let capturedTransaction = await transport.signedTransaction()
+        let raw = try XCTUnwrap(capturedTransaction)
+        let decodedRaw = try Cosmos_Tx_V1beta1_TxRaw(serializedBytes: raw)
+        let authInfo = try Cosmos_Tx_V1beta1_AuthInfo(serializedBytes: decodedRaw.authInfoBytes)
+        XCTAssertEqual(authInfo.signerInfos.first?.sequence, 9)
     }
 
 }
@@ -164,8 +172,19 @@ private actor CompositionTransport: TestingHTTPTransport {
 private actor FixtureBroadcastTransport: TestingHTTPTransport {
     private var posts = 0
     private var path: String?
+    private var broadcastRaw: Data?
 
     func data(for request: URLRequest) async throws -> (Data, HTTPURLResponse) {
+        if request.httpMethod == "GET", let url = request.url, url.path.hasPrefix("/cosmos/auth/v1beta1/accounts/") {
+            let address = url.lastPathComponent
+            let body = Data("{\"account\":{\"@type\":\"/cosmos.auth.v1beta1.BaseAccount\",\"address\":\"\(address)\",\"account_number\":\"1\",\"sequence\":\"9\"}}".utf8)
+            return (body, HTTPURLResponse(
+                url: url,
+                statusCode: 200,
+                httpVersion: nil,
+                headerFields: ["Content-Type": "application/json"]
+            )!)
+        }
         guard request.httpMethod == "POST", let url = request.url, let body = request.httpBody,
               let object = try? JSONSerialization.jsonObject(with: body) as? [String: String],
               let txBytes = object["tx_bytes"], object["mode"] == "BROADCAST_MODE_SYNC",
@@ -174,6 +193,7 @@ private actor FixtureBroadcastTransport: TestingHTTPTransport {
         }
         posts += 1
         path = url.path
+        broadcastRaw = raw
         let hash = SHA256.hash(data: raw).map { String(format: "%02X", $0) }.joined()
         let response = Data("{\"tx_response\":{\"txhash\":\"\(hash)\",\"code\":0}}".utf8)
         return (response, HTTPURLResponse(
@@ -186,6 +206,7 @@ private actor FixtureBroadcastTransport: TestingHTTPTransport {
 
     func postCount() -> Int { posts }
     func requestPath() -> String? { path }
+    func signedTransaction() -> Data? { broadcastRaw }
 }
 
 private final class FixtureBroadcastSigner: ISigner, @unchecked Sendable {

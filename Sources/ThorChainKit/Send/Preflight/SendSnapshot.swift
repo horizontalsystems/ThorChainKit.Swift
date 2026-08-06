@@ -8,7 +8,9 @@ struct DepositContext: Sendable, Equatable {
 }
 
 extension SendSnapshot {
-    var depositContext: DepositContext {
+    // The sequence is explicit: signing must use the freshly-read one, not the value
+    // captured at quote time.
+    func depositContext(sequence: UInt64) -> DepositContext {
         DepositContext(sender: sender, chainID: chainID, accountNumber: accountNumber, sequence: sequence)
     }
 }

@@ -71,6 +71,7 @@ actor TransactionSender {
     private let publicationBarrier: PendingPublicationBarrier
     private let broadcastOperation: (@Sendable (String, SignedTransaction) async throws -> BroadcastResponse)?
     private let lookupOperation: (@Sendable (String, TransactionID) async -> RetryLookupResponse)?
+    private let sendAccountOperation: (@Sendable (String, String) async throws -> SendAccountInfo)?
     private let operationRunner: EndpointOperationRunner
     private let retryAccountOperation: (@Sendable () async throws -> RetryAccountSnapshot)?
     private let retryFamilySelection: (@Sendable (String) async throws -> Void)?
@@ -95,6 +96,7 @@ actor TransactionSender {
         historyTransactionManager: TransactionManager? = nil,
         publicationBarrier: PendingPublicationBarrier = PendingPublicationBarrier(),
         lookupOperation: (@Sendable (String, TransactionID) async -> RetryLookupResponse)? = nil,
+        sendAccountOperation: (@Sendable (String, String) async throws -> SendAccountInfo)? = nil,
         operationDeadline: TimeInterval = 15,
         retryAccountOperation: (@Sendable () async throws -> RetryAccountSnapshot)? = nil,
         retryFamilySelection: (@Sendable (String) async throws -> Void)? = nil,
@@ -119,6 +121,7 @@ actor TransactionSender {
         self.historyTransactionManager = historyTransactionManager
         self.broadcastOperation = broadcastOperation
         self.lookupOperation = lookupOperation
+        self.sendAccountOperation = sendAccountOperation
         operationRunner = EndpointOperationRunner(deadline: operationDeadline)
         self.retryAccountOperation = retryAccountOperation
         self.retryFamilySelection = retryFamilySelection
@@ -195,6 +198,23 @@ actor TransactionSender {
 
     func consumeQuote(_ quote: SendQuote) throws {
         _ = try quoteStore.consume(quote, activeGeneration: try admittedGeneration())
+    }
+
+    // Nil when no account operation is wired (direct-coordinator tests); send() refuses to
+    // run without it. Deadline and error mapping match the broadcast/lookup operations.
+    func freshAccount(familyID: String, sender: String) async throws -> SendAccountInfo? {
+        guard let sendAccountOperation else { return nil }
+        do {
+            return try await operationRunner.run(familyID: familyID) {
+                try await sendAccountOperation(familyID, sender)
+            }
+        } catch let error as SendError {
+            throw error
+        } catch is CancellationError {
+            throw CancellationError()
+        } catch {
+            throw SendError.providerUnavailable
+        }
     }
 
     func beginAccountAttempt(_ sender: String) -> Bool {
@@ -315,7 +335,9 @@ actor TransactionSender {
 
     func send(quote: SendQuote, signer: any ISigner) async throws -> SendSubmission {
         try admit()
-        guard journal != nil else { throw SendError.operationUnavailable }
+        // The account operation is mandatory: silently falling back to the quote's stale
+        // sequence would reintroduce the sdk/32 rejection this pipeline exists to prevent.
+        guard journal != nil, sendAccountOperation != nil else { throw SendError.operationUnavailable }
         let result = await SendCoordinator(
             runtime: self,
             persistenceNamespace: persistenceNamespace,
@@ -356,6 +378,9 @@ actor TransactionSender {
                 return SendSubmission(transactionId: handoff.transaction.transactionID, state: .unknown)
             }
         } catch {
+            // The reservation is not yet linked to a journal row here; leaving it would
+            // deterministically block every following send at the same fresh sequence.
+            _ = try? releaseReservation(sender: handoff.sender, sequence: handoff.sequence, ownerToken: handoff.reservationOwnerToken)
             _ = releaseOperationHold(handoff.operationHold, ownerToken: handoff.reservationOwnerToken)
             throw SendError.storageUnavailable
         }

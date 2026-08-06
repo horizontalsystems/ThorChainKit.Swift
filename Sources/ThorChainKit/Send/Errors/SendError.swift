@@ -20,21 +20,19 @@ public struct NativeFeeChange: Equatable, Sendable {
 
 public enum BroadcastCodespaceCategory: String, Hashable, Sendable { case sdk, thorchain, other }
 
-enum BroadcastDiagnostic: String, Sendable { case invalidResponse, providerUnavailable }
-
 public struct BroadcastRejection: Equatable, Sendable {
     public let code: UInt32
     public let codespace: BroadcastCodespaceCategory
     public let sanitizedLog: String?
 
-    internal init(code: UInt32, codespace: String?, sanitizedLog: BroadcastDiagnostic?) {
+    internal init(code: UInt32, codespace: String?, sanitizedLog: String?) {
         self.code = code == 0 ? 1 : code
         switch codespace?.lowercased() {
         case "sdk": self.codespace = .sdk
         case "thorchain": self.codespace = .thorchain
         default: self.codespace = .other
         }
-        self.sanitizedLog = sanitizedLog?.rawValue
+        self.sanitizedLog = sanitizedLog
     }
 }
 
@@ -52,7 +50,14 @@ public enum SendError: Error, Equatable, Sendable, LocalizedError, CustomStringC
 
     public var description: String { render }
 
-    public var errorDescription: String? { render }
+    // LocalizedError is the user-facing channel: node-authored text stays out of it.
+    // The full diagnostic remains on description/debugDescription and in the journal.
+    public var errorDescription: String? {
+        if case let .broadcastRejected(rejection) = self {
+            return "broadcastRejected(code: \(rejection.code), codespace: \(rejection.codespace.rawValue))"
+        }
+        return render
+    }
 
     public var debugDescription: String { render }
 

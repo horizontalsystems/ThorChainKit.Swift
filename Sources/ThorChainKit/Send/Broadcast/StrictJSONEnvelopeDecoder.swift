@@ -6,7 +6,7 @@ struct BroadcastResponse: Sendable, Equatable {
     let txHash: String
     let code: UInt32
     let codespace: String?
-    let sanitizedLog: BroadcastDiagnostic?
+    let sanitizedLog: String?
 }
 
 enum StrictJSONEnvelopeError: Error, Equatable, Sendable {
@@ -69,14 +69,25 @@ struct StrictJSONEnvelopeDecoder: Sendable {
             throw StrictJSONEnvelopeError.invalidEnvelope
         }
         let codespace = try response["codespace"].map(Self.validatedASCII)
-        let diagnostic: BroadcastDiagnostic?
+        let diagnostic: String?
         if let rawLog = response["raw_log"] {
             guard let rawLog = rawLog as? String else { throw StrictJSONEnvelopeError.invalidEnvelope }
-            diagnostic = rawLog.isEmpty ? nil : .invalidResponse
+            diagnostic = Self.sanitizedLog(rawLog)
         } else {
             diagnostic = nil
         }
         return BroadcastResponse(txHash: hash.uppercased(), code: code, codespace: codespace, sanitizedLog: diagnostic)
+    }
+
+    // The node's raw_log is untrusted, but it carries the only actionable diagnostic of
+    // a CheckTx rejection ("account sequence mismatch, expected 7, got 6"). Keep the
+    // printable-ASCII subset, capped, instead of discarding it. Non-printables become
+    // spaces rather than vanishing so adjacent tokens do not glue together.
+    static func sanitizedLog(_ raw: String, maximumLength: Int = 256) -> String? {
+        let mapped = raw.unicodeScalars.map { $0.value >= 0x20 && $0.value <= 0x7E ? Character($0) : " " }
+        let trimmed = String(mapped).trimmingCharacters(in: .whitespaces)
+        guard !trimmed.isEmpty else { return nil }
+        return String(trimmed.prefix(maximumLength))
     }
 
     private static func validatedASCII(_ value: Any) throws -> String {

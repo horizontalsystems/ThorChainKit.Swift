@@ -44,14 +44,31 @@ actor SendCoordinator {
         var ownershipTransferred = false
         var signerFenceAcquired = false
         var retainSignerFence = false
+        var effectiveSequence = quote.internalAuthorityRecord.snapshot.sequence
         let result: SendCoordinatorResult
 
         do {
-            try await runtime.consumeQuote(quote)
             let publicKey = signer.compressedPublicKey
             guard let h1 = quote.preflightContext else { throw SendError.operationUnavailable }
             try bind(publicKey: publicKey, snapshot: h1)
-            guard try await runtime.acquireReservation(sender: sender, sequence: h1.sequence, ownerToken: ownerToken) else {
+            // The quote's sequence was read at a pinned height and may be minutes stale;
+            // signing it after the account has since transacted is a guaranteed CheckTx
+            // rejection (sdk/32). Like the Android kit, read the account fresh right
+            // before signing and sign whatever the chain reports now. The bounds keep a
+            // lagging or hostile node from rolling the sequence back (stale re-sign) or
+            // arming a far-future, never-expiring transaction.
+            if let fresh = try await runtime.freshAccount(familyID: h1.familyID, sender: sender) {
+                guard fresh.accountNumber == h1.accountNumber else { throw SendError.accountUnavailable }
+                guard fresh.sequence >= h1.sequence, fresh.sequence - h1.sequence <= Self.maximumSequenceCatchUp else {
+                    throw SendError.providerUnavailable
+                }
+                effectiveSequence = fresh.sequence
+            }
+            // Consumed only after the fresh read: a transient network failure must not burn
+            // the quote. The account hold taken above serialises execute per sender, so
+            // deferring consumption cannot double-consume.
+            try await runtime.consumeQuote(quote)
+            guard try await runtime.acquireReservation(sender: sender, sequence: effectiveSequence, ownerToken: ownerToken) else {
                 throw SendError.sendInProgress
             }
             reservationAcquired = true
@@ -62,14 +79,14 @@ actor SendCoordinator {
             if quote.recipient == nil {
                 guard let memo = quote.memo else { throw SendError.operationUnavailable }
                 payload = try DirectSignCodec.makeDepositSignPayload(
-                    context: h1.depositContext,
+                    context: h1.depositContext(sequence: effectiveSequence),
                     asset: try Denom.asset(for: h1.denom.rawValue),
                     amount: quote.amount,
                     memo: memo,
                     publicKey: publicKey
                 )
             } else {
-                payload = try DirectSignCodec.makeSignPayload(snapshot: h1, quote: prepared, publicKey: publicKey)
+                payload = try DirectSignCodec.makeSignPayload(snapshot: h1, quote: prepared, publicKey: publicKey, sequence: effectiveSequence)
             }
             guard await runtime.beginSignerFence(sender) else { throw SendError.sendInProgress }
             signerFenceAcquired = true
@@ -112,7 +129,7 @@ actor SendCoordinator {
                 providerFamilyID: h1.familyID,
                 quoteHeight: h1.height,
                 persistenceNamespace: persistenceNamespace,
-                sequence: h1.sequence,
+                sequence: effectiveSequence,
                 reservationOwnerToken: ownerToken,
                 operationHold: operationHold,
                 runtime: runtime
@@ -134,7 +151,7 @@ actor SendCoordinator {
             result: result,
             runtime: runtime,
             sender: sender,
-            sequence: quote.internalAuthorityRecord.snapshot.sequence,
+            sequence: effectiveSequence,
             ownerToken: ownerToken,
             operationHold: operationHold,
             reservationAcquired: reservationAcquired,
@@ -214,6 +231,10 @@ actor SendCoordinator {
             throw SendError.signerAddressMismatch
         }
     }
+
+    // Covers every legitimate advance (the user's own recent sends) while refusing a
+    // node-chosen far-future sequence.
+    private static let maximumSequenceCatchUp: UInt64 = 16
 
     private static func makeOwnerToken() -> Data {
         var value = UUID().uuid
