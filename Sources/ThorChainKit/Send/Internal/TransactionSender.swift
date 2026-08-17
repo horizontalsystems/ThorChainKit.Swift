@@ -1,7 +1,7 @@
 import BigInt
 import Foundation
 
-fileprivate final class SendRuntimeAdmissionState: Sendable {
+private final class SendRuntimeAdmissionState: Sendable {
     private let stateQueue = DispatchQueue(label: "ThorChainKit.Send.Admission")
     private let generationKey = DispatchSpecificKey<UInt64>()
 
@@ -197,7 +197,7 @@ actor TransactionSender {
     }
 
     func consumeQuote(_ quote: SendQuote) throws {
-        _ = try quoteStore.consume(quote, activeGeneration: try admittedGeneration())
+        _ = try quoteStore.consume(quote, activeGeneration: admittedGeneration())
     }
 
     // Nil when no account operation is wired (direct-coordinator tests); send() refuses to
@@ -357,7 +357,7 @@ actor TransactionSender {
         do {
             try journal.insertBroadcasting(
                 transaction: handoff.transaction,
-                senderPayload: try Address(handoff.sender, network: network ?? .mainnet).payload,
+                senderPayload: Address(handoff.sender, network: network ?? .mainnet).payload,
                 recipientPayload: handoff.recipientPayload,
                 sender: handoff.sender,
                 recipient: handoff.recipient,
@@ -442,12 +442,14 @@ actor TransactionSender {
         if record.retryBlockedReason == .sequenceAdvanced { throw SendError.retryBlocked(.sequenceAdvanced) }
         guard let lookupOperation, let broadcastOperation else { throw SendError.operationUnavailable }
         if retryAccountOperation == nil,
-           let acceptingNativeFee, acceptingNativeFee != record.quotedNativeFee {
+           let acceptingNativeFee, acceptingNativeFee != record.quotedNativeFee
+        {
             throw SendError.retryFeeChanged(NativeFeeChange(previous: BigUInt(record.quotedNativeFee), current: BigUInt(acceptingNativeFee)))
         }
         let nextGeneration = max(1, record.broadcastGeneration &+ 1)
         guard record.state == .unknown,
-              retryCAS(journal: journal, transactionId: transactionId, expectedGeneration: record.broadcastGeneration, nextGeneration: nextGeneration) else {
+              retryCAS(journal: journal, transactionId: transactionId, expectedGeneration: record.broadcastGeneration, nextGeneration: nextGeneration)
+        else {
             throw SendError.sendInProgress
         }
         refreshTransactionState()
@@ -505,13 +507,15 @@ actor TransactionSender {
                         throw SendError.retryBlocked(.sequenceAdvanced)
                     }
                     if snapshot.nativeFee != record.quotedNativeFee,
-                       acceptingNativeFee != snapshot.nativeFee {
+                       acceptingNativeFee != snapshot.nativeFee
+                    {
                         _ = try journal.transition(transactionID: transactionId, from: .broadcasting, expectedGeneration: nextGeneration, to: .unknown, generation: nextGeneration)
                         refreshTransactionState()
                         throw SendError.retryFeeChanged(NativeFeeChange(previous: BigUInt(record.quotedNativeFee), current: BigUInt(snapshot.nativeFee)))
                     }
                     if snapshot.nativeFee == record.quotedNativeFee,
-                       let acceptingNativeFee, acceptingNativeFee != snapshot.nativeFee {
+                       let acceptingNativeFee, acceptingNativeFee != snapshot.nativeFee
+                    {
                         _ = try journal.transition(transactionID: transactionId, from: .broadcasting, expectedGeneration: nextGeneration, to: .unknown, generation: nextGeneration)
                         refreshTransactionState()
                         throw SendError.retryFeeChanged(NativeFeeChange(previous: BigUInt(record.quotedNativeFee), current: BigUInt(snapshot.nativeFee)))

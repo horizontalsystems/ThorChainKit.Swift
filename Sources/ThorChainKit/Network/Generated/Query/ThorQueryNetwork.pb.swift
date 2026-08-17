@@ -15,363 +15,363 @@ import SwiftProtobuf
 // incompatible with the version of SwiftProtobuf to which you are linking.
 // Please ensure that you are building against the same version of the API
 // that was used to generate this file.
-fileprivate struct _GeneratedWithProtocGenSwiftVersion: SwiftProtobuf.ProtobufAPIVersionCheck {
-  struct _2: SwiftProtobuf.ProtobufAPIVersion_2 {}
-  typealias Version = _2
+private struct _GeneratedWithProtocGenSwiftVersion: SwiftProtobuf.ProtobufAPIVersionCheck {
+    struct _2: SwiftProtobuf.ProtobufAPIVersion_2 {}
+    typealias Version = _2
 }
 
 struct Types_QueryNetworkRequest: Sendable {
-  // SwiftProtobuf.Message conformance is added in an extension below. See the
-  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
-  // methods supported on all messages.
+    // SwiftProtobuf.Message conformance is added in an extension below. See the
+    // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+    // methods supported on all messages.
 
-  var height: String = String()
+    var height: String = .init()
 
-  var unknownFields = SwiftProtobuf.UnknownStorage()
+    var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  init() {}
+    init() {}
 }
 
 struct Types_QueryNetworkResponse: @unchecked Sendable {
-  // SwiftProtobuf.Message conformance is added in an extension below. See the
-  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
-  // methods supported on all messages.
+    // SwiftProtobuf.Message conformance is added in an extension below. See the
+    // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+    // methods supported on all messages.
 
-  /// total amount of RUNE awarded to node operators
-  var bondRewardRune: String {
-    get {return _storage._bondRewardRune}
-    set {_uniqueStorage()._bondRewardRune = newValue}
-  }
+    /// total amount of RUNE awarded to node operators
+    var bondRewardRune: String {
+        get { return _storage._bondRewardRune }
+        set { _uniqueStorage()._bondRewardRune = newValue }
+    }
 
-  /// total bonded RUNE
-  var totalBondUnits: String {
-    get {return _storage._totalBondUnits}
-    set {_uniqueStorage()._totalBondUnits = newValue}
-  }
+    /// total bonded RUNE
+    var totalBondUnits: String {
+        get { return _storage._totalBondUnits }
+        set { _uniqueStorage()._totalBondUnits = newValue }
+    }
 
-  /// RUNE in Available pools (equal in value to the Assets in those pools)
-  var availablePoolsRune: String {
-    get {return _storage._availablePoolsRune}
-    set {_uniqueStorage()._availablePoolsRune = newValue}
-  }
+    /// RUNE in Available pools (equal in value to the Assets in those pools)
+    var availablePoolsRune: String {
+        get { return _storage._availablePoolsRune }
+        set { _uniqueStorage()._availablePoolsRune = newValue }
+    }
 
-  /// RUNE value of Layer 1 Assets in vaults
-  var vaultsLiquidityRune: String {
-    get {return _storage._vaultsLiquidityRune}
-    set {_uniqueStorage()._vaultsLiquidityRune = newValue}
-  }
+    /// RUNE value of Layer 1 Assets in vaults
+    var vaultsLiquidityRune: String {
+        get { return _storage._vaultsLiquidityRune }
+        set { _uniqueStorage()._vaultsLiquidityRune = newValue }
+    }
 
-  /// effective security bond used to determine maximum pooled RUNE
-  var effectiveSecurityBond: String {
-    get {return _storage._effectiveSecurityBond}
-    set {_uniqueStorage()._effectiveSecurityBond = newValue}
-  }
+    /// effective security bond used to determine maximum pooled RUNE
+    var effectiveSecurityBond: String {
+        get { return _storage._effectiveSecurityBond }
+        set { _uniqueStorage()._effectiveSecurityBond = newValue }
+    }
 
-  /// total reserve RUNE
-  var totalReserve: String {
-    get {return _storage._totalReserve}
-    set {_uniqueStorage()._totalReserve = newValue}
-  }
+    /// total reserve RUNE
+    var totalReserve: String {
+        get { return _storage._totalReserve }
+        set { _uniqueStorage()._totalReserve = newValue }
+    }
 
-  /// Returns true if there exist RetiringVaults which have not finished
-  /// migrating funds to new ActiveVaults
-  var vaultsMigrating: Bool {
-    get {return _storage._vaultsMigrating}
-    set {_uniqueStorage()._vaultsMigrating = newValue}
-  }
+    /// Returns true if there exist RetiringVaults which have not finished
+    /// migrating funds to new ActiveVaults
+    var vaultsMigrating: Bool {
+        get { return _storage._vaultsMigrating }
+        set { _uniqueStorage()._vaultsMigrating = newValue }
+    }
 
-  /// Sum of the gas the network has spent to send outbounds
-  var gasSpentRune: String {
-    get {return _storage._gasSpentRune}
-    set {_uniqueStorage()._gasSpentRune = newValue}
-  }
+    /// Sum of the gas the network has spent to send outbounds
+    var gasSpentRune: String {
+        get { return _storage._gasSpentRune }
+        set { _uniqueStorage()._gasSpentRune = newValue }
+    }
 
-  /// Sum of the gas withheld from users to cover outbound gas
-  var gasWithheldRune: String {
-    get {return _storage._gasWithheldRune}
-    set {_uniqueStorage()._gasWithheldRune = newValue}
-  }
+    /// Sum of the gas withheld from users to cover outbound gas
+    var gasWithheldRune: String {
+        get { return _storage._gasWithheldRune }
+        set { _uniqueStorage()._gasWithheldRune = newValue }
+    }
 
-  /// Current outbound fee multiplier, in basis points
-  var outboundFeeMultiplier: String {
-    get {return _storage._outboundFeeMultiplier}
-    set {_uniqueStorage()._outboundFeeMultiplier = newValue}
-  }
+    /// Current outbound fee multiplier, in basis points
+    var outboundFeeMultiplier: String {
+        get { return _storage._outboundFeeMultiplier }
+        set { _uniqueStorage()._outboundFeeMultiplier = newValue }
+    }
 
-  /// the outbound transaction fee in rune, converted from the
-  /// NativeOutboundFeeUSD mimir (after USD fees are enabled)
-  var nativeOutboundFeeRune: String {
-    get {return _storage._nativeOutboundFeeRune}
-    set {_uniqueStorage()._nativeOutboundFeeRune = newValue}
-  }
+    /// the outbound transaction fee in rune, converted from the
+    /// NativeOutboundFeeUSD mimir (after USD fees are enabled)
+    var nativeOutboundFeeRune: String {
+        get { return _storage._nativeOutboundFeeRune }
+        set { _uniqueStorage()._nativeOutboundFeeRune = newValue }
+    }
 
-  /// the native transaction fee in rune, converted from the
-  /// NativeTransactionFeeUSD mimir (after USD fees are enabled)
-  var nativeTxFeeRune: String {
-    get {return _storage._nativeTxFeeRune}
-    set {_uniqueStorage()._nativeTxFeeRune = newValue}
-  }
+    /// the native transaction fee in rune, converted from the
+    /// NativeTransactionFeeUSD mimir (after USD fees are enabled)
+    var nativeTxFeeRune: String {
+        get { return _storage._nativeTxFeeRune }
+        set { _uniqueStorage()._nativeTxFeeRune = newValue }
+    }
 
-  /// the thorname register fee in rune, converted from the TNSRegisterFeeUSD
-  /// mimir (after USD fees are enabled)
-  var tnsRegisterFeeRune: String {
-    get {return _storage._tnsRegisterFeeRune}
-    set {_uniqueStorage()._tnsRegisterFeeRune = newValue}
-  }
+    /// the thorname register fee in rune, converted from the TNSRegisterFeeUSD
+    /// mimir (after USD fees are enabled)
+    var tnsRegisterFeeRune: String {
+        get { return _storage._tnsRegisterFeeRune }
+        set { _uniqueStorage()._tnsRegisterFeeRune = newValue }
+    }
 
-  /// the thorname fee per block in rune, converted from the TNSFeePerBlockUSD
-  /// mimir (after USD fees are enabled)
-  var tnsFeePerBlockRune: String {
-    get {return _storage._tnsFeePerBlockRune}
-    set {_uniqueStorage()._tnsFeePerBlockRune = newValue}
-  }
+    /// the thorname fee per block in rune, converted from the TNSFeePerBlockUSD
+    /// mimir (after USD fees are enabled)
+    var tnsFeePerBlockRune: String {
+        get { return _storage._tnsFeePerBlockRune }
+        set { _uniqueStorage()._tnsFeePerBlockRune = newValue }
+    }
 
-  /// the rune price in tor
-  var runePriceInTor: String {
-    get {return _storage._runePriceInTor}
-    set {_uniqueStorage()._runePriceInTor = newValue}
-  }
+    /// the rune price in tor
+    var runePriceInTor: String {
+        get { return _storage._runePriceInTor }
+        set { _uniqueStorage()._runePriceInTor = newValue }
+    }
 
-  /// the tor price in rune
-  var torPriceInRune: String {
-    get {return _storage._torPriceInRune}
-    set {_uniqueStorage()._torPriceInRune = newValue}
-  }
+    /// the tor price in rune
+    var torPriceInRune: String {
+        get { return _storage._torPriceInRune }
+        set { _uniqueStorage()._torPriceInRune = newValue }
+    }
 
-  /// indicator if all anchor chains are halted
-  var torPriceHalted: Bool {
-    get {return _storage._torPriceHalted}
-    set {_uniqueStorage()._torPriceHalted = newValue}
-  }
+    /// indicator if all anchor chains are halted
+    var torPriceHalted: Bool {
+        get { return _storage._torPriceHalted }
+        set { _uniqueStorage()._torPriceHalted = newValue }
+    }
 
-  /// indicates whether an active Asgard vault currently has spendable XMR funds
-  var xmrActiveVaultReady: Bool {
-    get {return _storage._xmrActiveVaultReady}
-    set {_uniqueStorage()._xmrActiveVaultReady = newValue}
-  }
+    /// indicates whether an active Asgard vault currently has spendable XMR funds
+    var xmrActiveVaultReady: Bool {
+        get { return _storage._xmrActiveVaultReady }
+        set { _uniqueStorage()._xmrActiveVaultReady = newValue }
+    }
 
-  var unknownFields = SwiftProtobuf.UnknownStorage()
+    var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  init() {}
+    init() {}
 
-  fileprivate var _storage = _StorageClass.defaultInstance
+    fileprivate var _storage = _StorageClass.defaultInstance
 }
 
 // MARK: - Code below here is support for the SwiftProtobuf runtime.
 
-fileprivate let _protobuf_package = "types"
+private let _protobuf_package = "types"
 
 extension Types_QueryNetworkRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  static let protoMessageName: String = _protobuf_package + ".QueryNetworkRequest"
-  static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}height\0")
+    static let protoMessageName: String = _protobuf_package + ".QueryNetworkRequest"
+    static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}height\0")
 
-  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
-    while let fieldNumber = try decoder.nextFieldNumber() {
-      // The use of inline closures is to circumvent an issue where the compiler
-      // allocates stack space for every case branch when no optimizations are
-      // enabled. https://github.com/apple/swift-protobuf/issues/1034
-      switch fieldNumber {
-      case 1: try { try decoder.decodeSingularStringField(value: &self.height) }()
-      default: break
-      }
+    mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+        while let fieldNumber = try decoder.nextFieldNumber() {
+            // The use of inline closures is to circumvent an issue where the compiler
+            // allocates stack space for every case branch when no optimizations are
+            // enabled. https://github.com/apple/swift-protobuf/issues/1034
+            switch fieldNumber {
+            case 1: try decoder.decodeSingularStringField(value: &height)
+            default: break
+            }
+        }
     }
-  }
 
-  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    if !self.height.isEmpty {
-      try visitor.visitSingularStringField(value: self.height, fieldNumber: 1)
+    func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+        if !height.isEmpty {
+            try visitor.visitSingularStringField(value: height, fieldNumber: 1)
+        }
+        try unknownFields.traverse(visitor: &visitor)
     }
-    try unknownFields.traverse(visitor: &visitor)
-  }
 
-  static func ==(lhs: Types_QueryNetworkRequest, rhs: Types_QueryNetworkRequest) -> Bool {
-    if lhs.height != rhs.height {return false}
-    if lhs.unknownFields != rhs.unknownFields {return false}
-    return true
-  }
+    static func == (lhs: Types_QueryNetworkRequest, rhs: Types_QueryNetworkRequest) -> Bool {
+        if lhs.height != rhs.height { return false }
+        if lhs.unknownFields != rhs.unknownFields { return false }
+        return true
+    }
 }
 
 extension Types_QueryNetworkResponse: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  static let protoMessageName: String = _protobuf_package + ".QueryNetworkResponse"
-  static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}bond_reward_rune\0\u{3}total_bond_units\0\u{3}effective_security_bond\0\u{3}total_reserve\0\u{3}vaults_migrating\0\u{3}gas_spent_rune\0\u{3}gas_withheld_rune\0\u{3}outbound_fee_multiplier\0\u{3}native_outbound_fee_rune\0\u{3}native_tx_fee_rune\0\u{3}tns_register_fee_rune\0\u{3}tns_fee_per_block_rune\0\u{3}rune_price_in_tor\0\u{3}tor_price_in_rune\0\u{3}available_pools_rune\0\u{3}vaults_liquidity_rune\0\u{3}tor_price_halted\0\u{3}xmr_active_vault_ready\0")
+    static let protoMessageName: String = _protobuf_package + ".QueryNetworkResponse"
+    static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}bond_reward_rune\0\u{3}total_bond_units\0\u{3}effective_security_bond\0\u{3}total_reserve\0\u{3}vaults_migrating\0\u{3}gas_spent_rune\0\u{3}gas_withheld_rune\0\u{3}outbound_fee_multiplier\0\u{3}native_outbound_fee_rune\0\u{3}native_tx_fee_rune\0\u{3}tns_register_fee_rune\0\u{3}tns_fee_per_block_rune\0\u{3}rune_price_in_tor\0\u{3}tor_price_in_rune\0\u{3}available_pools_rune\0\u{3}vaults_liquidity_rune\0\u{3}tor_price_halted\0\u{3}xmr_active_vault_ready\0")
 
-  fileprivate class _StorageClass {
-    var _bondRewardRune: String = String()
-    var _totalBondUnits: String = String()
-    var _availablePoolsRune: String = String()
-    var _vaultsLiquidityRune: String = String()
-    var _effectiveSecurityBond: String = String()
-    var _totalReserve: String = String()
-    var _vaultsMigrating: Bool = false
-    var _gasSpentRune: String = String()
-    var _gasWithheldRune: String = String()
-    var _outboundFeeMultiplier: String = String()
-    var _nativeOutboundFeeRune: String = String()
-    var _nativeTxFeeRune: String = String()
-    var _tnsRegisterFeeRune: String = String()
-    var _tnsFeePerBlockRune: String = String()
-    var _runePriceInTor: String = String()
-    var _torPriceInRune: String = String()
-    var _torPriceHalted: Bool = false
-    var _xmrActiveVaultReady: Bool = false
+    fileprivate class _StorageClass {
+        var _bondRewardRune: String = .init()
+        var _totalBondUnits: String = .init()
+        var _availablePoolsRune: String = .init()
+        var _vaultsLiquidityRune: String = .init()
+        var _effectiveSecurityBond: String = .init()
+        var _totalReserve: String = .init()
+        var _vaultsMigrating: Bool = false
+        var _gasSpentRune: String = .init()
+        var _gasWithheldRune: String = .init()
+        var _outboundFeeMultiplier: String = .init()
+        var _nativeOutboundFeeRune: String = .init()
+        var _nativeTxFeeRune: String = .init()
+        var _tnsRegisterFeeRune: String = .init()
+        var _tnsFeePerBlockRune: String = .init()
+        var _runePriceInTor: String = .init()
+        var _torPriceInRune: String = .init()
+        var _torPriceHalted: Bool = false
+        var _xmrActiveVaultReady: Bool = false
 
-      // This property is used as the initial default value for new instances of the type.
-      // The type itself is protecting the reference to its storage via CoW semantics.
-      // This will force a copy to be made of this reference when the first mutation occurs;
-      // hence, it is safe to mark this as `nonisolated(unsafe)`.
-      static nonisolated(unsafe) let defaultInstance = _StorageClass()
+        // This property is used as the initial default value for new instances of the type.
+        // The type itself is protecting the reference to its storage via CoW semantics.
+        // This will force a copy to be made of this reference when the first mutation occurs;
+        // hence, it is safe to mark this as `nonisolated(unsafe)`.
+        nonisolated(unsafe) static let defaultInstance = _StorageClass()
 
-    private init() {}
+        private init() {}
 
-    init(copying source: _StorageClass) {
-      _bondRewardRune = source._bondRewardRune
-      _totalBondUnits = source._totalBondUnits
-      _availablePoolsRune = source._availablePoolsRune
-      _vaultsLiquidityRune = source._vaultsLiquidityRune
-      _effectiveSecurityBond = source._effectiveSecurityBond
-      _totalReserve = source._totalReserve
-      _vaultsMigrating = source._vaultsMigrating
-      _gasSpentRune = source._gasSpentRune
-      _gasWithheldRune = source._gasWithheldRune
-      _outboundFeeMultiplier = source._outboundFeeMultiplier
-      _nativeOutboundFeeRune = source._nativeOutboundFeeRune
-      _nativeTxFeeRune = source._nativeTxFeeRune
-      _tnsRegisterFeeRune = source._tnsRegisterFeeRune
-      _tnsFeePerBlockRune = source._tnsFeePerBlockRune
-      _runePriceInTor = source._runePriceInTor
-      _torPriceInRune = source._torPriceInRune
-      _torPriceHalted = source._torPriceHalted
-      _xmrActiveVaultReady = source._xmrActiveVaultReady
-    }
-  }
-
-  fileprivate mutating func _uniqueStorage() -> _StorageClass {
-    if !isKnownUniquelyReferenced(&_storage) {
-      _storage = _StorageClass(copying: _storage)
-    }
-    return _storage
-  }
-
-  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
-    _ = _uniqueStorage()
-    try withExtendedLifetime(_storage) { (_storage: _StorageClass) in
-      while let fieldNumber = try decoder.nextFieldNumber() {
-        // The use of inline closures is to circumvent an issue where the compiler
-        // allocates stack space for every case branch when no optimizations are
-        // enabled. https://github.com/apple/swift-protobuf/issues/1034
-        switch fieldNumber {
-        case 1: try { try decoder.decodeSingularStringField(value: &_storage._bondRewardRune) }()
-        case 2: try { try decoder.decodeSingularStringField(value: &_storage._totalBondUnits) }()
-        case 3: try { try decoder.decodeSingularStringField(value: &_storage._effectiveSecurityBond) }()
-        case 4: try { try decoder.decodeSingularStringField(value: &_storage._totalReserve) }()
-        case 5: try { try decoder.decodeSingularBoolField(value: &_storage._vaultsMigrating) }()
-        case 6: try { try decoder.decodeSingularStringField(value: &_storage._gasSpentRune) }()
-        case 7: try { try decoder.decodeSingularStringField(value: &_storage._gasWithheldRune) }()
-        case 8: try { try decoder.decodeSingularStringField(value: &_storage._outboundFeeMultiplier) }()
-        case 9: try { try decoder.decodeSingularStringField(value: &_storage._nativeOutboundFeeRune) }()
-        case 10: try { try decoder.decodeSingularStringField(value: &_storage._nativeTxFeeRune) }()
-        case 11: try { try decoder.decodeSingularStringField(value: &_storage._tnsRegisterFeeRune) }()
-        case 12: try { try decoder.decodeSingularStringField(value: &_storage._tnsFeePerBlockRune) }()
-        case 13: try { try decoder.decodeSingularStringField(value: &_storage._runePriceInTor) }()
-        case 14: try { try decoder.decodeSingularStringField(value: &_storage._torPriceInRune) }()
-        case 15: try { try decoder.decodeSingularStringField(value: &_storage._availablePoolsRune) }()
-        case 16: try { try decoder.decodeSingularStringField(value: &_storage._vaultsLiquidityRune) }()
-        case 17: try { try decoder.decodeSingularBoolField(value: &_storage._torPriceHalted) }()
-        case 18: try { try decoder.decodeSingularBoolField(value: &_storage._xmrActiveVaultReady) }()
-        default: break
+        init(copying source: _StorageClass) {
+            _bondRewardRune = source._bondRewardRune
+            _totalBondUnits = source._totalBondUnits
+            _availablePoolsRune = source._availablePoolsRune
+            _vaultsLiquidityRune = source._vaultsLiquidityRune
+            _effectiveSecurityBond = source._effectiveSecurityBond
+            _totalReserve = source._totalReserve
+            _vaultsMigrating = source._vaultsMigrating
+            _gasSpentRune = source._gasSpentRune
+            _gasWithheldRune = source._gasWithheldRune
+            _outboundFeeMultiplier = source._outboundFeeMultiplier
+            _nativeOutboundFeeRune = source._nativeOutboundFeeRune
+            _nativeTxFeeRune = source._nativeTxFeeRune
+            _tnsRegisterFeeRune = source._tnsRegisterFeeRune
+            _tnsFeePerBlockRune = source._tnsFeePerBlockRune
+            _runePriceInTor = source._runePriceInTor
+            _torPriceInRune = source._torPriceInRune
+            _torPriceHalted = source._torPriceHalted
+            _xmrActiveVaultReady = source._xmrActiveVaultReady
         }
-      }
     }
-  }
 
-  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    try withExtendedLifetime(_storage) { (_storage: _StorageClass) in
-      if !_storage._bondRewardRune.isEmpty {
-        try visitor.visitSingularStringField(value: _storage._bondRewardRune, fieldNumber: 1)
-      }
-      if !_storage._totalBondUnits.isEmpty {
-        try visitor.visitSingularStringField(value: _storage._totalBondUnits, fieldNumber: 2)
-      }
-      if !_storage._effectiveSecurityBond.isEmpty {
-        try visitor.visitSingularStringField(value: _storage._effectiveSecurityBond, fieldNumber: 3)
-      }
-      if !_storage._totalReserve.isEmpty {
-        try visitor.visitSingularStringField(value: _storage._totalReserve, fieldNumber: 4)
-      }
-      if _storage._vaultsMigrating != false {
-        try visitor.visitSingularBoolField(value: _storage._vaultsMigrating, fieldNumber: 5)
-      }
-      if !_storage._gasSpentRune.isEmpty {
-        try visitor.visitSingularStringField(value: _storage._gasSpentRune, fieldNumber: 6)
-      }
-      if !_storage._gasWithheldRune.isEmpty {
-        try visitor.visitSingularStringField(value: _storage._gasWithheldRune, fieldNumber: 7)
-      }
-      if !_storage._outboundFeeMultiplier.isEmpty {
-        try visitor.visitSingularStringField(value: _storage._outboundFeeMultiplier, fieldNumber: 8)
-      }
-      if !_storage._nativeOutboundFeeRune.isEmpty {
-        try visitor.visitSingularStringField(value: _storage._nativeOutboundFeeRune, fieldNumber: 9)
-      }
-      if !_storage._nativeTxFeeRune.isEmpty {
-        try visitor.visitSingularStringField(value: _storage._nativeTxFeeRune, fieldNumber: 10)
-      }
-      if !_storage._tnsRegisterFeeRune.isEmpty {
-        try visitor.visitSingularStringField(value: _storage._tnsRegisterFeeRune, fieldNumber: 11)
-      }
-      if !_storage._tnsFeePerBlockRune.isEmpty {
-        try visitor.visitSingularStringField(value: _storage._tnsFeePerBlockRune, fieldNumber: 12)
-      }
-      if !_storage._runePriceInTor.isEmpty {
-        try visitor.visitSingularStringField(value: _storage._runePriceInTor, fieldNumber: 13)
-      }
-      if !_storage._torPriceInRune.isEmpty {
-        try visitor.visitSingularStringField(value: _storage._torPriceInRune, fieldNumber: 14)
-      }
-      if !_storage._availablePoolsRune.isEmpty {
-        try visitor.visitSingularStringField(value: _storage._availablePoolsRune, fieldNumber: 15)
-      }
-      if !_storage._vaultsLiquidityRune.isEmpty {
-        try visitor.visitSingularStringField(value: _storage._vaultsLiquidityRune, fieldNumber: 16)
-      }
-      if _storage._torPriceHalted != false {
-        try visitor.visitSingularBoolField(value: _storage._torPriceHalted, fieldNumber: 17)
-      }
-      if _storage._xmrActiveVaultReady != false {
-        try visitor.visitSingularBoolField(value: _storage._xmrActiveVaultReady, fieldNumber: 18)
-      }
+    fileprivate mutating func _uniqueStorage() -> _StorageClass {
+        if !isKnownUniquelyReferenced(&_storage) {
+            _storage = _StorageClass(copying: _storage)
+        }
+        return _storage
     }
-    try unknownFields.traverse(visitor: &visitor)
-  }
 
-  static func ==(lhs: Types_QueryNetworkResponse, rhs: Types_QueryNetworkResponse) -> Bool {
-    if lhs._storage !== rhs._storage {
-      let storagesAreEqual: Bool = withExtendedLifetime((lhs._storage, rhs._storage)) { (_args: (_StorageClass, _StorageClass)) in
-        let _storage = _args.0
-        let rhs_storage = _args.1
-        if _storage._bondRewardRune != rhs_storage._bondRewardRune {return false}
-        if _storage._totalBondUnits != rhs_storage._totalBondUnits {return false}
-        if _storage._availablePoolsRune != rhs_storage._availablePoolsRune {return false}
-        if _storage._vaultsLiquidityRune != rhs_storage._vaultsLiquidityRune {return false}
-        if _storage._effectiveSecurityBond != rhs_storage._effectiveSecurityBond {return false}
-        if _storage._totalReserve != rhs_storage._totalReserve {return false}
-        if _storage._vaultsMigrating != rhs_storage._vaultsMigrating {return false}
-        if _storage._gasSpentRune != rhs_storage._gasSpentRune {return false}
-        if _storage._gasWithheldRune != rhs_storage._gasWithheldRune {return false}
-        if _storage._outboundFeeMultiplier != rhs_storage._outboundFeeMultiplier {return false}
-        if _storage._nativeOutboundFeeRune != rhs_storage._nativeOutboundFeeRune {return false}
-        if _storage._nativeTxFeeRune != rhs_storage._nativeTxFeeRune {return false}
-        if _storage._tnsRegisterFeeRune != rhs_storage._tnsRegisterFeeRune {return false}
-        if _storage._tnsFeePerBlockRune != rhs_storage._tnsFeePerBlockRune {return false}
-        if _storage._runePriceInTor != rhs_storage._runePriceInTor {return false}
-        if _storage._torPriceInRune != rhs_storage._torPriceInRune {return false}
-        if _storage._torPriceHalted != rhs_storage._torPriceHalted {return false}
-        if _storage._xmrActiveVaultReady != rhs_storage._xmrActiveVaultReady {return false}
+    mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+        _ = _uniqueStorage()
+        try withExtendedLifetime(_storage) { (_storage: _StorageClass) in
+            while let fieldNumber = try decoder.nextFieldNumber() {
+                // The use of inline closures is to circumvent an issue where the compiler
+                // allocates stack space for every case branch when no optimizations are
+                // enabled. https://github.com/apple/swift-protobuf/issues/1034
+                switch fieldNumber {
+                case 1: try decoder.decodeSingularStringField(value: &_storage._bondRewardRune)
+                case 2: try decoder.decodeSingularStringField(value: &_storage._totalBondUnits)
+                case 3: try decoder.decodeSingularStringField(value: &_storage._effectiveSecurityBond)
+                case 4: try decoder.decodeSingularStringField(value: &_storage._totalReserve)
+                case 5: try decoder.decodeSingularBoolField(value: &_storage._vaultsMigrating)
+                case 6: try decoder.decodeSingularStringField(value: &_storage._gasSpentRune)
+                case 7: try decoder.decodeSingularStringField(value: &_storage._gasWithheldRune)
+                case 8: try decoder.decodeSingularStringField(value: &_storage._outboundFeeMultiplier)
+                case 9: try decoder.decodeSingularStringField(value: &_storage._nativeOutboundFeeRune)
+                case 10: try decoder.decodeSingularStringField(value: &_storage._nativeTxFeeRune)
+                case 11: try decoder.decodeSingularStringField(value: &_storage._tnsRegisterFeeRune)
+                case 12: try decoder.decodeSingularStringField(value: &_storage._tnsFeePerBlockRune)
+                case 13: try decoder.decodeSingularStringField(value: &_storage._runePriceInTor)
+                case 14: try decoder.decodeSingularStringField(value: &_storage._torPriceInRune)
+                case 15: try decoder.decodeSingularStringField(value: &_storage._availablePoolsRune)
+                case 16: try decoder.decodeSingularStringField(value: &_storage._vaultsLiquidityRune)
+                case 17: try decoder.decodeSingularBoolField(value: &_storage._torPriceHalted)
+                case 18: try decoder.decodeSingularBoolField(value: &_storage._xmrActiveVaultReady)
+                default: break
+                }
+            }
+        }
+    }
+
+    func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+        try withExtendedLifetime(_storage) { (_storage: _StorageClass) in
+            if !_storage._bondRewardRune.isEmpty {
+                try visitor.visitSingularStringField(value: _storage._bondRewardRune, fieldNumber: 1)
+            }
+            if !_storage._totalBondUnits.isEmpty {
+                try visitor.visitSingularStringField(value: _storage._totalBondUnits, fieldNumber: 2)
+            }
+            if !_storage._effectiveSecurityBond.isEmpty {
+                try visitor.visitSingularStringField(value: _storage._effectiveSecurityBond, fieldNumber: 3)
+            }
+            if !_storage._totalReserve.isEmpty {
+                try visitor.visitSingularStringField(value: _storage._totalReserve, fieldNumber: 4)
+            }
+            if _storage._vaultsMigrating != false {
+                try visitor.visitSingularBoolField(value: _storage._vaultsMigrating, fieldNumber: 5)
+            }
+            if !_storage._gasSpentRune.isEmpty {
+                try visitor.visitSingularStringField(value: _storage._gasSpentRune, fieldNumber: 6)
+            }
+            if !_storage._gasWithheldRune.isEmpty {
+                try visitor.visitSingularStringField(value: _storage._gasWithheldRune, fieldNumber: 7)
+            }
+            if !_storage._outboundFeeMultiplier.isEmpty {
+                try visitor.visitSingularStringField(value: _storage._outboundFeeMultiplier, fieldNumber: 8)
+            }
+            if !_storage._nativeOutboundFeeRune.isEmpty {
+                try visitor.visitSingularStringField(value: _storage._nativeOutboundFeeRune, fieldNumber: 9)
+            }
+            if !_storage._nativeTxFeeRune.isEmpty {
+                try visitor.visitSingularStringField(value: _storage._nativeTxFeeRune, fieldNumber: 10)
+            }
+            if !_storage._tnsRegisterFeeRune.isEmpty {
+                try visitor.visitSingularStringField(value: _storage._tnsRegisterFeeRune, fieldNumber: 11)
+            }
+            if !_storage._tnsFeePerBlockRune.isEmpty {
+                try visitor.visitSingularStringField(value: _storage._tnsFeePerBlockRune, fieldNumber: 12)
+            }
+            if !_storage._runePriceInTor.isEmpty {
+                try visitor.visitSingularStringField(value: _storage._runePriceInTor, fieldNumber: 13)
+            }
+            if !_storage._torPriceInRune.isEmpty {
+                try visitor.visitSingularStringField(value: _storage._torPriceInRune, fieldNumber: 14)
+            }
+            if !_storage._availablePoolsRune.isEmpty {
+                try visitor.visitSingularStringField(value: _storage._availablePoolsRune, fieldNumber: 15)
+            }
+            if !_storage._vaultsLiquidityRune.isEmpty {
+                try visitor.visitSingularStringField(value: _storage._vaultsLiquidityRune, fieldNumber: 16)
+            }
+            if _storage._torPriceHalted != false {
+                try visitor.visitSingularBoolField(value: _storage._torPriceHalted, fieldNumber: 17)
+            }
+            if _storage._xmrActiveVaultReady != false {
+                try visitor.visitSingularBoolField(value: _storage._xmrActiveVaultReady, fieldNumber: 18)
+            }
+        }
+        try unknownFields.traverse(visitor: &visitor)
+    }
+
+    static func == (lhs: Types_QueryNetworkResponse, rhs: Types_QueryNetworkResponse) -> Bool {
+        if lhs._storage !== rhs._storage {
+            let storagesAreEqual: Bool = withExtendedLifetime((lhs._storage, rhs._storage)) { (_args: (_StorageClass, _StorageClass)) in
+                let _storage = _args.0
+                let rhs_storage = _args.1
+                if _storage._bondRewardRune != rhs_storage._bondRewardRune { return false }
+                if _storage._totalBondUnits != rhs_storage._totalBondUnits { return false }
+                if _storage._availablePoolsRune != rhs_storage._availablePoolsRune { return false }
+                if _storage._vaultsLiquidityRune != rhs_storage._vaultsLiquidityRune { return false }
+                if _storage._effectiveSecurityBond != rhs_storage._effectiveSecurityBond { return false }
+                if _storage._totalReserve != rhs_storage._totalReserve { return false }
+                if _storage._vaultsMigrating != rhs_storage._vaultsMigrating { return false }
+                if _storage._gasSpentRune != rhs_storage._gasSpentRune { return false }
+                if _storage._gasWithheldRune != rhs_storage._gasWithheldRune { return false }
+                if _storage._outboundFeeMultiplier != rhs_storage._outboundFeeMultiplier { return false }
+                if _storage._nativeOutboundFeeRune != rhs_storage._nativeOutboundFeeRune { return false }
+                if _storage._nativeTxFeeRune != rhs_storage._nativeTxFeeRune { return false }
+                if _storage._tnsRegisterFeeRune != rhs_storage._tnsRegisterFeeRune { return false }
+                if _storage._tnsFeePerBlockRune != rhs_storage._tnsFeePerBlockRune { return false }
+                if _storage._runePriceInTor != rhs_storage._runePriceInTor { return false }
+                if _storage._torPriceInRune != rhs_storage._torPriceInRune { return false }
+                if _storage._torPriceHalted != rhs_storage._torPriceHalted { return false }
+                if _storage._xmrActiveVaultReady != rhs_storage._xmrActiveVaultReady { return false }
+                return true
+            }
+            if !storagesAreEqual { return false }
+        }
+        if lhs.unknownFields != rhs.unknownFields { return false }
         return true
-      }
-      if !storagesAreEqual {return false}
     }
-    if lhs.unknownFields != rhs.unknownFields {return false}
-    return true
-  }
 }

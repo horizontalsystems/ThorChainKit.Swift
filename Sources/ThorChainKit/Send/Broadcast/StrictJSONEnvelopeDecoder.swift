@@ -65,7 +65,8 @@ struct StrictJSONEnvelopeDecoder: Sendable {
               let number = response["code"] as? NSNumber,
               String(cString: number.objCType) != "c", String(cString: number.objCType) != "B", String(cString: number.objCType) != "d", String(cString: number.objCType) != "f",
               let integer = Int64(exactly: number), integer >= 0,
-              let code = UInt32(exactly: integer) else {
+              let code = UInt32(exactly: integer)
+        else {
             throw StrictJSONEnvelopeError.invalidEnvelope
         }
         let codespace = try response["codespace"].map(Self.validatedASCII)
@@ -92,19 +93,20 @@ struct StrictJSONEnvelopeDecoder: Sendable {
 
     private static func validatedASCII(_ value: Any) throws -> String {
         guard let value = value as? String, value.utf8.count <= 64,
-              value.unicodeScalars.allSatisfy({ $0.value >= 0x20 && $0.value <= 0x7E }) else {
+              value.unicodeScalars.allSatisfy({ $0.value >= 0x20 && $0.value <= 0x7E })
+        else {
             throw StrictJSONEnvelopeError.invalidEnvelope
         }
         return value
     }
 
     static func hashBytes(_ value: String) -> Data? {
-        guard value.count == 64, value.allSatisfy({ $0.isASCII && ($0.isNumber || ("a"..."f").contains($0) || ("A"..."F").contains($0)) }) else { return nil }
+        guard value.count == 64, value.allSatisfy({ $0.isASCII && ($0.isNumber || ("a" ... "f").contains($0) || ("A" ... "F").contains($0)) }) else { return nil }
         var result = Data(capacity: 32)
         var index = value.startIndex
         while index < value.endIndex {
             let next = value.index(index, offsetBy: 2)
-            guard let byte = UInt8(value[index..<next], radix: 16) else { return nil }
+            guard let byte = UInt8(value[index ..< next], radix: 16) else { return nil }
             result.append(byte)
             index = next
         }
@@ -168,7 +170,7 @@ private struct DuplicateKeyScanner {
         while let byte = current {
             index += 1
             if byte == 0x22 {
-                let data = Data(bytes[(start..<index)])
+                let data = Data(bytes[start ..< index])
                 guard let value = try JSONSerialization.jsonObject(with: data, options: [.fragmentsAllowed]) as? String else { throw StrictJSONEnvelopeError.invalidJSON }
                 return value
             }
@@ -184,12 +186,16 @@ private struct DuplicateKeyScanner {
 
     private mutating func scanPrimitive() throws {
         let start = index
-        while let byte = current, ![0x20, 0x09, 0x0A, 0x0D, 0x2C, 0x5D, 0x7D].contains(byte) { index += 1 }
+        while let byte = current, ![0x20, 0x09, 0x0A, 0x0D, 0x2C, 0x5D, 0x7D].contains(byte) {
+            index += 1
+        }
         guard start < index else { throw StrictJSONEnvelopeError.invalidJSON }
     }
 
     private mutating func skipWhitespace() throws {
-        while let byte = current, [0x20, 0x09, 0x0A, 0x0D].contains(byte) { index += 1 }
+        while let byte = current, [0x20, 0x09, 0x0A, 0x0D].contains(byte) {
+            index += 1
+        }
     }
 
     private mutating func consume(_ expected: UInt8) throws {

@@ -1,5 +1,5 @@
-import XCTest
 @testable import ThorChainKit
+import XCTest
 
 final class S1_04ContractTests: XCTestCase {
     func testTransportRecordsAreSendableAndAccountAbsenceRequiresEmptyBalances() throws {

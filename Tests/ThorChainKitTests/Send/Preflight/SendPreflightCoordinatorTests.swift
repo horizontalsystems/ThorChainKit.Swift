@@ -1,6 +1,6 @@
 import BigInt
-import XCTest
 @testable import ThorChainKit
+import XCTest
 
 final class SendPreflightCoordinatorTests: XCTestCase {
     func testPreparationUsesOneFamilyAndOneCommonHeight() async throws {
@@ -13,7 +13,7 @@ final class SendPreflightCoordinatorTests: XCTestCase {
         await runtime.activate(generation: 1)
         provider.runtime = runtime
         let coordinator = SendPreflightCoordinator(runtime: runtime, provider: provider)
-        let prepared = try await coordinator.prepareQuote(request: SendQuoteRequest(sender: address, recipient: try sendOtherAddress(), amount: .exact(100)))
+        let prepared = try await coordinator.prepareQuote(request: SendQuoteRequest(sender: address, recipient: sendOtherAddress(), amount: .exact(100)))
 
         XCTAssertEqual(prepared.quote.acceptedHeight, 42)
         XCTAssertEqual(prepared.snapshot.familyID, "rorcual-mainnet")
@@ -26,13 +26,13 @@ final class SendPreflightCoordinatorTests: XCTestCase {
         let address = try sendTestAddress()
         let family = try EndpointFamilyDescriptor(id: "rorcual-mainnet", cosmosRestURL: URL(string: "https://api-thorchain.rorcual.xyz/")!, cometBftURL: URL(string: "https://rpc-thorchain.rorcual.xyz/")!)
         let lease = EndpointLease(family: family, verifiedChainId: "thorchain-1", cosmosReadHeight: 42, cometReferenceHeight: 43, poolGeneration: 1)
-        let snapshot = try changed(try SendSnapshot.fixture(height: 42), memoMaximumBytes: 16)
+        let snapshot = try changed(SendSnapshot.fixture(height: 42), memoMaximumBytes: 16)
         let provider = ScriptedSendProvider(leases: [lease], snapshots: [snapshot])
         let runtime = SendRuntime(address: address)
         await runtime.activate(generation: 1)
         provider.runtime = runtime
 
-        let request = SendQuoteRequest(sender: address, recipient: try sendOtherAddress(), amount: .exact(100), memo: String(repeating: "a", count: 17))
+        let request = try SendQuoteRequest(sender: address, recipient: sendOtherAddress(), amount: .exact(100), memo: String(repeating: "a", count: 17))
         do {
             _ = try await SendPreflightCoordinator(runtime: runtime, provider: provider).prepareQuote(request: request)
             XCTFail("expected memo limit rejection")
@@ -51,7 +51,7 @@ final class SendPreflightCoordinatorTests: XCTestCase {
         let provider = ScriptedSendProvider(leases: [lease], snapshots: [wrongHeight], runtime: runtime)
         let coordinator = SendPreflightCoordinator(runtime: runtime, provider: provider)
         do {
-            _ = try await coordinator.prepareQuote(request: SendQuoteRequest(sender: address, recipient: try sendOtherAddress(), amount: .exact(100)))
+            _ = try await coordinator.prepareQuote(request: SendQuoteRequest(sender: address, recipient: sendOtherAddress(), amount: .exact(100)))
             XCTFail("mixed height must fail")
         } catch let error as SendError {
             XCTAssertEqual(error, .heightUnproven)
@@ -67,10 +67,10 @@ final class SendPreflightCoordinatorTests: XCTestCase {
         for routeID in [nil, "stale-route", "wrong-route"] as [String?] {
             let runtime = SendRuntime(address: sender)
             await runtime.activate(generation: 1)
-            let provider = ScriptedSendProvider(leases: [lease], snapshots: [try SendSnapshot.fixture(height: 42)], finalRouteID: routeID, runtime: runtime)
+            let provider = try ScriptedSendProvider(leases: [lease], snapshots: [SendSnapshot.fixture(height: 42)], finalRouteID: routeID, runtime: runtime)
             let coordinator = SendPreflightCoordinator(runtime: runtime, provider: provider)
             do {
-                _ = try await coordinator.prepareQuote(request: SendQuoteRequest(sender: sender, recipient: try sendOtherAddress(), amount: .exact(100)))
+                _ = try await coordinator.prepareQuote(request: SendQuoteRequest(sender: sender, recipient: sendOtherAddress(), amount: .exact(100)))
                 XCTFail("missing or stale final route must fail closed")
             } catch let error as SendError {
                 XCTAssertEqual(error, .policyUnavailable)
@@ -80,19 +80,15 @@ final class SendPreflightCoordinatorTests: XCTestCase {
         }
     }
 
-
-
-
-
     func testStoppedGenerationRejectsLatePreflightResult() async throws {
         let sender = try sendTestAddress()
         let family = try EndpointFamilyDescriptor(id: "rorcual-mainnet", cosmosRestURL: URL(string: "https://api-thorchain.rorcual.xyz/")!, cometBftURL: URL(string: "https://rpc-thorchain.rorcual.xyz/")!)
         let lease = EndpointLease(family: family, verifiedChainId: "thorchain-1", cosmosReadHeight: 42, cometReferenceHeight: 42, poolGeneration: 1)
         let runtime = SendRuntime(address: sender)
         await runtime.activate(generation: 1)
-        let provider = DelayedSendProvider(lease: lease, snapshot: try SendSnapshot.fixture(height: 42), runtime: runtime)
+        let provider = try DelayedSendProvider(lease: lease, snapshot: SendSnapshot.fixture(height: 42), runtime: runtime)
         let coordinator = SendPreflightCoordinator(runtime: runtime, provider: provider)
-        let task = Task { try await coordinator.prepareQuote(request: SendQuoteRequest(sender: sender, recipient: try sendOtherAddress(), amount: .exact(100))) }
+        let task = Task { try await coordinator.prepareQuote(request: SendQuoteRequest(sender: sender, recipient: sendOtherAddress(), amount: .exact(100))) }
         await runtime.invalidate(generation: 1)
         do {
             _ = try await task.value
@@ -108,9 +104,11 @@ final class SendPreflightCoordinatorTests: XCTestCase {
         let family = try EndpointFamilyDescriptor(id: "rorcual-mainnet", cosmosRestURL: URL(string: "https://api-thorchain.rorcual.xyz/")!, cometBftURL: URL(string: "https://rpc-thorchain.rorcual.xyz/")!)
         let runtime = SendRuntime(address: sender)
         await runtime.activate(generation: 1)
-        let delayed = DelayedSendProvider(lease: EndpointLease(family: family, verifiedChainId: "thorchain-1", cosmosReadHeight: 42, cometReferenceHeight: 42, poolGeneration: 1), snapshot: try SendSnapshot.fixture(height: 42), runtime: runtime)
+        let delayed = try DelayedSendProvider(lease: EndpointLease(family: family, verifiedChainId: "thorchain-1", cosmosReadHeight: 42, cometReferenceHeight: 42, poolGeneration: 1), snapshot: SendSnapshot.fixture(height: 42), runtime: runtime)
         let oldTask = Task { try await SendPreflightCoordinator(runtime: runtime, provider: delayed).prepareQuote(request: SendQuoteRequest(sender: sender, recipient: recipient, amount: .exact(100))) }
-        while await runtime.activePreflightAttemptCount() == 0 { await Task.yield() }
+        while await runtime.activePreflightAttemptCount() == 0 {
+            await Task.yield()
+        }
         await runtime.invalidate(generation: 1)
         await runtime.activate(generation: 2)
         do {
@@ -119,13 +117,12 @@ final class SendPreflightCoordinatorTests: XCTestCase {
         } catch let error as SendError {
             XCTAssertEqual(error, .kitNotStarted)
         }
-        let fresh = ScriptedSendProvider(leases: [EndpointLease(family: family, verifiedChainId: "thorchain-1", cosmosReadHeight: 42, cometReferenceHeight: 42, poolGeneration: 2)], snapshots: [try SendSnapshot.fixture(height: 42)], runtime: runtime)
+        let fresh = try ScriptedSendProvider(leases: [EndpointLease(family: family, verifiedChainId: "thorchain-1", cosmosReadHeight: 42, cometReferenceHeight: 42, poolGeneration: 2)], snapshots: [SendSnapshot.fixture(height: 42)], runtime: runtime)
         let prepared = try await SendPreflightCoordinator(runtime: runtime, provider: fresh).prepareQuote(request: SendQuoteRequest(sender: sender, recipient: recipient, amount: .exact(100)))
         XCTAssertEqual(prepared.quote.acceptedHeight, 42)
         let activeAttempts = await runtime.activePreflightAttemptCount()
         XCTAssertEqual(activeAttempts, 0)
     }
-
 }
 
 private func changed(
@@ -136,11 +133,11 @@ private func changed(
     accountNumber: UInt64? = nil,
     sequence: UInt64? = nil,
     accountPublicKey: String? = nil,
-        accountPublicKeyData: Data? = nil,
-        nativeFee: BigUInt? = nil,
-        mimir: MimirSnapshot? = nil,
-        memoMaximumBytes: Int? = nil,
-        recipientClassification: RecipientAccountClassification? = nil,
+    accountPublicKeyData: Data? = nil,
+    nativeFee: BigUInt? = nil,
+    mimir: MimirSnapshot? = nil,
+    memoMaximumBytes: Int? = nil,
+    recipientClassification: RecipientAccountClassification? = nil,
     policyRevision: String? = nil,
     restEndpoint: String? = nil,
     rpcEndpoint: String? = nil,
@@ -182,7 +179,7 @@ private final class ScriptedSendProvider: ISendPreflightProvider, @unchecked Sen
         return lease
     }
 
-    func snapshot(request: SendQuoteRequest, lease: EndpointLease, height: Int64, policy: SendPolicy, attempt: SendPreflightAttempt) async throws -> SendSnapshot {
+    func snapshot(request _: SendQuoteRequest, lease _: EndpointLease, height: Int64, policy _: SendPolicy, attempt _: SendPreflightAttempt) async throws -> SendSnapshot {
         try withLock {
             heights.append(height)
             guard !snapshots.isEmpty else { throw SendError.providerUnavailable }
@@ -198,7 +195,7 @@ private final class ScriptedSendProvider: ISendPreflightProvider, @unchecked Sen
         } else {
             boundAttempt = finalAttempt
         }
-        return SendSnapshotResult(snapshot: try await snapshot(request: request, lease: lease, height: height, policy: policy, attempt: attempt), attempt: boundAttempt)
+        return try SendSnapshotResult(snapshot: await snapshot(request: request, lease: lease, height: height, policy: policy, attempt: attempt), attempt: boundAttempt)
     }
 
     private func withLock<T>(_ body: () throws -> T) rethrows -> T {
@@ -216,12 +213,12 @@ private struct DelayedSendProvider: ISendPreflightProvider {
 
     func estimateFee() async throws -> BigUInt { 2 }
 
-    func lease(minimumHeight: Int64?) async throws -> EndpointLease {
+    func lease(minimumHeight _: Int64?) async throws -> EndpointLease {
         try await Task.sleep(nanoseconds: 50_000_000)
         return leaseValue
     }
 
-    func snapshot(request: SendQuoteRequest, lease: EndpointLease, height: Int64, policy: SendPolicy, attempt: SendPreflightAttempt) async throws -> SendSnapshot {
+    func snapshot(request _: SendQuoteRequest, lease _: EndpointLease, height _: Int64, policy _: SendPolicy, attempt _: SendPreflightAttempt) async throws -> SendSnapshot {
         try await Task.sleep(nanoseconds: 50_000_000)
         return snapshotValue
     }
@@ -233,6 +230,6 @@ private struct DelayedSendProvider: ISendPreflightProvider {
         } else {
             finalAttempt = attempt.withRoute("recipient-account")
         }
-        return SendSnapshotResult(snapshot: try await snapshot(request: request, lease: lease, height: height, policy: policy, attempt: attempt), attempt: finalAttempt)
+        return try SendSnapshotResult(snapshot: await snapshot(request: request, lease: lease, height: height, policy: policy, attempt: attempt), attempt: finalAttempt)
     }
 }

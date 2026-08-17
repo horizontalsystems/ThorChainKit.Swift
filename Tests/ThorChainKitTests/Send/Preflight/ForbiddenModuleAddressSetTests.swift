@@ -1,5 +1,5 @@
-import XCTest
 @testable import ThorChainKit
+import XCTest
 
 final class ForbiddenModuleAddressSetTests: XCTestCase {
     func testEveryPinnedModuleVectorAndSourceProvenanceIsPresent() throws {

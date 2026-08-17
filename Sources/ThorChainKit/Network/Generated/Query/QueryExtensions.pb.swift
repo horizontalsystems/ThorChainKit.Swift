@@ -15,9 +15,9 @@ import SwiftProtobuf
 // incompatible with the version of SwiftProtobuf to which you are linking.
 // Please ensure that you are building against the same version of the API
 // that was used to generate this file.
-fileprivate struct _GeneratedWithProtocGenSwiftVersion: SwiftProtobuf.ProtobufAPIVersionCheck {
-  struct _2: SwiftProtobuf.ProtobufAPIVersion_2 {}
-  typealias Version = _2
+private struct _GeneratedWithProtocGenSwiftVersion: SwiftProtobuf.ProtobufAPIVersionCheck {
+    struct _2: SwiftProtobuf.ProtobufAPIVersion_2 {}
+    typealias Version = _2
 }
 
 // MARK: - Extension support defined in query.proto.
@@ -30,44 +30,44 @@ fileprivate struct _GeneratedWithProtocGenSwiftVersion: SwiftProtobuf.ProtobufAP
 // the scope where the extend directive occurs.
 
 extension SwiftProtobuf.Google_Protobuf_MethodOptions {
+    /// module_query_safe is set to true when the query is safe to be called from
+    /// within the state machine, for example from another module's Keeper, via
+    /// ADR-033 calls or from CosmWasm contracts.
+    /// Concretely, it means that the query is:
+    /// 1. deterministic: given a block height, returns the exact same response
+    /// upon multiple calls; and doesn't introduce any state-machine-breaking
+    /// changes across SDK patch version.
+    /// 2. consumes gas correctly.
+    ///
+    /// If you are a module developer and want to add this annotation to one of
+    /// your own queries, please make sure that the corresponding query:
+    /// 1. is deterministic and won't introduce state-machine-breaking changes
+    /// without a coordinated upgrade path,
+    /// 2. has its gas tracked, to avoid the attack vector where no gas is
+    /// accounted for on potentially high-computation queries.
+    ///
+    /// For queries that potentially consume a large amount of gas (for example
+    /// those with pagination, if the pagination field is incorrectly set), we
+    /// also recommend adding Protobuf comments to warn module developers
+    /// consuming these queries.
+    ///
+    /// When set to true, the query can safely be called
+    var Cosmos_Query_V1_moduleQuerySafe: Bool {
+        get { return getExtensionValue(ext: Cosmos_Query_V1_Extensions_module_query_safe) ?? false }
+        set { setExtensionValue(ext: Cosmos_Query_V1_Extensions_module_query_safe, value: newValue) }
+    }
 
-  /// module_query_safe is set to true when the query is safe to be called from
-  /// within the state machine, for example from another module's Keeper, via
-  /// ADR-033 calls or from CosmWasm contracts.
-  /// Concretely, it means that the query is:
-  /// 1. deterministic: given a block height, returns the exact same response
-  /// upon multiple calls; and doesn't introduce any state-machine-breaking
-  /// changes across SDK patch version.
-  /// 2. consumes gas correctly.
-  ///
-  /// If you are a module developer and want to add this annotation to one of
-  /// your own queries, please make sure that the corresponding query:
-  /// 1. is deterministic and won't introduce state-machine-breaking changes
-  /// without a coordinated upgrade path,
-  /// 2. has its gas tracked, to avoid the attack vector where no gas is
-  /// accounted for on potentially high-computation queries.
-  ///
-  /// For queries that potentially consume a large amount of gas (for example
-  /// those with pagination, if the pagination field is incorrectly set), we
-  /// also recommend adding Protobuf comments to warn module developers
-  /// consuming these queries.
-  ///
-  /// When set to true, the query can safely be called
-  var Cosmos_Query_V1_moduleQuerySafe: Bool {
-    get {return getExtensionValue(ext: Cosmos_Query_V1_Extensions_module_query_safe) ?? false}
-    set {setExtensionValue(ext: Cosmos_Query_V1_Extensions_module_query_safe, value: newValue)}
-  }
-  /// Returns true if extension `Cosmos_Query_V1_Extensions_module_query_safe`
-  /// has been explicitly set.
-  var hasCosmos_Query_V1_moduleQuerySafe: Bool {
-    return hasExtensionValue(ext: Cosmos_Query_V1_Extensions_module_query_safe)
-  }
-  /// Clears the value of extension `Cosmos_Query_V1_Extensions_module_query_safe`.
-  /// Subsequent reads from it will return its default value.
-  mutating func clearCosmos_Query_V1_moduleQuerySafe() {
-    clearExtensionValue(ext: Cosmos_Query_V1_Extensions_module_query_safe)
-  }
+    /// Returns true if extension `Cosmos_Query_V1_Extensions_module_query_safe`
+    /// has been explicitly set.
+    var hasCosmos_Query_V1_moduleQuerySafe: Bool {
+        return hasExtensionValue(ext: Cosmos_Query_V1_Extensions_module_query_safe)
+    }
 
+    /// Clears the value of extension `Cosmos_Query_V1_Extensions_module_query_safe`.
+    /// Subsequent reads from it will return its default value.
+    mutating func clearCosmos_Query_V1_moduleQuerySafe() {
+        clearExtensionValue(ext: Cosmos_Query_V1_Extensions_module_query_safe)
+    }
 }
 
 // MARK: - File's ExtensionMap: Cosmos_Query_V1_Query_Extensions
@@ -77,7 +77,7 @@ extension SwiftProtobuf.Google_Protobuf_MethodOptions {
 /// in parsing, or it can be combined with other `SwiftProtobuf.SimpleExtensionMap`s to create
 /// a larger `SwiftProtobuf.SimpleExtensionMap`.
 let Cosmos_Query_V1_Query_Extensions: SwiftProtobuf.SimpleExtensionMap = [
-  Cosmos_Query_V1_Extensions_module_query_safe
+    Cosmos_Query_V1_Extensions_module_query_safe,
 ]
 
 // Extension Objects - The only reason these might be needed is when manually
@@ -107,6 +107,6 @@ let Cosmos_Query_V1_Query_Extensions: SwiftProtobuf.SimpleExtensionMap = [
 ///
 /// When set to true, the query can safely be called
 let Cosmos_Query_V1_Extensions_module_query_safe = SwiftProtobuf.MessageExtension<SwiftProtobuf.OptionalExtensionField<SwiftProtobuf.ProtobufBool>, SwiftProtobuf.Google_Protobuf_MethodOptions>(
-  _protobuf_fieldNumber: 11110001,
-  fieldName: "cosmos.query.v1.module_query_safe"
+    _protobuf_fieldNumber: 11_110_001,
+    fieldName: "cosmos.query.v1.module_query_safe"
 )

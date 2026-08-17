@@ -42,7 +42,8 @@ struct CosmosAccountClient: Sendable {
         guard (try? StrictJSONEnvelopeDecoder.validateJSONDocument(data)) != nil,
               let object = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
               let account = object["account"] as? [String: Any],
-              account["@type"] as? String != "/cosmos.auth.v1beta1.ModuleAccount" else {
+              account["@type"] as? String != "/cosmos.auth.v1beta1.ModuleAccount"
+        else {
             throw SendError.accountUnavailable
         }
         // vesting accounts nest the base account one level deeper; module/eth-style
@@ -52,7 +53,8 @@ struct CosmosAccountClient: Sendable {
             ?? account
         guard let accountAddress = fields["address"] as? String, accountAddress == address,
               let accountNumberString = fields["account_number"] as? String, let accountNumber = UInt64(accountNumberString),
-              let sequenceString = fields["sequence"] as? String, let sequence = UInt64(sequenceString) else {
+              let sequenceString = fields["sequence"] as? String, let sequence = UInt64(sequenceString)
+        else {
             throw SendError.accountUnavailable
         }
         return SendAccountInfo(accountNumber: accountNumber, sequence: sequence)

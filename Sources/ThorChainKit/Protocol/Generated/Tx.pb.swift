@@ -16,388 +16,391 @@ import SwiftProtobuf
 // incompatible with the version of SwiftProtobuf to which you are linking.
 // Please ensure that you are building against the same version of the API
 // that was used to generate this file.
-fileprivate struct _GeneratedWithProtocGenSwiftVersion: SwiftProtobuf.ProtobufAPIVersionCheck {
-  struct _2: SwiftProtobuf.ProtobufAPIVersion_2 {}
-  typealias Version = _2
+private struct _GeneratedWithProtocGenSwiftVersion: SwiftProtobuf.ProtobufAPIVersionCheck {
+    struct _2: SwiftProtobuf.ProtobufAPIVersion_2 {}
+    typealias Version = _2
 }
 
 struct Cosmos_Tx_V1beta1_TxBody: Sendable {
-  // SwiftProtobuf.Message conformance is added in an extension below. See the
-  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
-  // methods supported on all messages.
+    // SwiftProtobuf.Message conformance is added in an extension below. See the
+    // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+    // methods supported on all messages.
 
-  var messages: [SwiftProtobuf.Google_Protobuf_Any] = []
+    var messages: [SwiftProtobuf.Google_Protobuf_Any] = []
 
-  var memo: String = String()
+    var memo: String = .init()
 
-  var timeoutHeight: UInt64 = 0
+    var timeoutHeight: UInt64 = 0
 
-  var unknownFields = SwiftProtobuf.UnknownStorage()
+    var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  init() {}
+    init() {}
 }
 
 struct Cosmos_Tx_V1beta1_SignerInfo: Sendable {
-  // SwiftProtobuf.Message conformance is added in an extension below. See the
-  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
-  // methods supported on all messages.
+    // SwiftProtobuf.Message conformance is added in an extension below. See the
+    // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+    // methods supported on all messages.
 
-  var publicKey: SwiftProtobuf.Google_Protobuf_Any {
-    get {return _publicKey ?? SwiftProtobuf.Google_Protobuf_Any()}
-    set {_publicKey = newValue}
-  }
-  /// Returns true if `publicKey` has been explicitly set.
-  var hasPublicKey: Bool {return self._publicKey != nil}
-  /// Clears the value of `publicKey`. Subsequent reads from it will return its default value.
-  mutating func clearPublicKey() {self._publicKey = nil}
+    var publicKey: SwiftProtobuf.Google_Protobuf_Any {
+        get { return _publicKey ?? SwiftProtobuf.Google_Protobuf_Any() }
+        set { _publicKey = newValue }
+    }
 
-  var modeInfo: Cosmos_Tx_Signing_V1beta1_ModeInfo {
-    get {return _modeInfo ?? Cosmos_Tx_Signing_V1beta1_ModeInfo()}
-    set {_modeInfo = newValue}
-  }
-  /// Returns true if `modeInfo` has been explicitly set.
-  var hasModeInfo: Bool {return self._modeInfo != nil}
-  /// Clears the value of `modeInfo`. Subsequent reads from it will return its default value.
-  mutating func clearModeInfo() {self._modeInfo = nil}
+    /// Returns true if `publicKey` has been explicitly set.
+    var hasPublicKey: Bool { return _publicKey != nil }
+    /// Clears the value of `publicKey`. Subsequent reads from it will return its default value.
+    mutating func clearPublicKey() { _publicKey = nil }
 
-  var sequence: UInt64 = 0
+    var modeInfo: Cosmos_Tx_Signing_V1beta1_ModeInfo {
+        get { return _modeInfo ?? Cosmos_Tx_Signing_V1beta1_ModeInfo() }
+        set { _modeInfo = newValue }
+    }
 
-  var unknownFields = SwiftProtobuf.UnknownStorage()
+    /// Returns true if `modeInfo` has been explicitly set.
+    var hasModeInfo: Bool { return _modeInfo != nil }
+    /// Clears the value of `modeInfo`. Subsequent reads from it will return its default value.
+    mutating func clearModeInfo() { _modeInfo = nil }
 
-  init() {}
+    var sequence: UInt64 = 0
 
-  fileprivate var _publicKey: SwiftProtobuf.Google_Protobuf_Any? = nil
-  fileprivate var _modeInfo: Cosmos_Tx_Signing_V1beta1_ModeInfo? = nil
+    var unknownFields = SwiftProtobuf.UnknownStorage()
+
+    init() {}
+
+    fileprivate var _publicKey: SwiftProtobuf.Google_Protobuf_Any? = nil
+    fileprivate var _modeInfo: Cosmos_Tx_Signing_V1beta1_ModeInfo? = nil
 }
 
 struct Cosmos_Tx_V1beta1_Fee: Sendable {
-  // SwiftProtobuf.Message conformance is added in an extension below. See the
-  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
-  // methods supported on all messages.
+    // SwiftProtobuf.Message conformance is added in an extension below. See the
+    // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+    // methods supported on all messages.
 
-  var amount: [Cosmos_Base_V1beta1_Coin] = []
+    var amount: [Cosmos_Base_V1beta1_Coin] = []
 
-  var gasLimit: UInt64 = 0
+    var gasLimit: UInt64 = 0
 
-  var payer: String = String()
+    var payer: String = .init()
 
-  var granter: String = String()
+    var granter: String = .init()
 
-  var unknownFields = SwiftProtobuf.UnknownStorage()
+    var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  init() {}
+    init() {}
 }
 
 struct Cosmos_Tx_V1beta1_AuthInfo: Sendable {
-  // SwiftProtobuf.Message conformance is added in an extension below. See the
-  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
-  // methods supported on all messages.
+    // SwiftProtobuf.Message conformance is added in an extension below. See the
+    // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+    // methods supported on all messages.
 
-  var signerInfos: [Cosmos_Tx_V1beta1_SignerInfo] = []
+    var signerInfos: [Cosmos_Tx_V1beta1_SignerInfo] = []
 
-  var fee: Cosmos_Tx_V1beta1_Fee {
-    get {return _fee ?? Cosmos_Tx_V1beta1_Fee()}
-    set {_fee = newValue}
-  }
-  /// Returns true if `fee` has been explicitly set.
-  var hasFee: Bool {return self._fee != nil}
-  /// Clears the value of `fee`. Subsequent reads from it will return its default value.
-  mutating func clearFee() {self._fee = nil}
+    var fee: Cosmos_Tx_V1beta1_Fee {
+        get { return _fee ?? Cosmos_Tx_V1beta1_Fee() }
+        set { _fee = newValue }
+    }
 
-  var unknownFields = SwiftProtobuf.UnknownStorage()
+    /// Returns true if `fee` has been explicitly set.
+    var hasFee: Bool { return _fee != nil }
+    /// Clears the value of `fee`. Subsequent reads from it will return its default value.
+    mutating func clearFee() { _fee = nil }
 
-  init() {}
+    var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  fileprivate var _fee: Cosmos_Tx_V1beta1_Fee? = nil
+    init() {}
+
+    fileprivate var _fee: Cosmos_Tx_V1beta1_Fee? = nil
 }
 
 struct Cosmos_Tx_V1beta1_SignDoc: Sendable {
-  // SwiftProtobuf.Message conformance is added in an extension below. See the
-  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
-  // methods supported on all messages.
+    // SwiftProtobuf.Message conformance is added in an extension below. See the
+    // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+    // methods supported on all messages.
 
-  var bodyBytes: Data = Data()
+    var bodyBytes: Data = .init()
 
-  var authInfoBytes: Data = Data()
+    var authInfoBytes: Data = .init()
 
-  var chainID: String = String()
+    var chainID: String = .init()
 
-  var accountNumber: UInt64 = 0
+    var accountNumber: UInt64 = 0
 
-  var unknownFields = SwiftProtobuf.UnknownStorage()
+    var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  init() {}
+    init() {}
 }
 
 struct Cosmos_Tx_V1beta1_TxRaw: Sendable {
-  // SwiftProtobuf.Message conformance is added in an extension below. See the
-  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
-  // methods supported on all messages.
+    // SwiftProtobuf.Message conformance is added in an extension below. See the
+    // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+    // methods supported on all messages.
 
-  var bodyBytes: Data = Data()
+    var bodyBytes: Data = .init()
 
-  var authInfoBytes: Data = Data()
+    var authInfoBytes: Data = .init()
 
-  var signatures: [Data] = []
+    var signatures: [Data] = []
 
-  var unknownFields = SwiftProtobuf.UnknownStorage()
+    var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  init() {}
+    init() {}
 }
 
 // MARK: - Code below here is support for the SwiftProtobuf runtime.
 
-fileprivate let _protobuf_package = "cosmos.tx.v1beta1"
+private let _protobuf_package = "cosmos.tx.v1beta1"
 
 extension Cosmos_Tx_V1beta1_TxBody: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  static let protoMessageName: String = _protobuf_package + ".TxBody"
-  static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}messages\0\u{1}memo\0\u{3}timeout_height\0")
+    static let protoMessageName: String = _protobuf_package + ".TxBody"
+    static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}messages\0\u{1}memo\0\u{3}timeout_height\0")
 
-  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
-    while let fieldNumber = try decoder.nextFieldNumber() {
-      // The use of inline closures is to circumvent an issue where the compiler
-      // allocates stack space for every case branch when no optimizations are
-      // enabled. https://github.com/apple/swift-protobuf/issues/1034
-      switch fieldNumber {
-      case 1: try { try decoder.decodeRepeatedMessageField(value: &self.messages) }()
-      case 2: try { try decoder.decodeSingularStringField(value: &self.memo) }()
-      case 3: try { try decoder.decodeSingularUInt64Field(value: &self.timeoutHeight) }()
-      default: break
-      }
+    mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+        while let fieldNumber = try decoder.nextFieldNumber() {
+            // The use of inline closures is to circumvent an issue where the compiler
+            // allocates stack space for every case branch when no optimizations are
+            // enabled. https://github.com/apple/swift-protobuf/issues/1034
+            switch fieldNumber {
+            case 1: try decoder.decodeRepeatedMessageField(value: &messages)
+            case 2: try decoder.decodeSingularStringField(value: &memo)
+            case 3: try decoder.decodeSingularUInt64Field(value: &timeoutHeight)
+            default: break
+            }
+        }
     }
-  }
 
-  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    if !self.messages.isEmpty {
-      try visitor.visitRepeatedMessageField(value: self.messages, fieldNumber: 1)
+    func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+        if !messages.isEmpty {
+            try visitor.visitRepeatedMessageField(value: messages, fieldNumber: 1)
+        }
+        if !memo.isEmpty {
+            try visitor.visitSingularStringField(value: memo, fieldNumber: 2)
+        }
+        if timeoutHeight != 0 {
+            try visitor.visitSingularUInt64Field(value: timeoutHeight, fieldNumber: 3)
+        }
+        try unknownFields.traverse(visitor: &visitor)
     }
-    if !self.memo.isEmpty {
-      try visitor.visitSingularStringField(value: self.memo, fieldNumber: 2)
-    }
-    if self.timeoutHeight != 0 {
-      try visitor.visitSingularUInt64Field(value: self.timeoutHeight, fieldNumber: 3)
-    }
-    try unknownFields.traverse(visitor: &visitor)
-  }
 
-  static func ==(lhs: Cosmos_Tx_V1beta1_TxBody, rhs: Cosmos_Tx_V1beta1_TxBody) -> Bool {
-    if lhs.messages != rhs.messages {return false}
-    if lhs.memo != rhs.memo {return false}
-    if lhs.timeoutHeight != rhs.timeoutHeight {return false}
-    if lhs.unknownFields != rhs.unknownFields {return false}
-    return true
-  }
+    static func == (lhs: Cosmos_Tx_V1beta1_TxBody, rhs: Cosmos_Tx_V1beta1_TxBody) -> Bool {
+        if lhs.messages != rhs.messages { return false }
+        if lhs.memo != rhs.memo { return false }
+        if lhs.timeoutHeight != rhs.timeoutHeight { return false }
+        if lhs.unknownFields != rhs.unknownFields { return false }
+        return true
+    }
 }
 
 extension Cosmos_Tx_V1beta1_SignerInfo: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  static let protoMessageName: String = _protobuf_package + ".SignerInfo"
-  static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}public_key\0\u{3}mode_info\0\u{1}sequence\0")
+    static let protoMessageName: String = _protobuf_package + ".SignerInfo"
+    static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}public_key\0\u{3}mode_info\0\u{1}sequence\0")
 
-  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
-    while let fieldNumber = try decoder.nextFieldNumber() {
-      // The use of inline closures is to circumvent an issue where the compiler
-      // allocates stack space for every case branch when no optimizations are
-      // enabled. https://github.com/apple/swift-protobuf/issues/1034
-      switch fieldNumber {
-      case 1: try { try decoder.decodeSingularMessageField(value: &self._publicKey) }()
-      case 2: try { try decoder.decodeSingularMessageField(value: &self._modeInfo) }()
-      case 3: try { try decoder.decodeSingularUInt64Field(value: &self.sequence) }()
-      default: break
-      }
+    mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+        while let fieldNumber = try decoder.nextFieldNumber() {
+            // The use of inline closures is to circumvent an issue where the compiler
+            // allocates stack space for every case branch when no optimizations are
+            // enabled. https://github.com/apple/swift-protobuf/issues/1034
+            switch fieldNumber {
+            case 1: try decoder.decodeSingularMessageField(value: &_publicKey)
+            case 2: try decoder.decodeSingularMessageField(value: &_modeInfo)
+            case 3: try decoder.decodeSingularUInt64Field(value: &sequence)
+            default: break
+            }
+        }
     }
-  }
 
-  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    // The use of inline closures is to circumvent an issue where the compiler
-    // allocates stack space for every if/case branch local when no optimizations
-    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
-    // https://github.com/apple/swift-protobuf/issues/1182
-    try { if let v = self._publicKey {
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
-    } }()
-    try { if let v = self._modeInfo {
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 2)
-    } }()
-    if self.sequence != 0 {
-      try visitor.visitSingularUInt64Field(value: self.sequence, fieldNumber: 3)
+    func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+        // The use of inline closures is to circumvent an issue where the compiler
+        // allocates stack space for every if/case branch local when no optimizations
+        // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+        // https://github.com/apple/swift-protobuf/issues/1182
+        try { if let v = self._publicKey {
+            try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
+        } }()
+        try { if let v = self._modeInfo {
+            try visitor.visitSingularMessageField(value: v, fieldNumber: 2)
+        } }()
+        if sequence != 0 {
+            try visitor.visitSingularUInt64Field(value: sequence, fieldNumber: 3)
+        }
+        try unknownFields.traverse(visitor: &visitor)
     }
-    try unknownFields.traverse(visitor: &visitor)
-  }
 
-  static func ==(lhs: Cosmos_Tx_V1beta1_SignerInfo, rhs: Cosmos_Tx_V1beta1_SignerInfo) -> Bool {
-    if lhs._publicKey != rhs._publicKey {return false}
-    if lhs._modeInfo != rhs._modeInfo {return false}
-    if lhs.sequence != rhs.sequence {return false}
-    if lhs.unknownFields != rhs.unknownFields {return false}
-    return true
-  }
+    static func == (lhs: Cosmos_Tx_V1beta1_SignerInfo, rhs: Cosmos_Tx_V1beta1_SignerInfo) -> Bool {
+        if lhs._publicKey != rhs._publicKey { return false }
+        if lhs._modeInfo != rhs._modeInfo { return false }
+        if lhs.sequence != rhs.sequence { return false }
+        if lhs.unknownFields != rhs.unknownFields { return false }
+        return true
+    }
 }
 
 extension Cosmos_Tx_V1beta1_Fee: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  static let protoMessageName: String = _protobuf_package + ".Fee"
-  static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}amount\0\u{3}gas_limit\0\u{1}payer\0\u{1}granter\0")
+    static let protoMessageName: String = _protobuf_package + ".Fee"
+    static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}amount\0\u{3}gas_limit\0\u{1}payer\0\u{1}granter\0")
 
-  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
-    while let fieldNumber = try decoder.nextFieldNumber() {
-      // The use of inline closures is to circumvent an issue where the compiler
-      // allocates stack space for every case branch when no optimizations are
-      // enabled. https://github.com/apple/swift-protobuf/issues/1034
-      switch fieldNumber {
-      case 1: try { try decoder.decodeRepeatedMessageField(value: &self.amount) }()
-      case 2: try { try decoder.decodeSingularUInt64Field(value: &self.gasLimit) }()
-      case 3: try { try decoder.decodeSingularStringField(value: &self.payer) }()
-      case 4: try { try decoder.decodeSingularStringField(value: &self.granter) }()
-      default: break
-      }
+    mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+        while let fieldNumber = try decoder.nextFieldNumber() {
+            // The use of inline closures is to circumvent an issue where the compiler
+            // allocates stack space for every case branch when no optimizations are
+            // enabled. https://github.com/apple/swift-protobuf/issues/1034
+            switch fieldNumber {
+            case 1: try decoder.decodeRepeatedMessageField(value: &amount)
+            case 2: try decoder.decodeSingularUInt64Field(value: &gasLimit)
+            case 3: try decoder.decodeSingularStringField(value: &payer)
+            case 4: try decoder.decodeSingularStringField(value: &granter)
+            default: break
+            }
+        }
     }
-  }
 
-  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    if !self.amount.isEmpty {
-      try visitor.visitRepeatedMessageField(value: self.amount, fieldNumber: 1)
+    func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+        if !amount.isEmpty {
+            try visitor.visitRepeatedMessageField(value: amount, fieldNumber: 1)
+        }
+        if gasLimit != 0 {
+            try visitor.visitSingularUInt64Field(value: gasLimit, fieldNumber: 2)
+        }
+        if !payer.isEmpty {
+            try visitor.visitSingularStringField(value: payer, fieldNumber: 3)
+        }
+        if !granter.isEmpty {
+            try visitor.visitSingularStringField(value: granter, fieldNumber: 4)
+        }
+        try unknownFields.traverse(visitor: &visitor)
     }
-    if self.gasLimit != 0 {
-      try visitor.visitSingularUInt64Field(value: self.gasLimit, fieldNumber: 2)
-    }
-    if !self.payer.isEmpty {
-      try visitor.visitSingularStringField(value: self.payer, fieldNumber: 3)
-    }
-    if !self.granter.isEmpty {
-      try visitor.visitSingularStringField(value: self.granter, fieldNumber: 4)
-    }
-    try unknownFields.traverse(visitor: &visitor)
-  }
 
-  static func ==(lhs: Cosmos_Tx_V1beta1_Fee, rhs: Cosmos_Tx_V1beta1_Fee) -> Bool {
-    if lhs.amount != rhs.amount {return false}
-    if lhs.gasLimit != rhs.gasLimit {return false}
-    if lhs.payer != rhs.payer {return false}
-    if lhs.granter != rhs.granter {return false}
-    if lhs.unknownFields != rhs.unknownFields {return false}
-    return true
-  }
+    static func == (lhs: Cosmos_Tx_V1beta1_Fee, rhs: Cosmos_Tx_V1beta1_Fee) -> Bool {
+        if lhs.amount != rhs.amount { return false }
+        if lhs.gasLimit != rhs.gasLimit { return false }
+        if lhs.payer != rhs.payer { return false }
+        if lhs.granter != rhs.granter { return false }
+        if lhs.unknownFields != rhs.unknownFields { return false }
+        return true
+    }
 }
 
 extension Cosmos_Tx_V1beta1_AuthInfo: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  static let protoMessageName: String = _protobuf_package + ".AuthInfo"
-  static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}signer_infos\0\u{1}fee\0")
+    static let protoMessageName: String = _protobuf_package + ".AuthInfo"
+    static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}signer_infos\0\u{1}fee\0")
 
-  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
-    while let fieldNumber = try decoder.nextFieldNumber() {
-      // The use of inline closures is to circumvent an issue where the compiler
-      // allocates stack space for every case branch when no optimizations are
-      // enabled. https://github.com/apple/swift-protobuf/issues/1034
-      switch fieldNumber {
-      case 1: try { try decoder.decodeRepeatedMessageField(value: &self.signerInfos) }()
-      case 2: try { try decoder.decodeSingularMessageField(value: &self._fee) }()
-      default: break
-      }
+    mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+        while let fieldNumber = try decoder.nextFieldNumber() {
+            // The use of inline closures is to circumvent an issue where the compiler
+            // allocates stack space for every case branch when no optimizations are
+            // enabled. https://github.com/apple/swift-protobuf/issues/1034
+            switch fieldNumber {
+            case 1: try decoder.decodeRepeatedMessageField(value: &signerInfos)
+            case 2: try decoder.decodeSingularMessageField(value: &_fee)
+            default: break
+            }
+        }
     }
-  }
 
-  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    // The use of inline closures is to circumvent an issue where the compiler
-    // allocates stack space for every if/case branch local when no optimizations
-    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
-    // https://github.com/apple/swift-protobuf/issues/1182
-    if !self.signerInfos.isEmpty {
-      try visitor.visitRepeatedMessageField(value: self.signerInfos, fieldNumber: 1)
+    func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+        // The use of inline closures is to circumvent an issue where the compiler
+        // allocates stack space for every if/case branch local when no optimizations
+        // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+        // https://github.com/apple/swift-protobuf/issues/1182
+        if !signerInfos.isEmpty {
+            try visitor.visitRepeatedMessageField(value: signerInfos, fieldNumber: 1)
+        }
+        try { if let v = self._fee {
+            try visitor.visitSingularMessageField(value: v, fieldNumber: 2)
+        } }()
+        try unknownFields.traverse(visitor: &visitor)
     }
-    try { if let v = self._fee {
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 2)
-    } }()
-    try unknownFields.traverse(visitor: &visitor)
-  }
 
-  static func ==(lhs: Cosmos_Tx_V1beta1_AuthInfo, rhs: Cosmos_Tx_V1beta1_AuthInfo) -> Bool {
-    if lhs.signerInfos != rhs.signerInfos {return false}
-    if lhs._fee != rhs._fee {return false}
-    if lhs.unknownFields != rhs.unknownFields {return false}
-    return true
-  }
+    static func == (lhs: Cosmos_Tx_V1beta1_AuthInfo, rhs: Cosmos_Tx_V1beta1_AuthInfo) -> Bool {
+        if lhs.signerInfos != rhs.signerInfos { return false }
+        if lhs._fee != rhs._fee { return false }
+        if lhs.unknownFields != rhs.unknownFields { return false }
+        return true
+    }
 }
 
 extension Cosmos_Tx_V1beta1_SignDoc: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  static let protoMessageName: String = _protobuf_package + ".SignDoc"
-  static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}body_bytes\0\u{3}auth_info_bytes\0\u{3}chain_id\0\u{3}account_number\0")
+    static let protoMessageName: String = _protobuf_package + ".SignDoc"
+    static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}body_bytes\0\u{3}auth_info_bytes\0\u{3}chain_id\0\u{3}account_number\0")
 
-  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
-    while let fieldNumber = try decoder.nextFieldNumber() {
-      // The use of inline closures is to circumvent an issue where the compiler
-      // allocates stack space for every case branch when no optimizations are
-      // enabled. https://github.com/apple/swift-protobuf/issues/1034
-      switch fieldNumber {
-      case 1: try { try decoder.decodeSingularBytesField(value: &self.bodyBytes) }()
-      case 2: try { try decoder.decodeSingularBytesField(value: &self.authInfoBytes) }()
-      case 3: try { try decoder.decodeSingularStringField(value: &self.chainID) }()
-      case 4: try { try decoder.decodeSingularUInt64Field(value: &self.accountNumber) }()
-      default: break
-      }
+    mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+        while let fieldNumber = try decoder.nextFieldNumber() {
+            // The use of inline closures is to circumvent an issue where the compiler
+            // allocates stack space for every case branch when no optimizations are
+            // enabled. https://github.com/apple/swift-protobuf/issues/1034
+            switch fieldNumber {
+            case 1: try decoder.decodeSingularBytesField(value: &bodyBytes)
+            case 2: try decoder.decodeSingularBytesField(value: &authInfoBytes)
+            case 3: try decoder.decodeSingularStringField(value: &chainID)
+            case 4: try decoder.decodeSingularUInt64Field(value: &accountNumber)
+            default: break
+            }
+        }
     }
-  }
 
-  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    if !self.bodyBytes.isEmpty {
-      try visitor.visitSingularBytesField(value: self.bodyBytes, fieldNumber: 1)
+    func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+        if !bodyBytes.isEmpty {
+            try visitor.visitSingularBytesField(value: bodyBytes, fieldNumber: 1)
+        }
+        if !authInfoBytes.isEmpty {
+            try visitor.visitSingularBytesField(value: authInfoBytes, fieldNumber: 2)
+        }
+        if !chainID.isEmpty {
+            try visitor.visitSingularStringField(value: chainID, fieldNumber: 3)
+        }
+        if accountNumber != 0 {
+            try visitor.visitSingularUInt64Field(value: accountNumber, fieldNumber: 4)
+        }
+        try unknownFields.traverse(visitor: &visitor)
     }
-    if !self.authInfoBytes.isEmpty {
-      try visitor.visitSingularBytesField(value: self.authInfoBytes, fieldNumber: 2)
-    }
-    if !self.chainID.isEmpty {
-      try visitor.visitSingularStringField(value: self.chainID, fieldNumber: 3)
-    }
-    if self.accountNumber != 0 {
-      try visitor.visitSingularUInt64Field(value: self.accountNumber, fieldNumber: 4)
-    }
-    try unknownFields.traverse(visitor: &visitor)
-  }
 
-  static func ==(lhs: Cosmos_Tx_V1beta1_SignDoc, rhs: Cosmos_Tx_V1beta1_SignDoc) -> Bool {
-    if lhs.bodyBytes != rhs.bodyBytes {return false}
-    if lhs.authInfoBytes != rhs.authInfoBytes {return false}
-    if lhs.chainID != rhs.chainID {return false}
-    if lhs.accountNumber != rhs.accountNumber {return false}
-    if lhs.unknownFields != rhs.unknownFields {return false}
-    return true
-  }
+    static func == (lhs: Cosmos_Tx_V1beta1_SignDoc, rhs: Cosmos_Tx_V1beta1_SignDoc) -> Bool {
+        if lhs.bodyBytes != rhs.bodyBytes { return false }
+        if lhs.authInfoBytes != rhs.authInfoBytes { return false }
+        if lhs.chainID != rhs.chainID { return false }
+        if lhs.accountNumber != rhs.accountNumber { return false }
+        if lhs.unknownFields != rhs.unknownFields { return false }
+        return true
+    }
 }
 
 extension Cosmos_Tx_V1beta1_TxRaw: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  static let protoMessageName: String = _protobuf_package + ".TxRaw"
-  static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}body_bytes\0\u{3}auth_info_bytes\0\u{1}signatures\0")
+    static let protoMessageName: String = _protobuf_package + ".TxRaw"
+    static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}body_bytes\0\u{3}auth_info_bytes\0\u{1}signatures\0")
 
-  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
-    while let fieldNumber = try decoder.nextFieldNumber() {
-      // The use of inline closures is to circumvent an issue where the compiler
-      // allocates stack space for every case branch when no optimizations are
-      // enabled. https://github.com/apple/swift-protobuf/issues/1034
-      switch fieldNumber {
-      case 1: try { try decoder.decodeSingularBytesField(value: &self.bodyBytes) }()
-      case 2: try { try decoder.decodeSingularBytesField(value: &self.authInfoBytes) }()
-      case 3: try { try decoder.decodeRepeatedBytesField(value: &self.signatures) }()
-      default: break
-      }
+    mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+        while let fieldNumber = try decoder.nextFieldNumber() {
+            // The use of inline closures is to circumvent an issue where the compiler
+            // allocates stack space for every case branch when no optimizations are
+            // enabled. https://github.com/apple/swift-protobuf/issues/1034
+            switch fieldNumber {
+            case 1: try decoder.decodeSingularBytesField(value: &bodyBytes)
+            case 2: try decoder.decodeSingularBytesField(value: &authInfoBytes)
+            case 3: try decoder.decodeRepeatedBytesField(value: &signatures)
+            default: break
+            }
+        }
     }
-  }
 
-  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    if !self.bodyBytes.isEmpty {
-      try visitor.visitSingularBytesField(value: self.bodyBytes, fieldNumber: 1)
+    func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+        if !bodyBytes.isEmpty {
+            try visitor.visitSingularBytesField(value: bodyBytes, fieldNumber: 1)
+        }
+        if !authInfoBytes.isEmpty {
+            try visitor.visitSingularBytesField(value: authInfoBytes, fieldNumber: 2)
+        }
+        if !signatures.isEmpty {
+            try visitor.visitRepeatedBytesField(value: signatures, fieldNumber: 3)
+        }
+        try unknownFields.traverse(visitor: &visitor)
     }
-    if !self.authInfoBytes.isEmpty {
-      try visitor.visitSingularBytesField(value: self.authInfoBytes, fieldNumber: 2)
-    }
-    if !self.signatures.isEmpty {
-      try visitor.visitRepeatedBytesField(value: self.signatures, fieldNumber: 3)
-    }
-    try unknownFields.traverse(visitor: &visitor)
-  }
 
-  static func ==(lhs: Cosmos_Tx_V1beta1_TxRaw, rhs: Cosmos_Tx_V1beta1_TxRaw) -> Bool {
-    if lhs.bodyBytes != rhs.bodyBytes {return false}
-    if lhs.authInfoBytes != rhs.authInfoBytes {return false}
-    if lhs.signatures != rhs.signatures {return false}
-    if lhs.unknownFields != rhs.unknownFields {return false}
-    return true
-  }
+    static func == (lhs: Cosmos_Tx_V1beta1_TxRaw, rhs: Cosmos_Tx_V1beta1_TxRaw) -> Bool {
+        if lhs.bodyBytes != rhs.bodyBytes { return false }
+        if lhs.authInfoBytes != rhs.authInfoBytes { return false }
+        if lhs.signatures != rhs.signatures { return false }
+        if lhs.unknownFields != rhs.unknownFields { return false }
+        return true
+    }
 }

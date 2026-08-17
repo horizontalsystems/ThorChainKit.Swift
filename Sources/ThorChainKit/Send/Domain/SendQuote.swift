@@ -53,7 +53,7 @@ public struct SendQuote: Sendable, CustomDebugStringConvertible, CustomReflectab
     private let authorityRecord: QuoteAuthorityRecord
     private let sender: String
 
-    internal init(
+    init(
         recipient: Address?,
         amountMagnitude: Data,
         nativeFeeMagnitude: Data,
@@ -75,11 +75,11 @@ public struct SendQuote: Sendable, CustomDebugStringConvertible, CustomReflectab
         self.sender = sender
     }
 
-    internal var internalAuthorityRecord: QuoteAuthorityRecord { authorityRecord }
+    var internalAuthorityRecord: QuoteAuthorityRecord { authorityRecord }
 
-    internal var preflightContext: SendSnapshot? { authorityRecord.snapshot.preflightContext }
+    var preflightContext: SendSnapshot? { authorityRecord.snapshot.preflightContext }
 
-    internal var hasConsistentAuthorityProjection: Bool {
+    var hasConsistentAuthorityProjection: Bool {
         let snapshot = authorityRecord.snapshot
         let amountValue = BigUInt(amountMagnitude)
         let feeValue = BigUInt(nativeFeeMagnitude)
@@ -130,7 +130,7 @@ public struct SendQuote: Sendable, CustomDebugStringConvertible, CustomReflectab
             "totalDebit": totalDebit,
             "memo": memo as Any,
             "acceptedHeight": acceptedHeight,
-            "expiresAt": expiresAt
+            "expiresAt": expiresAt,
         ], displayStyle: .struct)
     }
 }

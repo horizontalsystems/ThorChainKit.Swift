@@ -52,7 +52,7 @@ let package = Package(
             name: "ThorChainKitTests",
             dependencies: [
                 "ThorChainKit",
-                .product(name: "secp256k1", package: "secp256k1.swift")
+                .product(name: "secp256k1", package: "secp256k1.swift"),
             ],
             exclude: ["Fixtures"]
         ),

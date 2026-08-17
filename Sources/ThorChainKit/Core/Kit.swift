@@ -39,7 +39,12 @@ public final class Kit {
     public var lastBlockHeight: Int64? { syncer.lastBlockHeight }
     public var syncState: SyncState { syncer.state }
     public var accountState: AccountState? { accountInfoManager.accountState }
-    public var runeBalance: BigUInt { balance(denom: .rune) }
+    // Balance of the chain's settlement asset: RUNE on THORChain, CACAO on Maya.
+    // `runeBalance` is a source-compatibility alias — on a Maya kit "rune" is not a bank
+    // denom, so anything but the native read would silently return zero.
+    public var runeBalance: BigUInt { nativeBalance }
+    public var nativeBalance: BigUInt { balance(denom: network.nativeDenom) }
+    public var decimals: Int { network.decimals }
     // One account read carries every denom, so all of an account's tokens are served
     // by this kit — a denom without its own adapter simply goes unread.
     public var balances: [Denom: BigUInt] { accountState?.balances ?? [:] }
@@ -60,12 +65,15 @@ public final class Kit {
     public var transactionsSyncStatePublisher: AnyPublisher<TransactionSyncState, Never> {
         transactionSyncer?.statePublisher ?? Just(.notSynced(error: .notStarted)).eraseToAnyPublisher()
     }
+
     public var allTransactionsPublisher: AnyPublisher<([Transaction], Bool), Never> {
         transactionManager?.allTransactionsPublisher ?? Empty().eraseToAnyPublisher()
     }
+
     public var transactionsPublisher: AnyPublisher<[Transaction], Never> {
         transactionManager?.transactionsPublisher ?? Empty().eraseToAnyPublisher()
     }
+
     public var lastBlockHeightPublisher: AnyPublisher<Int64?, Never> { syncer.lastBlockHeightPublisher }
     public var syncStatePublisher: AnyPublisher<SyncState, Never> { syncer.statePublisher }
     public var accountStatePublisher: AnyPublisher<AccountState?, Never> { accountInfoManager.accountStatePublisher }

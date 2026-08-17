@@ -1,6 +1,6 @@
 import Foundation
-import XCTest
 @testable import ThorChainKit
+import XCTest
 
 final class DerivationTests: XCTestCase {
     func testDefaultPathIsExactAndImmutable() throws {
@@ -80,7 +80,7 @@ private extension String {
         stride(from: 0, to: count, by: size).map { offset in
             let start = index(startIndex, offsetBy: offset)
             let end = index(start, offsetBy: min(size, distance(from: start, to: endIndex)))
-            return String(self[start..<end])
+            return String(self[start ..< end])
         }
     }
 }

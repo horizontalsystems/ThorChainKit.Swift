@@ -26,7 +26,7 @@ public struct EndpointPolicy: Hashable, Sendable {
         guard maximumAttempts.map({ $0 >= 1 }) ?? true else {
             throw EndpointConfigurationError.invalidPolicyField("maximumAttempts")
         }
-        guard (1...1000).contains(maximumBalancePageCount) else {
+        guard (1 ... 1000).contains(maximumBalancePageCount) else {
             throw EndpointConfigurationError.invalidPolicyField("maximumBalancePageCount")
         }
         self.maximumHeightLag = maximumHeightLag

@@ -1,6 +1,6 @@
 import Foundation
-import XCTest
 @testable import ThorChainKit
+import XCTest
 
 final class DenomTests: XCTestCase {
     func testAssetForThorNatives() throws {
@@ -65,7 +65,7 @@ final class DenomTests: XCTestCase {
             "btc~btc",
             "eth-usdc-0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
         ] {
-            XCTAssertEqual(Denom.denom(for: try Denom.asset(for: denom)), denom)
+            XCTAssertEqual(try Denom.denom(for: Denom.asset(for: denom)), denom)
         }
     }
 

@@ -7,11 +7,11 @@ struct PendingView: View {
     var body: some View {
         Section {
             Text(model.pendingStatus).accessibilityIdentifier("send.pending.list")
-#if EXAMPLE_FIXTURE
-            if let namespace = model.runtime.fixtureNamespace {
-                Text(namespace).accessibilityIdentifier("send.pending.namespace")
-            }
-#endif
+            #if EXAMPLE_FIXTURE
+                if let namespace = model.runtime.fixtureNamespace {
+                    Text(namespace).accessibilityIdentifier("send.pending.namespace")
+                }
+            #endif
             ForEach(model.pending, id: \.transactionId) { transaction in
                 VStack(alignment: .leading) {
                     Text(transaction.transactionId.hash)
@@ -27,7 +27,7 @@ struct PendingView: View {
                         Button("Acknowledge current fee and retry") {
                             model.retry(transaction, acceptingFee: model.retryCurrentFee)
                         }
-                            .accessibilityIdentifier("send.retry.button")
+                        .accessibilityIdentifier("send.retry.button")
                     }
                 }
             }

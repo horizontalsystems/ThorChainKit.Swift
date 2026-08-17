@@ -31,6 +31,6 @@ final class AccountInfoManager {
               accountInfo.networkChainId == address.network.expectedChainId
         else { throw StorageError.invalid }
         if save { try storage.save(accountInfo: accountInfo) }
-        accountStateSubject.send(try accountInfo.accountState())
+        try accountStateSubject.send(accountInfo.accountState())
     }
 }

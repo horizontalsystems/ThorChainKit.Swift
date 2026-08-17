@@ -1,6 +1,6 @@
 import Foundation
-import XCTest
 @testable import ThorChainKit
+import XCTest
 
 final class TestingAccountReadSessionS1_04Tests: XCTestCase {
     func testSessionReturnsProjectionFromTheRealReadPath() async throws {
@@ -11,7 +11,7 @@ final class TestingAccountReadSessionS1_04Tests: XCTestCase {
         )
         let configuration = try EndpointConfiguration(families: [family])
         let projection = try await TestingAccountReadSession(
-            address: try Address("thor166aczv0jatlnyzz8zsczdzk9xxxgppfpu530jl", network: .mainnet),
+            address: Address("thor166aczv0jatlnyzz8zsczdzk9xxxgppfpu530jl", network: .mainnet),
             configuration: configuration,
             transport: FixtureReadTransport()
         ).read()

@@ -1,5 +1,5 @@
-import XCTest
 @testable import ThorChainKit
+import XCTest
 
 final class EndpointInstantS1_04Tests: XCTestCase {
     func testAdvancedRejectsInvalidAndSaturatesOverflow() {

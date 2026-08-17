@@ -45,7 +45,7 @@ public struct DerivationPath: Hashable, Sendable {
 
     private static func isDecimal(_ value: String) -> Bool {
         guard !value.isEmpty, value.first != "0" || value.count == 1 else { return false }
-        return value.unicodeScalars.allSatisfy { (48...57).contains($0.value) }
+        return value.unicodeScalars.allSatisfy { (48 ... 57).contains($0.value) }
     }
 }
 

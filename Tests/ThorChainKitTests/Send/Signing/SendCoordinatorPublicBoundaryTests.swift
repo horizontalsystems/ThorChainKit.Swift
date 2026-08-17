@@ -1,10 +1,10 @@
 import Foundation
-import XCTest
 @testable import ThorChainKit
+import XCTest
 
 final class SendCoordinatorPublicBoundaryTests: XCTestCase {
     func testPublicSendIsUnavailableAndSideEffectFree() async throws {
-        let runtime = SendRuntime(address: try sendTestAddress(), persistenceNamespace: "coordinator-public")
+        let runtime = try SendRuntime(address: sendTestAddress(), persistenceNamespace: "coordinator-public")
         await runtime.activate(generation: 1)
         let signer = PublicBoundarySigner()
         let quote = try issueTestQuote(in: QuoteStore(), clock: TestSendClock())
@@ -23,7 +23,7 @@ private final class PublicBoundarySigner: ISigner, @unchecked Sendable {
     let compressedPublicKey = Data(repeating: 0, count: 33)
     private(set) var callCount = 0
 
-    func sign(digest: Data) async throws -> Data {
+    func sign(digest _: Data) async throws -> Data {
         callCount += 1
         return Data()
     }

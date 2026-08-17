@@ -2,9 +2,13 @@ import BigInt
 import Foundation
 
 public extension Kit {
-    /// `denom` is what gets sent. The network fee is charged in RUNE regardless, so a
-    /// non-RUNE send needs a RUNE balance for the fee on top of the token balance.
-    func quote(to recipient: Address, amount: SendAmount, memo: String? = nil, denom: Denom = .rune) async throws -> SendQuote {
+    /// `denom` is what gets sent; nil means the chain's native coin (RUNE/CACAO). The
+    /// network fee is charged in the native denom regardless, so a non-native send needs
+    /// a native balance for the fee on top of the token balance. The default is derived
+    /// from the network — a bare `.rune` default would silently move the wrong asset on
+    /// a Maya kit.
+    func quote(to recipient: Address, amount: SendAmount, memo: String? = nil, denom: Denom? = nil) async throws -> SendQuote {
+        let denom = denom ?? network.nativeDenom
         if let preflight {
             return try await preflight.prepareQuote(
                 request: SendQuoteRequest(
@@ -16,22 +20,22 @@ public extension Kit {
                 )
             ).quote
         }
-        // The fallback path predates denoms and would quote RUNE whatever was asked for.
-        // Refuse rather than send the wrong asset.
-        guard denom == .rune else { throw SendError.operationUnavailable }
+        // The fallback path predates denoms and would quote the chain's native asset
+        // whatever was asked for. Refuse rather than send the wrong asset.
+        guard denom == network.nativeDenom else { throw SendError.operationUnavailable }
         return try await transactionSender.quote(to: recipient, amount: amount, memo: memo == "" ? nil : memo)
     }
 
-    /// The chain-wide network fee, in RUNE base units.
+    /// The chain-wide network fee, in native base units (RUNE/CACAO).
     func estimateFee() async throws -> BigUInt {
         guard let preflight else { throw SendError.operationUnavailable }
         return try await preflight.estimateFee()
     }
 
     /// A deposit addresses the chain: no recipient, and the memo is the instruction.
-    /// `denom` is the bank denom being spent; it cannot be derived from `asset` for an
-    /// unknown x/-token, so callers pass both.
-    func depositQuote(asset: Asset, denom: Denom, amount: SendAmount, memo: String) async throws -> SendQuote {
+    /// The sign payload derives the on-chain asset from `denom` via the chain's own
+    /// resolver; the `asset` parameter is retained for source compatibility only.
+    func depositQuote(asset _: Asset, denom: Denom, amount: SendAmount, memo: String) async throws -> SendQuote {
         guard let preflight, !memo.isEmpty else { throw SendError.operationUnavailable }
         return try await preflight.prepareQuote(
             request: SendQuoteRequest(

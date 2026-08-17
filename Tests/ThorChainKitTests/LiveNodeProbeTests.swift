@@ -1,6 +1,6 @@
 import Foundation
-import XCTest
 @testable import ThorChainKit
+import XCTest
 
 final class LiveNodeProbeTests: XCTestCase {
     func testProbeRetainsThreeIndependentObservationsAndBasePath() async throws {
@@ -21,7 +21,7 @@ final class LiveNodeProbeTests: XCTestCase {
             clientId: "fixture-client"
         )
 
-        let outcomes = await probe.probe(index: 2, family: try family())
+        let outcomes = try await probe.probe(index: 2, family: family())
 
         XCTAssertEqual(outcomes.count, 3)
         XCTAssertEqual(outcomes.map(\.index.request), ProbeRequestKind.allCases)
@@ -56,9 +56,9 @@ final class LiveNodeProbeTests: XCTestCase {
             ),
         ])
 
-        let outcomes = await LiveNodeProbe(transport: transport).probe(
+        let outcomes = try await LiveNodeProbe(transport: transport).probe(
             index: 0,
-            family: try plainFamily()
+            family: plainFamily()
         )
 
         XCTAssertEqual(outcomes.map(\.result), [
@@ -70,9 +70,9 @@ final class LiveNodeProbeTests: XCTestCase {
 
     func testProbeMapsCancellationAndMakesNoAdditionalRequests() async throws {
         let transport = CancellingTransport()
-        let outcomes = await LiveNodeProbe(transport: transport).probe(
+        let outcomes = try await LiveNodeProbe(transport: transport).probe(
             index: 0,
-            family: try plainFamily()
+            family: plainFamily()
         )
 
         XCTAssertEqual(outcomes.map(\.result), [
@@ -91,9 +91,9 @@ final class LiveNodeProbeTests: XCTestCase {
             "/status": .failure(.secureConnectionFailed),
         ])
 
-        let outcomes = await LiveNodeProbe(transport: transport).probe(
+        let outcomes = try await LiveNodeProbe(transport: transport).probe(
             index: 0,
-            family: try plainFamily()
+            family: plainFamily()
         )
 
         XCTAssertEqual(outcomes.map(\.result), [
@@ -114,9 +114,9 @@ final class LiveNodeProbeTests: XCTestCase {
             ),
         ])
 
-        let outcomes = await LiveNodeProbe(transport: transport).probe(
+        let outcomes = try await LiveNodeProbe(transport: transport).probe(
             index: 0,
-            family: try plainFamily()
+            family: plainFamily()
         )
 
         XCTAssertEqual(outcomes.map(\.result), [
@@ -191,7 +191,7 @@ private actor ProbeTransport: IHttpTransport {
 private actor CancellingTransport: IHttpTransport {
     private(set) var requestCount = 0
 
-    func data(for request: URLRequest) async throws -> (Data, HTTPURLResponse) {
+    func data(for _: URLRequest) async throws -> (Data, HTTPURLResponse) {
         requestCount += 1
         throw CancellationError()
     }

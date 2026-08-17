@@ -64,7 +64,8 @@ actor EndpointPool {
         let latestBlock = await probe.latestBlock(family: cachedLease.family)
         if case let .success(block) = latestBlock,
            block.chainId == cachedLease.verifiedChainId,
-           block.latestHeight > 0 {
+           block.latestHeight > 0
+        {
             return EndpointLease(
                 family: cachedLease.family,
                 verifiedChainId: cachedLease.verifiedChainId,
@@ -210,15 +211,19 @@ actor EndpointPool {
             }
         }
 
-        for (id, _) in locked { waiters.removeValue(forKey: id) }
-        for id in cancelledIDs { waiters.removeValue(forKey: id) }
+        for (id, _) in locked {
+            waiters.removeValue(forKey: id)
+        }
+        for id in cancelledIDs {
+            waiters.removeValue(forKey: id)
+        }
         notifyWaiterCountObservers()
 
         let deliveries = locked.map { _, waiter -> (Waiter, Result<EndpointLease, Error>) in
             switch evaluation {
             case let .success(families, fallback):
                 do {
-                    return (waiter, .success(try select(
+                    return try (waiter, .success(select(
                         from: families,
                         excluding: waiter.excluding,
                         fallback: fallback
@@ -307,13 +312,12 @@ actor EndpointPool {
             let family = configuration.families[familyIndex]
             let observations = outcomes.compactMap(identityObservation)
                 .sorted {
-                    return $0.request.rawValue < $1.request.rawValue
+                    $0.request.rawValue < $1.request.rawValue
                 }
             let identities = Set(observations.map(\.chainId))
             if identities.count > 1, let first = observations.first {
                 candidates.append((familyIndex, family.id, first, .mixed))
-            }
-            else if let foreign = observations.first(where: { $0.chainId != network.expectedChainId }) {
+            } else if let foreign = observations.first(where: { $0.chainId != network.expectedChainId }) {
                 candidates.append((familyIndex, family.id, foreign, .foreign))
             }
         }

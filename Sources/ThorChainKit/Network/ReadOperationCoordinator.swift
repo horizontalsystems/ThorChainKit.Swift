@@ -103,7 +103,7 @@ struct ReadOperationCoordinator: IAccountProvider {
             group.addTask {
                 guard !Task.isCancelled else { return .account(.failure(.cancelled)) }
                 do {
-                    return .account(.success(try await client.account(address: address, using: lease, timeout: timeout)))
+                    return try .account(.success(await client.account(address: address, using: lease, timeout: timeout)))
                 } catch {
                     return .account(.failure(ReadFailure(error: error)))
                 }
@@ -111,7 +111,7 @@ struct ReadOperationCoordinator: IAccountProvider {
             group.addTask {
                 guard !Task.isCancelled else { return .balances(.failure(.cancelled)) }
                 do {
-                    return .balances(.success(try await client.balances(address: address, using: lease, timeout: timeout)))
+                    return try .balances(.success(await client.balances(address: address, using: lease, timeout: timeout)))
                 } catch {
                     return .balances(.failure(ReadFailure(error: error)))
                 }
@@ -132,7 +132,8 @@ struct ReadOperationCoordinator: IAccountProvider {
             if Task.isCancelled { return .failure(.cancelled) }
             if let account, let balances,
                case let .success(accountValue) = account,
-               case let .success(balanceValue) = balances {
+               case let .success(balanceValue) = balances
+            {
                 return .success(accountValue, balanceValue)
             }
 
@@ -146,7 +147,6 @@ struct ReadOperationCoordinator: IAccountProvider {
             return .failure(selected)
         }
     }
-
 }
 
 private enum AttemptOutcome: Sendable {

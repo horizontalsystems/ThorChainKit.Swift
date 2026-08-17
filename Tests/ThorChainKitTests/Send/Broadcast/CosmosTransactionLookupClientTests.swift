@@ -1,6 +1,6 @@
 import Foundation
-import XCTest
 @testable import ThorChainKit
+import XCTest
 
 final class CosmosTransactionLookupClientTests: XCTestCase {
     func testMatchingHashAndExactNotFoundAreTheOnlyRetryAuthorities() async throws {
@@ -54,7 +54,7 @@ private actor LookupTransport: IHttpTransport {
         self.result = result
     }
 
-    func data(for request: URLRequest) async throws -> (Data, HTTPURLResponse) {
+    func data(for _: URLRequest) async throws -> (Data, HTTPURLResponse) {
         result
     }
 }

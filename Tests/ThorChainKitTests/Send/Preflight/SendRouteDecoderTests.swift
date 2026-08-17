@@ -1,5 +1,5 @@
-import XCTest
 @testable import ThorChainKit
+import XCTest
 
 final class SendRouteDecoderTests: XCTestCase {
     func testBalanceRejectsADenomOtherThanTheRequestedOne() {
@@ -32,14 +32,14 @@ final class SendRouteDecoderTests: XCTestCase {
             #"{"balance":{"denom":"rune","amount":"01"}}"#,
             #"{"balance":{"denom":"rune","amount":"-1"}}"#,
             #"{"balance":{"denom":"rune","amount":"1","extra":true}}"#,
-            #"{"denom":"rune","amount":"1"}"#
+            #"{"denom":"rune","amount":"1"}"#,
         ] {
             XCTAssertThrowsError(try SendRouteDecoders.balance(Data(body.utf8), expecting: "rune"))
         }
         for body in [
             #"{"balance":{"denom":"rune"}}"#,
             #"{"balance":{"denom":"rune","amount":1}}"#,
-            #"{"balance":{"denom":"rune","amount":""}}"#
+            #"{"balance":{"denom":"rune","amount":""}}"#,
         ] {
             XCTAssertThrowsError(try SendRouteDecoders.balance(Data(body.utf8), expecting: "rune"))
         }
@@ -55,5 +55,4 @@ final class SendRouteDecoderTests: XCTestCase {
             XCTAssertThrowsError(try SendRouteDecoders.mimir(Data(body.utf8)))
         }
     }
-
 }

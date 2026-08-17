@@ -1,6 +1,6 @@
 import BigInt
-import XCTest
 @testable import ThorChainKit
+import XCTest
 
 final class SendValueTests: XCTestCase {
     func testAllPublicMonetaryValuesSnapshotBeforeUse() {
@@ -13,5 +13,4 @@ final class SendValueTests: XCTestCase {
         XCTAssertEqual(fee.previous, BigUInt("18446744073709551617"))
         XCTAssertEqual(fee.current, BigUInt("18446744073709551618"))
     }
-
 }

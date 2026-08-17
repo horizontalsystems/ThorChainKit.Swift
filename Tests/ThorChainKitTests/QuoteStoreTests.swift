@@ -1,6 +1,6 @@
 import Foundation
-import XCTest
 @testable import ThorChainKit
+import XCTest
 
 final class QuoteStoreTests: XCTestCase {
     func testWallClockExpiryMatchesTheMonotonicDeadline() throws {
@@ -9,8 +9,8 @@ final class QuoteStoreTests: XCTestCase {
         // Nothing else ties them together, so a change to one must change the other.
         let issuedAt = Date()
         let quote = try QuoteStore(clock: TestSendClock()).issue(
-            sender: try sendTestAddress(),
-            recipient: try sendOtherAddress(),
+            sender: sendTestAddress(),
+            recipient: sendOtherAddress(),
             amountMagnitude: SendMagnitude(3).data,
             nativeFeeMagnitude: SendMagnitude(1).data,
             totalDebitMagnitude: SendMagnitude(4).data,
@@ -89,8 +89,8 @@ final class QuoteStoreTests: XCTestCase {
 
         XCTAssertThrowsError(
             try store.issue(
-                sender: try sendTestAddress(),
-                recipient: try sendTestAddress(),
+                sender: sendTestAddress(),
+                recipient: sendTestAddress(),
                 amountMagnitude: SendMagnitude(3).data,
                 nativeFeeMagnitude: SendMagnitude(2).data,
                 totalDebitMagnitude: SendMagnitude(4).data,
@@ -115,7 +115,7 @@ final class QuoteStoreTests: XCTestCase {
             (SendMagnitude(3).data, Data([0]), SendMagnitude(3).data),
             (SendMagnitude(3).data, SendMagnitude(2).data, Data([0, 5])),
             (SendMagnitude(3).data, SendMagnitude(2).data, Data()),
-            (SendMagnitude(3).data, SendMagnitude(2).data, SendMagnitude(4).data)
+            (SendMagnitude(3).data, SendMagnitude(2).data, SendMagnitude(4).data),
         ]
         for (amount, fee, totalDebit) in cases {
             XCTAssertThrowsError(
@@ -141,8 +141,8 @@ final class QuoteStoreTests: XCTestCase {
 
         XCTAssertThrowsError(
             try store.issue(
-                sender: try sendTestAddress(),
-                recipient: try sendOtherAddress(),
+                sender: sendTestAddress(),
+                recipient: sendOtherAddress(),
                 amountMagnitude: SendMagnitude(3).data,
                 nativeFeeMagnitude: SendMagnitude(2).data,
                 totalDebitMagnitude: SendMagnitude(5).data,
@@ -160,7 +160,7 @@ final class QuoteStoreTests: XCTestCase {
         let clock = TestSendClock()
         let source = QuoteStore(clock: clock)
         let quote = try issueTestQuote(in: source, clock: clock, generation: 12)
-        let projection = SendQuote(
+        let projection = try SendQuote(
             recipient: quote.recipient,
             amountMagnitude: SendMagnitude(100).data,
             nativeFeeMagnitude: SendMagnitude(2).data,
@@ -169,7 +169,7 @@ final class QuoteStoreTests: XCTestCase {
             acceptedHeight: quote.acceptedHeight,
             expiresAt: Date(timeIntervalSince1970: 99),
             authorityRecord: quote.internalAuthorityRecord,
-            sender: try sendOtherAddress().raw
+            sender: sendOtherAddress().raw
         )
 
         XCTAssertFalse(projection.hasConsistentAuthorityProjection)
@@ -179,7 +179,7 @@ final class QuoteStoreTests: XCTestCase {
         let snapshot = try SendSnapshot.fixture(height: 12)
         let store = QuoteStore()
         let quote = try store.issue(
-            sender: try Address(snapshot.sender, network: .mainnet), recipient: try Address(snapshot.recipient, network: .mainnet),
+            sender: Address(snapshot.sender, network: .mainnet), recipient: Address(snapshot.recipient, network: .mainnet),
             amountMagnitude: SendMagnitude(snapshot.amount).data, nativeFeeMagnitude: SendMagnitude(snapshot.nativeFee).data, totalDebitMagnitude: SendMagnitude(snapshot.totalDebit).data,
             memo: nil, acceptedHeight: snapshot.height, generation: 7, providerFamilyID: snapshot.familyID, preflightContext: snapshot
         )
@@ -270,7 +270,7 @@ final class QuoteStoreTests: XCTestCase {
             projection(amount: SendMagnitude(100).data, fee: SendMagnitude(2).data, total: Data([0, 102])),
             projection(amount: SendMagnitude(100).data, fee: SendMagnitude(2).data, total: SendMagnitude(101).data),
             projection(amount: Data(), fee: Data(), total: Data()),
-            projection(amount: SendMagnitude(100).data, fee: SendMagnitude(2).data, total: SendMagnitude(102).data, providerFamilyID: "")
+            projection(amount: SendMagnitude(100).data, fee: SendMagnitude(2).data, total: SendMagnitude(102).data, providerFamilyID: ""),
         ]
 
         for invalid in invalidProjections {

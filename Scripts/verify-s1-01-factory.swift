@@ -104,12 +104,14 @@ let networkPath = "Sources/ThorChainKit/Models/Network.swift"
 guard let persistenceKey = namedVariable("persistenceKey", in: parsedAST(networkPath)) else {
     fail("Network.persistenceKey declaration is absent")
 }
+
 actual.append("\(networkPath)#persistenceKey\t\(digest(persistenceKey))")
 
 let fixtureURL = root.appendingPathComponent(CommandLine.arguments[1])
 guard let expected = try? String(contentsOf: fixtureURL, encoding: .utf8) else {
     fail("fixture is unavailable at \(CommandLine.arguments[1])")
 }
+
 let result = actual.joined(separator: "\n") + "\n"
 guard result == expected else {
     fail("normalized syntax differs; actual fixture follows:\n\(result)")

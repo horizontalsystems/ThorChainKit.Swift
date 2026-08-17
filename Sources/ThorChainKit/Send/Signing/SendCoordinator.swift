@@ -80,7 +80,8 @@ actor SendCoordinator {
                 guard let memo = quote.memo else { throw SendError.operationUnavailable }
                 payload = try DirectSignCodec.makeDepositSignPayload(
                     context: h1.depositContext(sequence: effectiveSequence),
-                    asset: try Denom.asset(for: h1.denom.rawValue),
+                    // Chain-aware: the THOR-only static would stamp a Maya deposit THOR.CACAO
+                    asset: network.chain.asset(for: h1.denom.rawValue),
                     amount: quote.amount,
                     memo: memo,
                     publicKey: publicKey
@@ -115,12 +116,12 @@ actor SendCoordinator {
             let compact = try SignerVerifier().verify(signature: signature, digest: payload.digest, publicKey: publicKey)
             let transaction = try DirectSignCodec.makeTxRaw(payload: payload, compactSignature: compact.rawValue)
             ownershipTransferred = true
-            result = .handoff(SendAttemptHandoff(
+            result = try .handoff(SendAttemptHandoff(
                 transaction: transaction,
                 accountGate: operationHold.accountGate,
                 sender: h1.sender,
                 recipient: h1.recipient,
-                recipientPayload: h1.recipient.isEmpty ? nil : try Address(h1.recipient, network: network).payload,
+                recipientPayload: h1.recipient.isEmpty ? nil : Address(h1.recipient, network: network).payload,
                 amount: SendMagnitude(h1.amount).data,
                 denom: h1.denom,
                 quotedNativeFee: SendMagnitude(h1.nativeFee).data,
@@ -165,7 +166,7 @@ actor SendCoordinator {
         _ signer: any ISigner,
         digest: Data,
         sender: String,
-        expiresAt: Date
+        expiresAt _: Date
     ) async -> SignerRaceResult {
         // Expiry deliberately does NOT cancel a signer that has already started: the
         // user is mid-Face-ID and cannot be blamed for how long authentication takes.
@@ -277,7 +278,7 @@ private final class SignerOperation: @unchecked Sendable {
     func start() {
         let task = Task { [self] in
             do {
-                complete(.success(try await signer.sign(digest: digest)))
+                try complete(.success(await signer.sign(digest: digest)))
             } catch is CancellationError {
                 complete(.failure(.signerCancelled))
             } catch {

@@ -2,8 +2,8 @@ import BigInt
 import CryptoKit
 import Foundation
 import secp256k1
-import XCTest
 @testable import ThorChainKit
+import XCTest
 
 final class DirectSignCodecTests: XCTestCase {
     private let sender = "thor1w508d6qejxtdg4y5r3zarvary0c5xw7ku6wp68"
@@ -54,7 +54,7 @@ final class DirectSignCodecTests: XCTestCase {
             String(describing: payload),
             String(reflecting: payload),
             String(describing: signed),
-            String(reflecting: signed)
+            String(reflecting: signed),
         ] {
             XCTAssertFalse(representation.contains("bodyBytes"))
             XCTAssertFalse(representation.contains("authInfoBytes"))
@@ -85,7 +85,7 @@ final class DirectSignCodecTests: XCTestCase {
         signDoc.authInfoBytes = try auth.serializedData()
         signDoc.chainID = "thorchain-1"
         signDoc.accountNumber = 123_456
-        let legacyDigest = Data(SHA256.hash(data: try signDoc.serializedData()))
+        let legacyDigest = try Data(SHA256.hash(data: signDoc.serializedData()))
         XCTAssertEqual(legacyDigest.hex, "7e513b23957b2e3caf77e796ba1412851be066cd77f96a7d196c3c856c641ebf")
     }
 
@@ -162,8 +162,8 @@ final class DirectSignCodecTests: XCTestCase {
         // Hardcoding "rune" here would move the wrong asset in the amount computed
         // from the TCY balance, and until this test existed nothing caught it.
         let tcy = try Denom(rawValue: "tcy")
-        let payload = try makePayload(snapshot: try makeSnapshot(denom: tcy))
-        let runePayload = try makePayload(snapshot: try makeSnapshot())
+        let payload = try makePayload(snapshot: makeSnapshot(denom: tcy))
+        let runePayload = try makePayload(snapshot: makeSnapshot())
 
         let body = try Cosmos_Tx_V1beta1_TxBody(serializedBytes: payload.bodyBytes)
         let message = try Types_MsgSend(serializedBytes: body.messages[0].value)
@@ -200,7 +200,7 @@ final class DirectSignCodecTests: XCTestCase {
             amount: BigUInt(100_000_000),
             nativeFee: 0,
             denom: denom,
-            mimir: MimirSnapshot(haltChainGlobal: -1, nodePauseChainGlobal: -1, haltTHORChain: -1, solvencyHaltTHORChain: -1),
+            mimir: MimirSnapshot(haltChainGlobal: -1, nodePauseChainGlobal: -1, haltNativeChain: -1, solvencyHaltNativeChain: -1),
             memoMaximumBytes: 256,
             accountPublicKey: "/cosmos.crypto.secp256k1.PubKey",
             accountPublicKeyData: publicKey ?? self.publicKey
@@ -210,8 +210,8 @@ final class DirectSignCodecTests: XCTestCase {
     private func makeQuote(sender: String = "thor1w508d6qejxtdg4y5r3zarvary0c5xw7ku6wp68", memo: String? = nil, preflightContext: SendSnapshot? = nil) throws -> SendQuote {
         let clock = TestSendClock()
         return try QuoteStore(clock: clock).issue(
-            sender: try Address(sender, network: .mainnet),
-            recipient: try Address(recipient, network: .mainnet),
+            sender: Address(sender, network: .mainnet),
+            recipient: Address(recipient, network: .mainnet),
             amountMagnitude: SendMagnitude(BigUInt(100_000_000)).data,
             nativeFeeMagnitude: Data(),
             totalDebitMagnitude: SendMagnitude(BigUInt(100_000_000)).data,
@@ -239,7 +239,7 @@ private extension String {
         stride(from: 0, to: count, by: size).map { offset in
             let start = index(startIndex, offsetBy: offset)
             let end = index(start, offsetBy: min(size, distance(from: start, to: endIndex)))
-            return String(self[start..<end])
+            return String(self[start ..< end])
         }
     }
 }

@@ -76,7 +76,7 @@ final class TransactionSyncer: @unchecked Sendable {
                 let backfill = try await Self.fetchBackfill(
                     provider: provider,
                     address: address,
-                    pageToken: try repository.cursor().backfillPageToken
+                    pageToken: repository.cursor().backfillPageToken
                 )
                 try self?.commit(backfill: backfill, syncID: activeSyncID)
                 let pending = try await Self.fetchPending(
@@ -154,7 +154,7 @@ final class TransactionSyncer: @unchecked Sendable {
                 transactionID: nil
             )
             try Task.checkCancellation()
-            updated.append(contentsOf: try page.actions.compactMap(transaction))
+            try updated.append(contentsOf: page.actions.compactMap(transaction))
             token = page.nextPageToken
             if token == nil || page.actions.isEmpty {
                 token = nil
@@ -205,7 +205,7 @@ final class TransactionSyncer: @unchecked Sendable {
         else {
             throw MidgardProviderError.invalidResponse
         }
-        return Transaction(
+        return try Transaction(
             transactionId: transactionId,
             blockHeight: height,
             timestamp: Date(timeIntervalSince1970: TimeInterval(nanoseconds) / 1_000_000_000),
@@ -213,8 +213,8 @@ final class TransactionSyncer: @unchecked Sendable {
             type: type,
             status: status,
             memo: memo(action.metadata),
-            incoming: try transfers(incoming),
-            outgoing: try transfers(outgoing),
+            incoming: transfers(incoming),
+            outgoing: transfers(outgoing),
             fee: networkFee(action.metadata)
         )
     }

@@ -1,10 +1,5 @@
 import BigInt
-import XCTest
 @testable import ThorChainKit
+import XCTest
 
-final class SendErrorTests: XCTestCase {
-
-
-
-}
-
+final class SendErrorTests: XCTestCase {}

@@ -18,6 +18,7 @@ guard let allowlistText = try? String(contentsOfFile: allowlistPath, encoding: .
 else {
     fail("one or more inputs are unavailable")
 }
+
 let expected = Set(allowlistText.split(separator: "\n").map(String.init))
 guard expected.count == 18 else {
     fail("allowlist must contain exactly 18 unique tests")
@@ -32,10 +33,10 @@ final class ReportParser: NSObject, XMLParserDelegate {
     var caseHasFailure = false
 
     func parser(
-        _ parser: XMLParser,
+        _: XMLParser,
         didStartElement elementName: String,
-        namespaceURI: String?,
-        qualifiedName qName: String?,
+        namespaceURI _: String?,
+        qualifiedName _: String?,
         attributes attributeDict: [String: String] = [:]
     ) {
         if elementName == "testsuite" {
@@ -80,6 +81,7 @@ for match in regex.matches(in: transcript, range: range) {
     let status = String(transcript[Range(match.range(at: 2), in: transcript)!])
     statuses["ThorChainKitTests.PublicApiTests/\(name)", default: []].append(status)
 }
+
 guard statuses.keys.allSatisfy(expected.contains),
       expected.allSatisfy({ statuses[$0] == ["passed"] })
 else {

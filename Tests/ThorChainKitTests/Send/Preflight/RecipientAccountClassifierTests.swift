@@ -1,5 +1,5 @@
-import XCTest
 @testable import ThorChainKit
+import XCTest
 
 final class RecipientAccountClassifierTests: XCTestCase {
     func testSupportedAccountAtExactHeightIsAUser() throws {
@@ -45,7 +45,7 @@ final class RecipientAccountClassifierTests: XCTestCase {
             RecipientAccountResponse(height: 10, type: "/cosmos.auth.v1beta1.BaseAccount", address: "thor1other"),
             RecipientAccountResponse(height: 10, code: 22, codespace: nil, value: Data()),
             RecipientAccountResponse(height: 10, code: 22, codespace: "sdk", value: Data([1])),
-            RecipientAccountResponse(height: 10, code: 22, codespace: "baseapp", value: Data())
+            RecipientAccountResponse(height: 10, code: 22, codespace: "baseapp", value: Data()),
         ]
         for response in cases {
             XCTAssertThrowsError(try RecipientAccountClassifier.classify(response, expectedHeight: 10, recipient: recipient, forbidden: set)) { error in
@@ -59,7 +59,7 @@ final class RecipientAccountClassifierTests: XCTestCase {
         let set = try ForbiddenModuleAddressSet()
         for response in [
             RecipientAccountResponse(height: 10, address: address),
-            RecipientAccountResponse(height: 10, code: 22, codespace: "sdk")
+            RecipientAccountResponse(height: 10, code: 22, codespace: "sdk"),
         ] {
             XCTAssertThrowsError(try RecipientAccountClassifier.classify(response, expectedHeight: 10, recipient: address, forbidden: set)) { error in
                 XCTAssertEqual(error as? SendError, .recipientIsModule)

@@ -3,7 +3,7 @@ public struct Denom: Hashable, Sendable {
 
     public init(rawValue: String) throws {
         let bytes = Array(rawValue.utf8)
-        guard (3...128).contains(bytes.count),
+        guard (3 ... 128).contains(bytes.count),
               bytes.first.map(Self.isLetter) == true,
               bytes.dropFirst().allSatisfy(Self.isAllowed)
         else {
@@ -13,14 +13,15 @@ public struct Denom: Hashable, Sendable {
     }
 
     public static let rune = try! Denom(rawValue: "rune")
+    public static let cacao = try! Denom(rawValue: "cacao")
 
     private static func isLetter(_ byte: UInt8) -> Bool {
-        (65...90).contains(byte) || (97...122).contains(byte)
+        (65 ... 90).contains(byte) || (97 ... 122).contains(byte)
     }
 
     private static func isAllowed(_ byte: UInt8) -> Bool {
         isLetter(byte)
-            || (48...57).contains(byte)
+            || (48 ... 57).contains(byte)
             || [47, 58, 46, 95, 45].contains(byte)
     }
 }
@@ -75,5 +76,57 @@ public extension Denom {
         }
 
         return asset.description.lowercased()
+    }
+}
+
+// Per-chain denom <-> Asset translation. thornode-family chains share the delimiter
+// grammar (Asset) but differ in their native denom and the irregular native-token naming
+// rules. THOR keeps the historical Denom statics; Maya follows the same shape as the
+// Android kit's MayaAssetResolver.
+public extension Network.Chain {
+    // MAYA-native denoms whose notation is irregular (not derivable from the asset)
+    private static let mayaNativeAssets: [String: Asset] = [
+        "cacao": .cacao,
+        "maya": Asset(chain: "MAYA", symbol: "MAYA", ticker: "MAYA"),
+    ]
+
+    func asset(for denom: String) throws -> Asset {
+        switch self {
+        case .thor:
+            return try Denom.asset(for: denom)
+        case .maya:
+            let lowered = denom.lowercased()
+
+            if let native = Self.mayaNativeAssets[lowered] {
+                return native
+            }
+
+            // Maya has no Rujira "x/" app-layer namespace, so (unlike THOR) a plain
+            // delimiter-free denom is a MAYA-native token directly
+            guard lowered.contains(where: Asset.isDelimiter) else {
+                let symbol = lowered.uppercased()
+                return Asset(chain: "MAYA", symbol: symbol, ticker: symbol)
+            }
+
+            // "chain-symbol" (secured) or "chain/symbol" (synth)
+            return try Asset(notation: lowered)
+        }
+    }
+
+    func denom(for asset: Asset) -> String {
+        switch self {
+        case .thor:
+            return Denom.denom(for: asset)
+        case .maya:
+            if let native = Self.mayaNativeAssets.first(where: { $0.value == asset }) {
+                return native.key
+            }
+
+            if asset.chain == "MAYA", !asset.synth, !asset.trade, !asset.secured {
+                return asset.symbol.lowercased()
+            }
+
+            return asset.description.lowercased()
+        }
     }
 }

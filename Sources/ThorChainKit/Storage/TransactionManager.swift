@@ -9,14 +9,16 @@ final class TransactionManager: @unchecked Sendable {
     private let repository: TransactionRepository
     private let journal: SendJournal
     private let pendingTransactionManager: PendingTransactionManager
+    private let chain: Network.Chain
     private let allTransactionsSubject = PassthroughSubject<([Transaction], Bool), Never>()
     private let transactionsSubject = PassthroughSubject<[Transaction], Never>()
 
-    init(storage: TransactionStorage, repository: TransactionRepository, journal: SendJournal, pendingTransactionManager: PendingTransactionManager) {
+    init(storage: TransactionStorage, repository: TransactionRepository, journal: SendJournal, pendingTransactionManager: PendingTransactionManager, chain: Network.Chain = .thor) {
         self.storage = storage
         self.repository = repository
         self.journal = journal
         self.pendingTransactionManager = pendingTransactionManager
+        self.chain = chain
     }
 
     var allTransactionsPublisher: AnyPublisher<([Transaction], Bool), Never> {
@@ -60,11 +62,11 @@ final class TransactionManager: @unchecked Sendable {
 
     func reconcileLocalTransactions() throws {
         let records = try journal.records()
-        let pending = records.compactMap(Self.localTransaction)
+        let pending = records.compactMap { Self.localTransaction($0, chain: chain) }
         let rejected = Set(records.filter { $0.state == .rejected }.map(\.transactionID))
 
         let changed = try storage.write { db -> Bool in
-            var changed = !(try repository.saveLocal(pending, in: db)).isEmpty
+            var changed = try !(repository.saveLocal(pending, in: db)).isEmpty
             for transactionID in rejected {
                 guard let transaction = try repository.pendingTransaction(transactionID: transactionID, in: db) else { continue }
                 let failed = Transaction(
@@ -80,7 +82,7 @@ final class TransactionManager: @unchecked Sendable {
                     // The fee was charged whether or not the transaction was accepted.
                     fee: transaction.fee
                 )
-                changed = !(try repository.save([failed], in: db)).isEmpty || changed
+                changed = try !(repository.save([failed], in: db)).isEmpty || changed
             }
             return changed
         }
@@ -88,13 +90,13 @@ final class TransactionManager: @unchecked Sendable {
         if changed { process(initial: false) }
     }
 
-    private static func localTransaction(_ record: SendJournalRecord) -> Transaction? {
+    private static func localTransaction(_ record: SendJournalRecord, chain: Network.Chain) -> Transaction? {
         let amount = BigUInt(record.amount)
         guard record.state != .rejected, amount > 0 else { return nil }
         let nanoseconds = Int64(record.createdAt.timeIntervalSince1970 * 1_000_000_000)
         // Midgard notation, because the record that replaces this one will use it. A bare
         // bank denom like "tcy" would never match its own confirmation.
-        let asset = (try? Denom.asset(for: record.denom.rawValue))?.description ?? Asset.rune.description
+        let asset = (try? chain.asset(for: record.denom.rawValue))?.description ?? chain.nativeAsset.description
         return Transaction(
             transactionId: record.transactionID,
             blockHeight: 0,

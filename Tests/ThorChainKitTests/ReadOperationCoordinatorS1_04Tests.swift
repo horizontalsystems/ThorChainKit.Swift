@@ -1,13 +1,13 @@
 import Foundation
-import XCTest
 @testable import ThorChainKit
+import XCTest
 
 final class ReadOperationCoordinatorS1_04Tests: XCTestCase {
     func testCancellationDuringSuccessLinearizationDoesNotReturnSuccess() async throws {
         let first = try family(id: "first")
         let configuration = try EndpointConfiguration(
             families: [first],
-            policy: try EndpointPolicy(maximumAttempts: 1, maximumBalancePageCount: 4)
+            policy: EndpointPolicy(maximumAttempts: 1, maximumBalancePageCount: 4)
         )
         let client = ScriptedReadClient()
         await client.setOutcome(for: "first", outcome: .success)
@@ -42,7 +42,7 @@ final class ReadOperationCoordinatorS1_04Tests: XCTestCase {
         let second = try family(id: "second")
         let configuration = try EndpointConfiguration(
             families: [first, second],
-            policy: try EndpointPolicy(maximumBalancePageCount: 4)
+            policy: EndpointPolicy(maximumBalancePageCount: 4)
         )
         let client = ScriptedReadClient()
         await client.setOutcome(for: "first", outcome: .retryable)
@@ -64,7 +64,7 @@ final class ReadOperationCoordinatorS1_04Tests: XCTestCase {
         // to move there behind the user's back, so all three tries go to the same one
         // and the failure is then reported as it came.
         do {
-            _ = try await coordinator.read(address: try address())
+            _ = try await coordinator.read(address: address())
             XCTFail("a provider that keeps failing must surface its error")
         } catch let error as ThorNodeReadError {
             guard case let .httpStatus(_, code, _) = error else { return XCTFail("unexpected \(error)") }
@@ -133,7 +133,7 @@ private actor ScriptedReadClient: INodeApiProvider {
 
     func setOutcome(for family: String, outcome: Outcome) { outcomes[family] = outcome }
 
-    func account(address: Address, using lease: EndpointLease, timeout _: TimeInterval?) async throws -> AccountTransport? {
+    func account(address _: Address, using lease: EndpointLease, timeout _: TimeInterval?) async throws -> AccountTransport? {
         familyCalls.append(lease.family.id)
         if outcomes[lease.family.id] == .retryable {
             throw ThorNodeReadError.httpStatus(operation: .account, code: 503, retryAfterSeconds: nil)
@@ -141,7 +141,7 @@ private actor ScriptedReadClient: INodeApiProvider {
         return AccountTransport(accountNumber: 1, sequence: 2)
     }
 
-    func balances(address: Address, using lease: EndpointLease, timeout _: TimeInterval?) async throws -> [BalanceTransport] {
+    func balances(address _: Address, using lease: EndpointLease, timeout _: TimeInterval?) async throws -> [BalanceTransport] {
         familyCalls.append(lease.family.id)
         if outcomes[lease.family.id] == .retryable {
             return []

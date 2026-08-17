@@ -193,7 +193,7 @@ indirect enum MidgardJSONValue: Decodable, Sendable {
         else if let value = try? container.decode(Double.self) { self = .number(value) }
         else if let value = try? container.decode(String.self) { self = .string(value) }
         else if let value = try? container.decode([String: MidgardJSONValue].self) { self = .object(value) }
-        else { self = .array(try container.decode([MidgardJSONValue].self)) }
+        else { self = try .array(container.decode([MidgardJSONValue].self)) }
     }
 
     var object: [String: MidgardJSONValue]? {

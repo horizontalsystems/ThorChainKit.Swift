@@ -16,940 +16,946 @@ import SwiftProtobuf
 // incompatible with the version of SwiftProtobuf to which you are linking.
 // Please ensure that you are building against the same version of the API
 // that was used to generate this file.
-fileprivate struct _GeneratedWithProtocGenSwiftVersion: SwiftProtobuf.ProtobufAPIVersionCheck {
-  struct _2: SwiftProtobuf.ProtobufAPIVersion_2 {}
-  typealias Version = _2
+private struct _GeneratedWithProtocGenSwiftVersion: SwiftProtobuf.ProtobufAPIVersionCheck {
+    struct _2: SwiftProtobuf.ProtobufAPIVersion_2 {}
+    typealias Version = _2
 }
 
 /// QueryAccountsRequest is the request type for the Query/Accounts RPC method.
 struct Cosmos_Auth_V1beta1_QueryAccountsRequest: Sendable {
-  // SwiftProtobuf.Message conformance is added in an extension below. See the
-  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
-  // methods supported on all messages.
+    // SwiftProtobuf.Message conformance is added in an extension below. See the
+    // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+    // methods supported on all messages.
 
-  /// pagination defines an optional pagination for the request.
-  var pagination: Cosmos_Base_Query_V1beta1_PageRequest {
-    get {return _pagination ?? Cosmos_Base_Query_V1beta1_PageRequest()}
-    set {_pagination = newValue}
-  }
-  /// Returns true if `pagination` has been explicitly set.
-  var hasPagination: Bool {return self._pagination != nil}
-  /// Clears the value of `pagination`. Subsequent reads from it will return its default value.
-  mutating func clearPagination() {self._pagination = nil}
+    /// pagination defines an optional pagination for the request.
+    var pagination: Cosmos_Base_Query_V1beta1_PageRequest {
+        get { return _pagination ?? Cosmos_Base_Query_V1beta1_PageRequest() }
+        set { _pagination = newValue }
+    }
 
-  var unknownFields = SwiftProtobuf.UnknownStorage()
+    /// Returns true if `pagination` has been explicitly set.
+    var hasPagination: Bool { return _pagination != nil }
+    /// Clears the value of `pagination`. Subsequent reads from it will return its default value.
+    mutating func clearPagination() { _pagination = nil }
 
-  init() {}
+    var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  fileprivate var _pagination: Cosmos_Base_Query_V1beta1_PageRequest? = nil
+    init() {}
+
+    fileprivate var _pagination: Cosmos_Base_Query_V1beta1_PageRequest? = nil
 }
 
 /// QueryAccountsResponse is the response type for the Query/Accounts RPC method.
 struct Cosmos_Auth_V1beta1_QueryAccountsResponse: Sendable {
-  // SwiftProtobuf.Message conformance is added in an extension below. See the
-  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
-  // methods supported on all messages.
+    // SwiftProtobuf.Message conformance is added in an extension below. See the
+    // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+    // methods supported on all messages.
 
-  /// accounts are the existing accounts
-  var accounts: [SwiftProtobuf.Google_Protobuf_Any] = []
+    /// accounts are the existing accounts
+    var accounts: [SwiftProtobuf.Google_Protobuf_Any] = []
 
-  /// pagination defines the pagination in the response.
-  var pagination: Cosmos_Base_Query_V1beta1_PageResponse {
-    get {return _pagination ?? Cosmos_Base_Query_V1beta1_PageResponse()}
-    set {_pagination = newValue}
-  }
-  /// Returns true if `pagination` has been explicitly set.
-  var hasPagination: Bool {return self._pagination != nil}
-  /// Clears the value of `pagination`. Subsequent reads from it will return its default value.
-  mutating func clearPagination() {self._pagination = nil}
+    /// pagination defines the pagination in the response.
+    var pagination: Cosmos_Base_Query_V1beta1_PageResponse {
+        get { return _pagination ?? Cosmos_Base_Query_V1beta1_PageResponse() }
+        set { _pagination = newValue }
+    }
 
-  var unknownFields = SwiftProtobuf.UnknownStorage()
+    /// Returns true if `pagination` has been explicitly set.
+    var hasPagination: Bool { return _pagination != nil }
+    /// Clears the value of `pagination`. Subsequent reads from it will return its default value.
+    mutating func clearPagination() { _pagination = nil }
 
-  init() {}
+    var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  fileprivate var _pagination: Cosmos_Base_Query_V1beta1_PageResponse? = nil
+    init() {}
+
+    fileprivate var _pagination: Cosmos_Base_Query_V1beta1_PageResponse? = nil
 }
 
 /// QueryAccountRequest is the request type for the Query/Account RPC method.
 struct Cosmos_Auth_V1beta1_QueryAccountRequest: Sendable {
-  // SwiftProtobuf.Message conformance is added in an extension below. See the
-  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
-  // methods supported on all messages.
+    // SwiftProtobuf.Message conformance is added in an extension below. See the
+    // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+    // methods supported on all messages.
 
-  /// address defines the address to query for.
-  var address: String = String()
+    /// address defines the address to query for.
+    var address: String = .init()
 
-  var unknownFields = SwiftProtobuf.UnknownStorage()
+    var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  init() {}
+    init() {}
 }
 
 /// QueryAccountResponse is the response type for the Query/Account RPC method.
 struct Cosmos_Auth_V1beta1_QueryAccountResponse: Sendable {
-  // SwiftProtobuf.Message conformance is added in an extension below. See the
-  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
-  // methods supported on all messages.
+    // SwiftProtobuf.Message conformance is added in an extension below. See the
+    // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+    // methods supported on all messages.
 
-  /// account defines the account of the corresponding address.
-  var account: SwiftProtobuf.Google_Protobuf_Any {
-    get {return _account ?? SwiftProtobuf.Google_Protobuf_Any()}
-    set {_account = newValue}
-  }
-  /// Returns true if `account` has been explicitly set.
-  var hasAccount: Bool {return self._account != nil}
-  /// Clears the value of `account`. Subsequent reads from it will return its default value.
-  mutating func clearAccount() {self._account = nil}
+    /// account defines the account of the corresponding address.
+    var account: SwiftProtobuf.Google_Protobuf_Any {
+        get { return _account ?? SwiftProtobuf.Google_Protobuf_Any() }
+        set { _account = newValue }
+    }
 
-  var unknownFields = SwiftProtobuf.UnknownStorage()
+    /// Returns true if `account` has been explicitly set.
+    var hasAccount: Bool { return _account != nil }
+    /// Clears the value of `account`. Subsequent reads from it will return its default value.
+    mutating func clearAccount() { _account = nil }
 
-  init() {}
+    var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  fileprivate var _account: SwiftProtobuf.Google_Protobuf_Any? = nil
+    init() {}
+
+    fileprivate var _account: SwiftProtobuf.Google_Protobuf_Any? = nil
 }
 
 /// QueryParamsRequest is the request type for the Query/Params RPC method.
 struct Cosmos_Auth_V1beta1_QueryParamsRequest: Sendable {
-  // SwiftProtobuf.Message conformance is added in an extension below. See the
-  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
-  // methods supported on all messages.
+    // SwiftProtobuf.Message conformance is added in an extension below. See the
+    // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+    // methods supported on all messages.
 
-  var unknownFields = SwiftProtobuf.UnknownStorage()
+    var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  init() {}
+    init() {}
 }
 
 /// QueryParamsResponse is the response type for the Query/Params RPC method.
 struct Cosmos_Auth_V1beta1_QueryParamsResponse: Sendable {
-  // SwiftProtobuf.Message conformance is added in an extension below. See the
-  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
-  // methods supported on all messages.
+    // SwiftProtobuf.Message conformance is added in an extension below. See the
+    // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+    // methods supported on all messages.
 
-  /// params defines the parameters of the module.
-  var params: Cosmos_Auth_V1beta1_Params {
-    get {return _params ?? Cosmos_Auth_V1beta1_Params()}
-    set {_params = newValue}
-  }
-  /// Returns true if `params` has been explicitly set.
-  var hasParams: Bool {return self._params != nil}
-  /// Clears the value of `params`. Subsequent reads from it will return its default value.
-  mutating func clearParams() {self._params = nil}
+    /// params defines the parameters of the module.
+    var params: Cosmos_Auth_V1beta1_Params {
+        get { return _params ?? Cosmos_Auth_V1beta1_Params() }
+        set { _params = newValue }
+    }
 
-  var unknownFields = SwiftProtobuf.UnknownStorage()
+    /// Returns true if `params` has been explicitly set.
+    var hasParams: Bool { return _params != nil }
+    /// Clears the value of `params`. Subsequent reads from it will return its default value.
+    mutating func clearParams() { _params = nil }
 
-  init() {}
+    var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  fileprivate var _params: Cosmos_Auth_V1beta1_Params? = nil
+    init() {}
+
+    fileprivate var _params: Cosmos_Auth_V1beta1_Params? = nil
 }
 
 /// QueryModuleAccountsRequest is the request type for the Query/ModuleAccounts RPC method.
 struct Cosmos_Auth_V1beta1_QueryModuleAccountsRequest: Sendable {
-  // SwiftProtobuf.Message conformance is added in an extension below. See the
-  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
-  // methods supported on all messages.
+    // SwiftProtobuf.Message conformance is added in an extension below. See the
+    // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+    // methods supported on all messages.
 
-  var unknownFields = SwiftProtobuf.UnknownStorage()
+    var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  init() {}
+    init() {}
 }
 
 /// QueryModuleAccountsResponse is the response type for the Query/ModuleAccounts RPC method.
 struct Cosmos_Auth_V1beta1_QueryModuleAccountsResponse: Sendable {
-  // SwiftProtobuf.Message conformance is added in an extension below. See the
-  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
-  // methods supported on all messages.
+    // SwiftProtobuf.Message conformance is added in an extension below. See the
+    // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+    // methods supported on all messages.
 
-  var accounts: [SwiftProtobuf.Google_Protobuf_Any] = []
+    var accounts: [SwiftProtobuf.Google_Protobuf_Any] = []
 
-  var unknownFields = SwiftProtobuf.UnknownStorage()
+    var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  init() {}
+    init() {}
 }
 
 /// QueryModuleAccountByNameRequest is the request type for the Query/ModuleAccountByName RPC method.
 struct Cosmos_Auth_V1beta1_QueryModuleAccountByNameRequest: Sendable {
-  // SwiftProtobuf.Message conformance is added in an extension below. See the
-  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
-  // methods supported on all messages.
+    // SwiftProtobuf.Message conformance is added in an extension below. See the
+    // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+    // methods supported on all messages.
 
-  var name: String = String()
+    var name: String = .init()
 
-  var unknownFields = SwiftProtobuf.UnknownStorage()
+    var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  init() {}
+    init() {}
 }
 
 /// QueryModuleAccountByNameResponse is the response type for the Query/ModuleAccountByName RPC method.
 struct Cosmos_Auth_V1beta1_QueryModuleAccountByNameResponse: Sendable {
-  // SwiftProtobuf.Message conformance is added in an extension below. See the
-  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
-  // methods supported on all messages.
+    // SwiftProtobuf.Message conformance is added in an extension below. See the
+    // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+    // methods supported on all messages.
 
-  var account: SwiftProtobuf.Google_Protobuf_Any {
-    get {return _account ?? SwiftProtobuf.Google_Protobuf_Any()}
-    set {_account = newValue}
-  }
-  /// Returns true if `account` has been explicitly set.
-  var hasAccount: Bool {return self._account != nil}
-  /// Clears the value of `account`. Subsequent reads from it will return its default value.
-  mutating func clearAccount() {self._account = nil}
+    var account: SwiftProtobuf.Google_Protobuf_Any {
+        get { return _account ?? SwiftProtobuf.Google_Protobuf_Any() }
+        set { _account = newValue }
+    }
 
-  var unknownFields = SwiftProtobuf.UnknownStorage()
+    /// Returns true if `account` has been explicitly set.
+    var hasAccount: Bool { return _account != nil }
+    /// Clears the value of `account`. Subsequent reads from it will return its default value.
+    mutating func clearAccount() { _account = nil }
 
-  init() {}
+    var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  fileprivate var _account: SwiftProtobuf.Google_Protobuf_Any? = nil
+    init() {}
+
+    fileprivate var _account: SwiftProtobuf.Google_Protobuf_Any? = nil
 }
 
 /// Bech32PrefixRequest is the request type for Bech32Prefix rpc method.
 struct Cosmos_Auth_V1beta1_Bech32PrefixRequest: Sendable {
-  // SwiftProtobuf.Message conformance is added in an extension below. See the
-  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
-  // methods supported on all messages.
+    // SwiftProtobuf.Message conformance is added in an extension below. See the
+    // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+    // methods supported on all messages.
 
-  var unknownFields = SwiftProtobuf.UnknownStorage()
+    var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  init() {}
+    init() {}
 }
 
 /// Bech32PrefixResponse is the response type for Bech32Prefix rpc method.
 struct Cosmos_Auth_V1beta1_Bech32PrefixResponse: Sendable {
-  // SwiftProtobuf.Message conformance is added in an extension below. See the
-  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
-  // methods supported on all messages.
+    // SwiftProtobuf.Message conformance is added in an extension below. See the
+    // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+    // methods supported on all messages.
 
-  var bech32Prefix: String = String()
+    var bech32Prefix: String = .init()
 
-  var unknownFields = SwiftProtobuf.UnknownStorage()
+    var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  init() {}
+    init() {}
 }
 
 /// AddressBytesToStringRequest is the request type for AddressString rpc method.
 struct Cosmos_Auth_V1beta1_AddressBytesToStringRequest: Sendable {
-  // SwiftProtobuf.Message conformance is added in an extension below. See the
-  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
-  // methods supported on all messages.
+    // SwiftProtobuf.Message conformance is added in an extension below. See the
+    // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+    // methods supported on all messages.
 
-  var addressBytes: Data = Data()
+    var addressBytes: Data = .init()
 
-  var unknownFields = SwiftProtobuf.UnknownStorage()
+    var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  init() {}
+    init() {}
 }
 
 /// AddressBytesToStringResponse is the response type for AddressString rpc method.
 struct Cosmos_Auth_V1beta1_AddressBytesToStringResponse: Sendable {
-  // SwiftProtobuf.Message conformance is added in an extension below. See the
-  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
-  // methods supported on all messages.
+    // SwiftProtobuf.Message conformance is added in an extension below. See the
+    // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+    // methods supported on all messages.
 
-  var addressString: String = String()
+    var addressString: String = .init()
 
-  var unknownFields = SwiftProtobuf.UnknownStorage()
+    var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  init() {}
+    init() {}
 }
 
 /// AddressStringToBytesRequest is the request type for AccountBytes rpc method.
 struct Cosmos_Auth_V1beta1_AddressStringToBytesRequest: Sendable {
-  // SwiftProtobuf.Message conformance is added in an extension below. See the
-  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
-  // methods supported on all messages.
+    // SwiftProtobuf.Message conformance is added in an extension below. See the
+    // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+    // methods supported on all messages.
 
-  var addressString: String = String()
+    var addressString: String = .init()
 
-  var unknownFields = SwiftProtobuf.UnknownStorage()
+    var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  init() {}
+    init() {}
 }
 
 /// AddressStringToBytesResponse is the response type for AddressBytes rpc method.
 struct Cosmos_Auth_V1beta1_AddressStringToBytesResponse: Sendable {
-  // SwiftProtobuf.Message conformance is added in an extension below. See the
-  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
-  // methods supported on all messages.
+    // SwiftProtobuf.Message conformance is added in an extension below. See the
+    // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+    // methods supported on all messages.
 
-  var addressBytes: Data = Data()
+    var addressBytes: Data = .init()
 
-  var unknownFields = SwiftProtobuf.UnknownStorage()
+    var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  init() {}
+    init() {}
 }
 
 /// QueryAccountAddressByIDRequest is the request type for AccountAddressByID rpc method
 struct Cosmos_Auth_V1beta1_QueryAccountAddressByIDRequest: Sendable {
-  // SwiftProtobuf.Message conformance is added in an extension below. See the
-  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
-  // methods supported on all messages.
+    // SwiftProtobuf.Message conformance is added in an extension below. See the
+    // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+    // methods supported on all messages.
 
-  /// Deprecated, use account_id instead
-  ///
-  /// id is the account number of the address to be queried. This field
-  /// should have been an uint64 (like all account numbers), and will be
-  /// updated to uint64 in a future version of the auth query.
-  ///
-  /// NOTE: This field was marked as deprecated in the .proto file.
-  var id: Int64 = 0
+    /// Deprecated, use account_id instead
+    ///
+    /// id is the account number of the address to be queried. This field
+    /// should have been an uint64 (like all account numbers), and will be
+    /// updated to uint64 in a future version of the auth query.
+    ///
+    /// NOTE: This field was marked as deprecated in the .proto file.
+    var id: Int64 = 0
 
-  /// account_id is the account number of the address to be queried.
-  var accountID: UInt64 = 0
+    /// account_id is the account number of the address to be queried.
+    var accountID: UInt64 = 0
 
-  var unknownFields = SwiftProtobuf.UnknownStorage()
+    var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  init() {}
+    init() {}
 }
 
 /// QueryAccountAddressByIDResponse is the response type for AccountAddressByID rpc method
 struct Cosmos_Auth_V1beta1_QueryAccountAddressByIDResponse: Sendable {
-  // SwiftProtobuf.Message conformance is added in an extension below. See the
-  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
-  // methods supported on all messages.
+    // SwiftProtobuf.Message conformance is added in an extension below. See the
+    // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+    // methods supported on all messages.
 
-  var accountAddress: String = String()
+    var accountAddress: String = .init()
 
-  var unknownFields = SwiftProtobuf.UnknownStorage()
+    var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  init() {}
+    init() {}
 }
 
 /// QueryAccountInfoRequest is the Query/AccountInfo request type.
 struct Cosmos_Auth_V1beta1_QueryAccountInfoRequest: Sendable {
-  // SwiftProtobuf.Message conformance is added in an extension below. See the
-  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
-  // methods supported on all messages.
+    // SwiftProtobuf.Message conformance is added in an extension below. See the
+    // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+    // methods supported on all messages.
 
-  /// address is the account address string.
-  var address: String = String()
+    /// address is the account address string.
+    var address: String = .init()
 
-  var unknownFields = SwiftProtobuf.UnknownStorage()
+    var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  init() {}
+    init() {}
 }
 
 /// QueryAccountInfoResponse is the Query/AccountInfo response type.
 struct Cosmos_Auth_V1beta1_QueryAccountInfoResponse: Sendable {
-  // SwiftProtobuf.Message conformance is added in an extension below. See the
-  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
-  // methods supported on all messages.
+    // SwiftProtobuf.Message conformance is added in an extension below. See the
+    // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+    // methods supported on all messages.
 
-  /// info is the account info which is represented by BaseAccount.
-  var info: Cosmos_Auth_V1beta1_BaseAccount {
-    get {return _info ?? Cosmos_Auth_V1beta1_BaseAccount()}
-    set {_info = newValue}
-  }
-  /// Returns true if `info` has been explicitly set.
-  var hasInfo: Bool {return self._info != nil}
-  /// Clears the value of `info`. Subsequent reads from it will return its default value.
-  mutating func clearInfo() {self._info = nil}
+    /// info is the account info which is represented by BaseAccount.
+    var info: Cosmos_Auth_V1beta1_BaseAccount {
+        get { return _info ?? Cosmos_Auth_V1beta1_BaseAccount() }
+        set { _info = newValue }
+    }
 
-  var unknownFields = SwiftProtobuf.UnknownStorage()
+    /// Returns true if `info` has been explicitly set.
+    var hasInfo: Bool { return _info != nil }
+    /// Clears the value of `info`. Subsequent reads from it will return its default value.
+    mutating func clearInfo() { _info = nil }
 
-  init() {}
+    var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  fileprivate var _info: Cosmos_Auth_V1beta1_BaseAccount? = nil
+    init() {}
+
+    fileprivate var _info: Cosmos_Auth_V1beta1_BaseAccount? = nil
 }
 
 // MARK: - Code below here is support for the SwiftProtobuf runtime.
 
-fileprivate let _protobuf_package = "cosmos.auth.v1beta1"
+private let _protobuf_package = "cosmos.auth.v1beta1"
 
 extension Cosmos_Auth_V1beta1_QueryAccountsRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  static let protoMessageName: String = _protobuf_package + ".QueryAccountsRequest"
-  static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}pagination\0")
+    static let protoMessageName: String = _protobuf_package + ".QueryAccountsRequest"
+    static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}pagination\0")
 
-  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
-    while let fieldNumber = try decoder.nextFieldNumber() {
-      // The use of inline closures is to circumvent an issue where the compiler
-      // allocates stack space for every case branch when no optimizations are
-      // enabled. https://github.com/apple/swift-protobuf/issues/1034
-      switch fieldNumber {
-      case 1: try { try decoder.decodeSingularMessageField(value: &self._pagination) }()
-      default: break
-      }
+    mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+        while let fieldNumber = try decoder.nextFieldNumber() {
+            // The use of inline closures is to circumvent an issue where the compiler
+            // allocates stack space for every case branch when no optimizations are
+            // enabled. https://github.com/apple/swift-protobuf/issues/1034
+            switch fieldNumber {
+            case 1: try decoder.decodeSingularMessageField(value: &_pagination)
+            default: break
+            }
+        }
     }
-  }
 
-  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    // The use of inline closures is to circumvent an issue where the compiler
-    // allocates stack space for every if/case branch local when no optimizations
-    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
-    // https://github.com/apple/swift-protobuf/issues/1182
-    try { if let v = self._pagination {
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
-    } }()
-    try unknownFields.traverse(visitor: &visitor)
-  }
+    func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+        // The use of inline closures is to circumvent an issue where the compiler
+        // allocates stack space for every if/case branch local when no optimizations
+        // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+        // https://github.com/apple/swift-protobuf/issues/1182
+        try { if let v = self._pagination {
+            try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
+        } }()
+        try unknownFields.traverse(visitor: &visitor)
+    }
 
-  static func ==(lhs: Cosmos_Auth_V1beta1_QueryAccountsRequest, rhs: Cosmos_Auth_V1beta1_QueryAccountsRequest) -> Bool {
-    if lhs._pagination != rhs._pagination {return false}
-    if lhs.unknownFields != rhs.unknownFields {return false}
-    return true
-  }
+    static func == (lhs: Cosmos_Auth_V1beta1_QueryAccountsRequest, rhs: Cosmos_Auth_V1beta1_QueryAccountsRequest) -> Bool {
+        if lhs._pagination != rhs._pagination { return false }
+        if lhs.unknownFields != rhs.unknownFields { return false }
+        return true
+    }
 }
 
 extension Cosmos_Auth_V1beta1_QueryAccountsResponse: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  static let protoMessageName: String = _protobuf_package + ".QueryAccountsResponse"
-  static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}accounts\0\u{1}pagination\0")
+    static let protoMessageName: String = _protobuf_package + ".QueryAccountsResponse"
+    static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}accounts\0\u{1}pagination\0")
 
-  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
-    while let fieldNumber = try decoder.nextFieldNumber() {
-      // The use of inline closures is to circumvent an issue where the compiler
-      // allocates stack space for every case branch when no optimizations are
-      // enabled. https://github.com/apple/swift-protobuf/issues/1034
-      switch fieldNumber {
-      case 1: try { try decoder.decodeRepeatedMessageField(value: &self.accounts) }()
-      case 2: try { try decoder.decodeSingularMessageField(value: &self._pagination) }()
-      default: break
-      }
+    mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+        while let fieldNumber = try decoder.nextFieldNumber() {
+            // The use of inline closures is to circumvent an issue where the compiler
+            // allocates stack space for every case branch when no optimizations are
+            // enabled. https://github.com/apple/swift-protobuf/issues/1034
+            switch fieldNumber {
+            case 1: try decoder.decodeRepeatedMessageField(value: &accounts)
+            case 2: try decoder.decodeSingularMessageField(value: &_pagination)
+            default: break
+            }
+        }
     }
-  }
 
-  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    // The use of inline closures is to circumvent an issue where the compiler
-    // allocates stack space for every if/case branch local when no optimizations
-    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
-    // https://github.com/apple/swift-protobuf/issues/1182
-    if !self.accounts.isEmpty {
-      try visitor.visitRepeatedMessageField(value: self.accounts, fieldNumber: 1)
+    func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+        // The use of inline closures is to circumvent an issue where the compiler
+        // allocates stack space for every if/case branch local when no optimizations
+        // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+        // https://github.com/apple/swift-protobuf/issues/1182
+        if !accounts.isEmpty {
+            try visitor.visitRepeatedMessageField(value: accounts, fieldNumber: 1)
+        }
+        try { if let v = self._pagination {
+            try visitor.visitSingularMessageField(value: v, fieldNumber: 2)
+        } }()
+        try unknownFields.traverse(visitor: &visitor)
     }
-    try { if let v = self._pagination {
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 2)
-    } }()
-    try unknownFields.traverse(visitor: &visitor)
-  }
 
-  static func ==(lhs: Cosmos_Auth_V1beta1_QueryAccountsResponse, rhs: Cosmos_Auth_V1beta1_QueryAccountsResponse) -> Bool {
-    if lhs.accounts != rhs.accounts {return false}
-    if lhs._pagination != rhs._pagination {return false}
-    if lhs.unknownFields != rhs.unknownFields {return false}
-    return true
-  }
+    static func == (lhs: Cosmos_Auth_V1beta1_QueryAccountsResponse, rhs: Cosmos_Auth_V1beta1_QueryAccountsResponse) -> Bool {
+        if lhs.accounts != rhs.accounts { return false }
+        if lhs._pagination != rhs._pagination { return false }
+        if lhs.unknownFields != rhs.unknownFields { return false }
+        return true
+    }
 }
 
 extension Cosmos_Auth_V1beta1_QueryAccountRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  static let protoMessageName: String = _protobuf_package + ".QueryAccountRequest"
-  static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}address\0")
+    static let protoMessageName: String = _protobuf_package + ".QueryAccountRequest"
+    static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}address\0")
 
-  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
-    while let fieldNumber = try decoder.nextFieldNumber() {
-      // The use of inline closures is to circumvent an issue where the compiler
-      // allocates stack space for every case branch when no optimizations are
-      // enabled. https://github.com/apple/swift-protobuf/issues/1034
-      switch fieldNumber {
-      case 1: try { try decoder.decodeSingularStringField(value: &self.address) }()
-      default: break
-      }
+    mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+        while let fieldNumber = try decoder.nextFieldNumber() {
+            // The use of inline closures is to circumvent an issue where the compiler
+            // allocates stack space for every case branch when no optimizations are
+            // enabled. https://github.com/apple/swift-protobuf/issues/1034
+            switch fieldNumber {
+            case 1: try decoder.decodeSingularStringField(value: &address)
+            default: break
+            }
+        }
     }
-  }
 
-  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    if !self.address.isEmpty {
-      try visitor.visitSingularStringField(value: self.address, fieldNumber: 1)
+    func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+        if !address.isEmpty {
+            try visitor.visitSingularStringField(value: address, fieldNumber: 1)
+        }
+        try unknownFields.traverse(visitor: &visitor)
     }
-    try unknownFields.traverse(visitor: &visitor)
-  }
 
-  static func ==(lhs: Cosmos_Auth_V1beta1_QueryAccountRequest, rhs: Cosmos_Auth_V1beta1_QueryAccountRequest) -> Bool {
-    if lhs.address != rhs.address {return false}
-    if lhs.unknownFields != rhs.unknownFields {return false}
-    return true
-  }
+    static func == (lhs: Cosmos_Auth_V1beta1_QueryAccountRequest, rhs: Cosmos_Auth_V1beta1_QueryAccountRequest) -> Bool {
+        if lhs.address != rhs.address { return false }
+        if lhs.unknownFields != rhs.unknownFields { return false }
+        return true
+    }
 }
 
 extension Cosmos_Auth_V1beta1_QueryAccountResponse: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  static let protoMessageName: String = _protobuf_package + ".QueryAccountResponse"
-  static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}account\0")
+    static let protoMessageName: String = _protobuf_package + ".QueryAccountResponse"
+    static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}account\0")
 
-  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
-    while let fieldNumber = try decoder.nextFieldNumber() {
-      // The use of inline closures is to circumvent an issue where the compiler
-      // allocates stack space for every case branch when no optimizations are
-      // enabled. https://github.com/apple/swift-protobuf/issues/1034
-      switch fieldNumber {
-      case 1: try { try decoder.decodeSingularMessageField(value: &self._account) }()
-      default: break
-      }
+    mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+        while let fieldNumber = try decoder.nextFieldNumber() {
+            // The use of inline closures is to circumvent an issue where the compiler
+            // allocates stack space for every case branch when no optimizations are
+            // enabled. https://github.com/apple/swift-protobuf/issues/1034
+            switch fieldNumber {
+            case 1: try decoder.decodeSingularMessageField(value: &_account)
+            default: break
+            }
+        }
     }
-  }
 
-  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    // The use of inline closures is to circumvent an issue where the compiler
-    // allocates stack space for every if/case branch local when no optimizations
-    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
-    // https://github.com/apple/swift-protobuf/issues/1182
-    try { if let v = self._account {
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
-    } }()
-    try unknownFields.traverse(visitor: &visitor)
-  }
+    func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+        // The use of inline closures is to circumvent an issue where the compiler
+        // allocates stack space for every if/case branch local when no optimizations
+        // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+        // https://github.com/apple/swift-protobuf/issues/1182
+        try { if let v = self._account {
+            try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
+        } }()
+        try unknownFields.traverse(visitor: &visitor)
+    }
 
-  static func ==(lhs: Cosmos_Auth_V1beta1_QueryAccountResponse, rhs: Cosmos_Auth_V1beta1_QueryAccountResponse) -> Bool {
-    if lhs._account != rhs._account {return false}
-    if lhs.unknownFields != rhs.unknownFields {return false}
-    return true
-  }
+    static func == (lhs: Cosmos_Auth_V1beta1_QueryAccountResponse, rhs: Cosmos_Auth_V1beta1_QueryAccountResponse) -> Bool {
+        if lhs._account != rhs._account { return false }
+        if lhs.unknownFields != rhs.unknownFields { return false }
+        return true
+    }
 }
 
 extension Cosmos_Auth_V1beta1_QueryParamsRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  static let protoMessageName: String = _protobuf_package + ".QueryParamsRequest"
-  static let _protobuf_nameMap = SwiftProtobuf._NameMap()
+    static let protoMessageName: String = _protobuf_package + ".QueryParamsRequest"
+    static let _protobuf_nameMap = SwiftProtobuf._NameMap()
 
-  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
-    // Load everything into unknown fields
-    while try decoder.nextFieldNumber() != nil {}
-  }
+    mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+        // Load everything into unknown fields
+        while try decoder.nextFieldNumber() != nil {}
+    }
 
-  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    try unknownFields.traverse(visitor: &visitor)
-  }
+    func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+        try unknownFields.traverse(visitor: &visitor)
+    }
 
-  static func ==(lhs: Cosmos_Auth_V1beta1_QueryParamsRequest, rhs: Cosmos_Auth_V1beta1_QueryParamsRequest) -> Bool {
-    if lhs.unknownFields != rhs.unknownFields {return false}
-    return true
-  }
+    static func == (lhs: Cosmos_Auth_V1beta1_QueryParamsRequest, rhs: Cosmos_Auth_V1beta1_QueryParamsRequest) -> Bool {
+        if lhs.unknownFields != rhs.unknownFields { return false }
+        return true
+    }
 }
 
 extension Cosmos_Auth_V1beta1_QueryParamsResponse: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  static let protoMessageName: String = _protobuf_package + ".QueryParamsResponse"
-  static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}params\0")
+    static let protoMessageName: String = _protobuf_package + ".QueryParamsResponse"
+    static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}params\0")
 
-  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
-    while let fieldNumber = try decoder.nextFieldNumber() {
-      // The use of inline closures is to circumvent an issue where the compiler
-      // allocates stack space for every case branch when no optimizations are
-      // enabled. https://github.com/apple/swift-protobuf/issues/1034
-      switch fieldNumber {
-      case 1: try { try decoder.decodeSingularMessageField(value: &self._params) }()
-      default: break
-      }
+    mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+        while let fieldNumber = try decoder.nextFieldNumber() {
+            // The use of inline closures is to circumvent an issue where the compiler
+            // allocates stack space for every case branch when no optimizations are
+            // enabled. https://github.com/apple/swift-protobuf/issues/1034
+            switch fieldNumber {
+            case 1: try decoder.decodeSingularMessageField(value: &_params)
+            default: break
+            }
+        }
     }
-  }
 
-  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    // The use of inline closures is to circumvent an issue where the compiler
-    // allocates stack space for every if/case branch local when no optimizations
-    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
-    // https://github.com/apple/swift-protobuf/issues/1182
-    try { if let v = self._params {
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
-    } }()
-    try unknownFields.traverse(visitor: &visitor)
-  }
+    func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+        // The use of inline closures is to circumvent an issue where the compiler
+        // allocates stack space for every if/case branch local when no optimizations
+        // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+        // https://github.com/apple/swift-protobuf/issues/1182
+        try { if let v = self._params {
+            try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
+        } }()
+        try unknownFields.traverse(visitor: &visitor)
+    }
 
-  static func ==(lhs: Cosmos_Auth_V1beta1_QueryParamsResponse, rhs: Cosmos_Auth_V1beta1_QueryParamsResponse) -> Bool {
-    if lhs._params != rhs._params {return false}
-    if lhs.unknownFields != rhs.unknownFields {return false}
-    return true
-  }
+    static func == (lhs: Cosmos_Auth_V1beta1_QueryParamsResponse, rhs: Cosmos_Auth_V1beta1_QueryParamsResponse) -> Bool {
+        if lhs._params != rhs._params { return false }
+        if lhs.unknownFields != rhs.unknownFields { return false }
+        return true
+    }
 }
 
 extension Cosmos_Auth_V1beta1_QueryModuleAccountsRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  static let protoMessageName: String = _protobuf_package + ".QueryModuleAccountsRequest"
-  static let _protobuf_nameMap = SwiftProtobuf._NameMap()
+    static let protoMessageName: String = _protobuf_package + ".QueryModuleAccountsRequest"
+    static let _protobuf_nameMap = SwiftProtobuf._NameMap()
 
-  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
-    // Load everything into unknown fields
-    while try decoder.nextFieldNumber() != nil {}
-  }
+    mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+        // Load everything into unknown fields
+        while try decoder.nextFieldNumber() != nil {}
+    }
 
-  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    try unknownFields.traverse(visitor: &visitor)
-  }
+    func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+        try unknownFields.traverse(visitor: &visitor)
+    }
 
-  static func ==(lhs: Cosmos_Auth_V1beta1_QueryModuleAccountsRequest, rhs: Cosmos_Auth_V1beta1_QueryModuleAccountsRequest) -> Bool {
-    if lhs.unknownFields != rhs.unknownFields {return false}
-    return true
-  }
+    static func == (lhs: Cosmos_Auth_V1beta1_QueryModuleAccountsRequest, rhs: Cosmos_Auth_V1beta1_QueryModuleAccountsRequest) -> Bool {
+        if lhs.unknownFields != rhs.unknownFields { return false }
+        return true
+    }
 }
 
 extension Cosmos_Auth_V1beta1_QueryModuleAccountsResponse: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  static let protoMessageName: String = _protobuf_package + ".QueryModuleAccountsResponse"
-  static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}accounts\0")
+    static let protoMessageName: String = _protobuf_package + ".QueryModuleAccountsResponse"
+    static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}accounts\0")
 
-  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
-    while let fieldNumber = try decoder.nextFieldNumber() {
-      // The use of inline closures is to circumvent an issue where the compiler
-      // allocates stack space for every case branch when no optimizations are
-      // enabled. https://github.com/apple/swift-protobuf/issues/1034
-      switch fieldNumber {
-      case 1: try { try decoder.decodeRepeatedMessageField(value: &self.accounts) }()
-      default: break
-      }
+    mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+        while let fieldNumber = try decoder.nextFieldNumber() {
+            // The use of inline closures is to circumvent an issue where the compiler
+            // allocates stack space for every case branch when no optimizations are
+            // enabled. https://github.com/apple/swift-protobuf/issues/1034
+            switch fieldNumber {
+            case 1: try decoder.decodeRepeatedMessageField(value: &accounts)
+            default: break
+            }
+        }
     }
-  }
 
-  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    if !self.accounts.isEmpty {
-      try visitor.visitRepeatedMessageField(value: self.accounts, fieldNumber: 1)
+    func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+        if !accounts.isEmpty {
+            try visitor.visitRepeatedMessageField(value: accounts, fieldNumber: 1)
+        }
+        try unknownFields.traverse(visitor: &visitor)
     }
-    try unknownFields.traverse(visitor: &visitor)
-  }
 
-  static func ==(lhs: Cosmos_Auth_V1beta1_QueryModuleAccountsResponse, rhs: Cosmos_Auth_V1beta1_QueryModuleAccountsResponse) -> Bool {
-    if lhs.accounts != rhs.accounts {return false}
-    if lhs.unknownFields != rhs.unknownFields {return false}
-    return true
-  }
+    static func == (lhs: Cosmos_Auth_V1beta1_QueryModuleAccountsResponse, rhs: Cosmos_Auth_V1beta1_QueryModuleAccountsResponse) -> Bool {
+        if lhs.accounts != rhs.accounts { return false }
+        if lhs.unknownFields != rhs.unknownFields { return false }
+        return true
+    }
 }
 
 extension Cosmos_Auth_V1beta1_QueryModuleAccountByNameRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  static let protoMessageName: String = _protobuf_package + ".QueryModuleAccountByNameRequest"
-  static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}name\0")
+    static let protoMessageName: String = _protobuf_package + ".QueryModuleAccountByNameRequest"
+    static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}name\0")
 
-  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
-    while let fieldNumber = try decoder.nextFieldNumber() {
-      // The use of inline closures is to circumvent an issue where the compiler
-      // allocates stack space for every case branch when no optimizations are
-      // enabled. https://github.com/apple/swift-protobuf/issues/1034
-      switch fieldNumber {
-      case 1: try { try decoder.decodeSingularStringField(value: &self.name) }()
-      default: break
-      }
+    mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+        while let fieldNumber = try decoder.nextFieldNumber() {
+            // The use of inline closures is to circumvent an issue where the compiler
+            // allocates stack space for every case branch when no optimizations are
+            // enabled. https://github.com/apple/swift-protobuf/issues/1034
+            switch fieldNumber {
+            case 1: try decoder.decodeSingularStringField(value: &name)
+            default: break
+            }
+        }
     }
-  }
 
-  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    if !self.name.isEmpty {
-      try visitor.visitSingularStringField(value: self.name, fieldNumber: 1)
+    func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+        if !name.isEmpty {
+            try visitor.visitSingularStringField(value: name, fieldNumber: 1)
+        }
+        try unknownFields.traverse(visitor: &visitor)
     }
-    try unknownFields.traverse(visitor: &visitor)
-  }
 
-  static func ==(lhs: Cosmos_Auth_V1beta1_QueryModuleAccountByNameRequest, rhs: Cosmos_Auth_V1beta1_QueryModuleAccountByNameRequest) -> Bool {
-    if lhs.name != rhs.name {return false}
-    if lhs.unknownFields != rhs.unknownFields {return false}
-    return true
-  }
+    static func == (lhs: Cosmos_Auth_V1beta1_QueryModuleAccountByNameRequest, rhs: Cosmos_Auth_V1beta1_QueryModuleAccountByNameRequest) -> Bool {
+        if lhs.name != rhs.name { return false }
+        if lhs.unknownFields != rhs.unknownFields { return false }
+        return true
+    }
 }
 
 extension Cosmos_Auth_V1beta1_QueryModuleAccountByNameResponse: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  static let protoMessageName: String = _protobuf_package + ".QueryModuleAccountByNameResponse"
-  static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}account\0")
+    static let protoMessageName: String = _protobuf_package + ".QueryModuleAccountByNameResponse"
+    static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}account\0")
 
-  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
-    while let fieldNumber = try decoder.nextFieldNumber() {
-      // The use of inline closures is to circumvent an issue where the compiler
-      // allocates stack space for every case branch when no optimizations are
-      // enabled. https://github.com/apple/swift-protobuf/issues/1034
-      switch fieldNumber {
-      case 1: try { try decoder.decodeSingularMessageField(value: &self._account) }()
-      default: break
-      }
+    mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+        while let fieldNumber = try decoder.nextFieldNumber() {
+            // The use of inline closures is to circumvent an issue where the compiler
+            // allocates stack space for every case branch when no optimizations are
+            // enabled. https://github.com/apple/swift-protobuf/issues/1034
+            switch fieldNumber {
+            case 1: try decoder.decodeSingularMessageField(value: &_account)
+            default: break
+            }
+        }
     }
-  }
 
-  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    // The use of inline closures is to circumvent an issue where the compiler
-    // allocates stack space for every if/case branch local when no optimizations
-    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
-    // https://github.com/apple/swift-protobuf/issues/1182
-    try { if let v = self._account {
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
-    } }()
-    try unknownFields.traverse(visitor: &visitor)
-  }
+    func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+        // The use of inline closures is to circumvent an issue where the compiler
+        // allocates stack space for every if/case branch local when no optimizations
+        // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+        // https://github.com/apple/swift-protobuf/issues/1182
+        try { if let v = self._account {
+            try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
+        } }()
+        try unknownFields.traverse(visitor: &visitor)
+    }
 
-  static func ==(lhs: Cosmos_Auth_V1beta1_QueryModuleAccountByNameResponse, rhs: Cosmos_Auth_V1beta1_QueryModuleAccountByNameResponse) -> Bool {
-    if lhs._account != rhs._account {return false}
-    if lhs.unknownFields != rhs.unknownFields {return false}
-    return true
-  }
+    static func == (lhs: Cosmos_Auth_V1beta1_QueryModuleAccountByNameResponse, rhs: Cosmos_Auth_V1beta1_QueryModuleAccountByNameResponse) -> Bool {
+        if lhs._account != rhs._account { return false }
+        if lhs.unknownFields != rhs.unknownFields { return false }
+        return true
+    }
 }
 
 extension Cosmos_Auth_V1beta1_Bech32PrefixRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  static let protoMessageName: String = _protobuf_package + ".Bech32PrefixRequest"
-  static let _protobuf_nameMap = SwiftProtobuf._NameMap()
+    static let protoMessageName: String = _protobuf_package + ".Bech32PrefixRequest"
+    static let _protobuf_nameMap = SwiftProtobuf._NameMap()
 
-  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
-    // Load everything into unknown fields
-    while try decoder.nextFieldNumber() != nil {}
-  }
+    mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+        // Load everything into unknown fields
+        while try decoder.nextFieldNumber() != nil {}
+    }
 
-  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    try unknownFields.traverse(visitor: &visitor)
-  }
+    func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+        try unknownFields.traverse(visitor: &visitor)
+    }
 
-  static func ==(lhs: Cosmos_Auth_V1beta1_Bech32PrefixRequest, rhs: Cosmos_Auth_V1beta1_Bech32PrefixRequest) -> Bool {
-    if lhs.unknownFields != rhs.unknownFields {return false}
-    return true
-  }
+    static func == (lhs: Cosmos_Auth_V1beta1_Bech32PrefixRequest, rhs: Cosmos_Auth_V1beta1_Bech32PrefixRequest) -> Bool {
+        if lhs.unknownFields != rhs.unknownFields { return false }
+        return true
+    }
 }
 
 extension Cosmos_Auth_V1beta1_Bech32PrefixResponse: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  static let protoMessageName: String = _protobuf_package + ".Bech32PrefixResponse"
-  static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}bech32_prefix\0")
+    static let protoMessageName: String = _protobuf_package + ".Bech32PrefixResponse"
+    static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}bech32_prefix\0")
 
-  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
-    while let fieldNumber = try decoder.nextFieldNumber() {
-      // The use of inline closures is to circumvent an issue where the compiler
-      // allocates stack space for every case branch when no optimizations are
-      // enabled. https://github.com/apple/swift-protobuf/issues/1034
-      switch fieldNumber {
-      case 1: try { try decoder.decodeSingularStringField(value: &self.bech32Prefix) }()
-      default: break
-      }
+    mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+        while let fieldNumber = try decoder.nextFieldNumber() {
+            // The use of inline closures is to circumvent an issue where the compiler
+            // allocates stack space for every case branch when no optimizations are
+            // enabled. https://github.com/apple/swift-protobuf/issues/1034
+            switch fieldNumber {
+            case 1: try decoder.decodeSingularStringField(value: &bech32Prefix)
+            default: break
+            }
+        }
     }
-  }
 
-  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    if !self.bech32Prefix.isEmpty {
-      try visitor.visitSingularStringField(value: self.bech32Prefix, fieldNumber: 1)
+    func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+        if !bech32Prefix.isEmpty {
+            try visitor.visitSingularStringField(value: bech32Prefix, fieldNumber: 1)
+        }
+        try unknownFields.traverse(visitor: &visitor)
     }
-    try unknownFields.traverse(visitor: &visitor)
-  }
 
-  static func ==(lhs: Cosmos_Auth_V1beta1_Bech32PrefixResponse, rhs: Cosmos_Auth_V1beta1_Bech32PrefixResponse) -> Bool {
-    if lhs.bech32Prefix != rhs.bech32Prefix {return false}
-    if lhs.unknownFields != rhs.unknownFields {return false}
-    return true
-  }
+    static func == (lhs: Cosmos_Auth_V1beta1_Bech32PrefixResponse, rhs: Cosmos_Auth_V1beta1_Bech32PrefixResponse) -> Bool {
+        if lhs.bech32Prefix != rhs.bech32Prefix { return false }
+        if lhs.unknownFields != rhs.unknownFields { return false }
+        return true
+    }
 }
 
 extension Cosmos_Auth_V1beta1_AddressBytesToStringRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  static let protoMessageName: String = _protobuf_package + ".AddressBytesToStringRequest"
-  static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}address_bytes\0")
+    static let protoMessageName: String = _protobuf_package + ".AddressBytesToStringRequest"
+    static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}address_bytes\0")
 
-  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
-    while let fieldNumber = try decoder.nextFieldNumber() {
-      // The use of inline closures is to circumvent an issue where the compiler
-      // allocates stack space for every case branch when no optimizations are
-      // enabled. https://github.com/apple/swift-protobuf/issues/1034
-      switch fieldNumber {
-      case 1: try { try decoder.decodeSingularBytesField(value: &self.addressBytes) }()
-      default: break
-      }
+    mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+        while let fieldNumber = try decoder.nextFieldNumber() {
+            // The use of inline closures is to circumvent an issue where the compiler
+            // allocates stack space for every case branch when no optimizations are
+            // enabled. https://github.com/apple/swift-protobuf/issues/1034
+            switch fieldNumber {
+            case 1: try decoder.decodeSingularBytesField(value: &addressBytes)
+            default: break
+            }
+        }
     }
-  }
 
-  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    if !self.addressBytes.isEmpty {
-      try visitor.visitSingularBytesField(value: self.addressBytes, fieldNumber: 1)
+    func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+        if !addressBytes.isEmpty {
+            try visitor.visitSingularBytesField(value: addressBytes, fieldNumber: 1)
+        }
+        try unknownFields.traverse(visitor: &visitor)
     }
-    try unknownFields.traverse(visitor: &visitor)
-  }
 
-  static func ==(lhs: Cosmos_Auth_V1beta1_AddressBytesToStringRequest, rhs: Cosmos_Auth_V1beta1_AddressBytesToStringRequest) -> Bool {
-    if lhs.addressBytes != rhs.addressBytes {return false}
-    if lhs.unknownFields != rhs.unknownFields {return false}
-    return true
-  }
+    static func == (lhs: Cosmos_Auth_V1beta1_AddressBytesToStringRequest, rhs: Cosmos_Auth_V1beta1_AddressBytesToStringRequest) -> Bool {
+        if lhs.addressBytes != rhs.addressBytes { return false }
+        if lhs.unknownFields != rhs.unknownFields { return false }
+        return true
+    }
 }
 
 extension Cosmos_Auth_V1beta1_AddressBytesToStringResponse: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  static let protoMessageName: String = _protobuf_package + ".AddressBytesToStringResponse"
-  static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}address_string\0")
+    static let protoMessageName: String = _protobuf_package + ".AddressBytesToStringResponse"
+    static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}address_string\0")
 
-  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
-    while let fieldNumber = try decoder.nextFieldNumber() {
-      // The use of inline closures is to circumvent an issue where the compiler
-      // allocates stack space for every case branch when no optimizations are
-      // enabled. https://github.com/apple/swift-protobuf/issues/1034
-      switch fieldNumber {
-      case 1: try { try decoder.decodeSingularStringField(value: &self.addressString) }()
-      default: break
-      }
+    mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+        while let fieldNumber = try decoder.nextFieldNumber() {
+            // The use of inline closures is to circumvent an issue where the compiler
+            // allocates stack space for every case branch when no optimizations are
+            // enabled. https://github.com/apple/swift-protobuf/issues/1034
+            switch fieldNumber {
+            case 1: try decoder.decodeSingularStringField(value: &addressString)
+            default: break
+            }
+        }
     }
-  }
 
-  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    if !self.addressString.isEmpty {
-      try visitor.visitSingularStringField(value: self.addressString, fieldNumber: 1)
+    func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+        if !addressString.isEmpty {
+            try visitor.visitSingularStringField(value: addressString, fieldNumber: 1)
+        }
+        try unknownFields.traverse(visitor: &visitor)
     }
-    try unknownFields.traverse(visitor: &visitor)
-  }
 
-  static func ==(lhs: Cosmos_Auth_V1beta1_AddressBytesToStringResponse, rhs: Cosmos_Auth_V1beta1_AddressBytesToStringResponse) -> Bool {
-    if lhs.addressString != rhs.addressString {return false}
-    if lhs.unknownFields != rhs.unknownFields {return false}
-    return true
-  }
+    static func == (lhs: Cosmos_Auth_V1beta1_AddressBytesToStringResponse, rhs: Cosmos_Auth_V1beta1_AddressBytesToStringResponse) -> Bool {
+        if lhs.addressString != rhs.addressString { return false }
+        if lhs.unknownFields != rhs.unknownFields { return false }
+        return true
+    }
 }
 
 extension Cosmos_Auth_V1beta1_AddressStringToBytesRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  static let protoMessageName: String = _protobuf_package + ".AddressStringToBytesRequest"
-  static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}address_string\0")
+    static let protoMessageName: String = _protobuf_package + ".AddressStringToBytesRequest"
+    static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}address_string\0")
 
-  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
-    while let fieldNumber = try decoder.nextFieldNumber() {
-      // The use of inline closures is to circumvent an issue where the compiler
-      // allocates stack space for every case branch when no optimizations are
-      // enabled. https://github.com/apple/swift-protobuf/issues/1034
-      switch fieldNumber {
-      case 1: try { try decoder.decodeSingularStringField(value: &self.addressString) }()
-      default: break
-      }
+    mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+        while let fieldNumber = try decoder.nextFieldNumber() {
+            // The use of inline closures is to circumvent an issue where the compiler
+            // allocates stack space for every case branch when no optimizations are
+            // enabled. https://github.com/apple/swift-protobuf/issues/1034
+            switch fieldNumber {
+            case 1: try decoder.decodeSingularStringField(value: &addressString)
+            default: break
+            }
+        }
     }
-  }
 
-  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    if !self.addressString.isEmpty {
-      try visitor.visitSingularStringField(value: self.addressString, fieldNumber: 1)
+    func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+        if !addressString.isEmpty {
+            try visitor.visitSingularStringField(value: addressString, fieldNumber: 1)
+        }
+        try unknownFields.traverse(visitor: &visitor)
     }
-    try unknownFields.traverse(visitor: &visitor)
-  }
 
-  static func ==(lhs: Cosmos_Auth_V1beta1_AddressStringToBytesRequest, rhs: Cosmos_Auth_V1beta1_AddressStringToBytesRequest) -> Bool {
-    if lhs.addressString != rhs.addressString {return false}
-    if lhs.unknownFields != rhs.unknownFields {return false}
-    return true
-  }
+    static func == (lhs: Cosmos_Auth_V1beta1_AddressStringToBytesRequest, rhs: Cosmos_Auth_V1beta1_AddressStringToBytesRequest) -> Bool {
+        if lhs.addressString != rhs.addressString { return false }
+        if lhs.unknownFields != rhs.unknownFields { return false }
+        return true
+    }
 }
 
 extension Cosmos_Auth_V1beta1_AddressStringToBytesResponse: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  static let protoMessageName: String = _protobuf_package + ".AddressStringToBytesResponse"
-  static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}address_bytes\0")
+    static let protoMessageName: String = _protobuf_package + ".AddressStringToBytesResponse"
+    static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}address_bytes\0")
 
-  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
-    while let fieldNumber = try decoder.nextFieldNumber() {
-      // The use of inline closures is to circumvent an issue where the compiler
-      // allocates stack space for every case branch when no optimizations are
-      // enabled. https://github.com/apple/swift-protobuf/issues/1034
-      switch fieldNumber {
-      case 1: try { try decoder.decodeSingularBytesField(value: &self.addressBytes) }()
-      default: break
-      }
+    mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+        while let fieldNumber = try decoder.nextFieldNumber() {
+            // The use of inline closures is to circumvent an issue where the compiler
+            // allocates stack space for every case branch when no optimizations are
+            // enabled. https://github.com/apple/swift-protobuf/issues/1034
+            switch fieldNumber {
+            case 1: try decoder.decodeSingularBytesField(value: &addressBytes)
+            default: break
+            }
+        }
     }
-  }
 
-  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    if !self.addressBytes.isEmpty {
-      try visitor.visitSingularBytesField(value: self.addressBytes, fieldNumber: 1)
+    func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+        if !addressBytes.isEmpty {
+            try visitor.visitSingularBytesField(value: addressBytes, fieldNumber: 1)
+        }
+        try unknownFields.traverse(visitor: &visitor)
     }
-    try unknownFields.traverse(visitor: &visitor)
-  }
 
-  static func ==(lhs: Cosmos_Auth_V1beta1_AddressStringToBytesResponse, rhs: Cosmos_Auth_V1beta1_AddressStringToBytesResponse) -> Bool {
-    if lhs.addressBytes != rhs.addressBytes {return false}
-    if lhs.unknownFields != rhs.unknownFields {return false}
-    return true
-  }
+    static func == (lhs: Cosmos_Auth_V1beta1_AddressStringToBytesResponse, rhs: Cosmos_Auth_V1beta1_AddressStringToBytesResponse) -> Bool {
+        if lhs.addressBytes != rhs.addressBytes { return false }
+        if lhs.unknownFields != rhs.unknownFields { return false }
+        return true
+    }
 }
 
 extension Cosmos_Auth_V1beta1_QueryAccountAddressByIDRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  static let protoMessageName: String = _protobuf_package + ".QueryAccountAddressByIDRequest"
-  static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}id\0\u{3}account_id\0")
+    static let protoMessageName: String = _protobuf_package + ".QueryAccountAddressByIDRequest"
+    static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}id\0\u{3}account_id\0")
 
-  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
-    while let fieldNumber = try decoder.nextFieldNumber() {
-      // The use of inline closures is to circumvent an issue where the compiler
-      // allocates stack space for every case branch when no optimizations are
-      // enabled. https://github.com/apple/swift-protobuf/issues/1034
-      switch fieldNumber {
-      case 1: try { try decoder.decodeSingularInt64Field(value: &self.id) }()
-      case 2: try { try decoder.decodeSingularUInt64Field(value: &self.accountID) }()
-      default: break
-      }
+    mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+        while let fieldNumber = try decoder.nextFieldNumber() {
+            // The use of inline closures is to circumvent an issue where the compiler
+            // allocates stack space for every case branch when no optimizations are
+            // enabled. https://github.com/apple/swift-protobuf/issues/1034
+            switch fieldNumber {
+            case 1: try decoder.decodeSingularInt64Field(value: &id)
+            case 2: try decoder.decodeSingularUInt64Field(value: &accountID)
+            default: break
+            }
+        }
     }
-  }
 
-  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    if self.id != 0 {
-      try visitor.visitSingularInt64Field(value: self.id, fieldNumber: 1)
+    func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+        if id != 0 {
+            try visitor.visitSingularInt64Field(value: id, fieldNumber: 1)
+        }
+        if accountID != 0 {
+            try visitor.visitSingularUInt64Field(value: accountID, fieldNumber: 2)
+        }
+        try unknownFields.traverse(visitor: &visitor)
     }
-    if self.accountID != 0 {
-      try visitor.visitSingularUInt64Field(value: self.accountID, fieldNumber: 2)
-    }
-    try unknownFields.traverse(visitor: &visitor)
-  }
 
-  static func ==(lhs: Cosmos_Auth_V1beta1_QueryAccountAddressByIDRequest, rhs: Cosmos_Auth_V1beta1_QueryAccountAddressByIDRequest) -> Bool {
-    if lhs.id != rhs.id {return false}
-    if lhs.accountID != rhs.accountID {return false}
-    if lhs.unknownFields != rhs.unknownFields {return false}
-    return true
-  }
+    static func == (lhs: Cosmos_Auth_V1beta1_QueryAccountAddressByIDRequest, rhs: Cosmos_Auth_V1beta1_QueryAccountAddressByIDRequest) -> Bool {
+        if lhs.id != rhs.id { return false }
+        if lhs.accountID != rhs.accountID { return false }
+        if lhs.unknownFields != rhs.unknownFields { return false }
+        return true
+    }
 }
 
 extension Cosmos_Auth_V1beta1_QueryAccountAddressByIDResponse: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  static let protoMessageName: String = _protobuf_package + ".QueryAccountAddressByIDResponse"
-  static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}account_address\0")
+    static let protoMessageName: String = _protobuf_package + ".QueryAccountAddressByIDResponse"
+    static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}account_address\0")
 
-  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
-    while let fieldNumber = try decoder.nextFieldNumber() {
-      // The use of inline closures is to circumvent an issue where the compiler
-      // allocates stack space for every case branch when no optimizations are
-      // enabled. https://github.com/apple/swift-protobuf/issues/1034
-      switch fieldNumber {
-      case 1: try { try decoder.decodeSingularStringField(value: &self.accountAddress) }()
-      default: break
-      }
+    mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+        while let fieldNumber = try decoder.nextFieldNumber() {
+            // The use of inline closures is to circumvent an issue where the compiler
+            // allocates stack space for every case branch when no optimizations are
+            // enabled. https://github.com/apple/swift-protobuf/issues/1034
+            switch fieldNumber {
+            case 1: try decoder.decodeSingularStringField(value: &accountAddress)
+            default: break
+            }
+        }
     }
-  }
 
-  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    if !self.accountAddress.isEmpty {
-      try visitor.visitSingularStringField(value: self.accountAddress, fieldNumber: 1)
+    func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+        if !accountAddress.isEmpty {
+            try visitor.visitSingularStringField(value: accountAddress, fieldNumber: 1)
+        }
+        try unknownFields.traverse(visitor: &visitor)
     }
-    try unknownFields.traverse(visitor: &visitor)
-  }
 
-  static func ==(lhs: Cosmos_Auth_V1beta1_QueryAccountAddressByIDResponse, rhs: Cosmos_Auth_V1beta1_QueryAccountAddressByIDResponse) -> Bool {
-    if lhs.accountAddress != rhs.accountAddress {return false}
-    if lhs.unknownFields != rhs.unknownFields {return false}
-    return true
-  }
+    static func == (lhs: Cosmos_Auth_V1beta1_QueryAccountAddressByIDResponse, rhs: Cosmos_Auth_V1beta1_QueryAccountAddressByIDResponse) -> Bool {
+        if lhs.accountAddress != rhs.accountAddress { return false }
+        if lhs.unknownFields != rhs.unknownFields { return false }
+        return true
+    }
 }
 
 extension Cosmos_Auth_V1beta1_QueryAccountInfoRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  static let protoMessageName: String = _protobuf_package + ".QueryAccountInfoRequest"
-  static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}address\0")
+    static let protoMessageName: String = _protobuf_package + ".QueryAccountInfoRequest"
+    static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}address\0")
 
-  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
-    while let fieldNumber = try decoder.nextFieldNumber() {
-      // The use of inline closures is to circumvent an issue where the compiler
-      // allocates stack space for every case branch when no optimizations are
-      // enabled. https://github.com/apple/swift-protobuf/issues/1034
-      switch fieldNumber {
-      case 1: try { try decoder.decodeSingularStringField(value: &self.address) }()
-      default: break
-      }
+    mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+        while let fieldNumber = try decoder.nextFieldNumber() {
+            // The use of inline closures is to circumvent an issue where the compiler
+            // allocates stack space for every case branch when no optimizations are
+            // enabled. https://github.com/apple/swift-protobuf/issues/1034
+            switch fieldNumber {
+            case 1: try decoder.decodeSingularStringField(value: &address)
+            default: break
+            }
+        }
     }
-  }
 
-  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    if !self.address.isEmpty {
-      try visitor.visitSingularStringField(value: self.address, fieldNumber: 1)
+    func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+        if !address.isEmpty {
+            try visitor.visitSingularStringField(value: address, fieldNumber: 1)
+        }
+        try unknownFields.traverse(visitor: &visitor)
     }
-    try unknownFields.traverse(visitor: &visitor)
-  }
 
-  static func ==(lhs: Cosmos_Auth_V1beta1_QueryAccountInfoRequest, rhs: Cosmos_Auth_V1beta1_QueryAccountInfoRequest) -> Bool {
-    if lhs.address != rhs.address {return false}
-    if lhs.unknownFields != rhs.unknownFields {return false}
-    return true
-  }
+    static func == (lhs: Cosmos_Auth_V1beta1_QueryAccountInfoRequest, rhs: Cosmos_Auth_V1beta1_QueryAccountInfoRequest) -> Bool {
+        if lhs.address != rhs.address { return false }
+        if lhs.unknownFields != rhs.unknownFields { return false }
+        return true
+    }
 }
 
 extension Cosmos_Auth_V1beta1_QueryAccountInfoResponse: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  static let protoMessageName: String = _protobuf_package + ".QueryAccountInfoResponse"
-  static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}info\0")
+    static let protoMessageName: String = _protobuf_package + ".QueryAccountInfoResponse"
+    static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}info\0")
 
-  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
-    while let fieldNumber = try decoder.nextFieldNumber() {
-      // The use of inline closures is to circumvent an issue where the compiler
-      // allocates stack space for every case branch when no optimizations are
-      // enabled. https://github.com/apple/swift-protobuf/issues/1034
-      switch fieldNumber {
-      case 1: try { try decoder.decodeSingularMessageField(value: &self._info) }()
-      default: break
-      }
+    mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+        while let fieldNumber = try decoder.nextFieldNumber() {
+            // The use of inline closures is to circumvent an issue where the compiler
+            // allocates stack space for every case branch when no optimizations are
+            // enabled. https://github.com/apple/swift-protobuf/issues/1034
+            switch fieldNumber {
+            case 1: try decoder.decodeSingularMessageField(value: &_info)
+            default: break
+            }
+        }
     }
-  }
 
-  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    // The use of inline closures is to circumvent an issue where the compiler
-    // allocates stack space for every if/case branch local when no optimizations
-    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
-    // https://github.com/apple/swift-protobuf/issues/1182
-    try { if let v = self._info {
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
-    } }()
-    try unknownFields.traverse(visitor: &visitor)
-  }
+    func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+        // The use of inline closures is to circumvent an issue where the compiler
+        // allocates stack space for every if/case branch local when no optimizations
+        // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+        // https://github.com/apple/swift-protobuf/issues/1182
+        try { if let v = self._info {
+            try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
+        } }()
+        try unknownFields.traverse(visitor: &visitor)
+    }
 
-  static func ==(lhs: Cosmos_Auth_V1beta1_QueryAccountInfoResponse, rhs: Cosmos_Auth_V1beta1_QueryAccountInfoResponse) -> Bool {
-    if lhs._info != rhs._info {return false}
-    if lhs.unknownFields != rhs.unknownFields {return false}
-    return true
-  }
+    static func == (lhs: Cosmos_Auth_V1beta1_QueryAccountInfoResponse, rhs: Cosmos_Auth_V1beta1_QueryAccountInfoResponse) -> Bool {
+        if lhs._info != rhs._info { return false }
+        if lhs.unknownFields != rhs.unknownFields { return false }
+        return true
+    }
 }

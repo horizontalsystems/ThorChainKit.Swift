@@ -1,6 +1,6 @@
-import XCTest
 import SwiftProtobuf
 @testable import ThorChainKit
+import XCTest
 
 final class CosmosQueryCodecTests: XCTestCase {
     func testGeneratedQueryCodecRoundTripsTypedAccountMessages() throws {
@@ -43,7 +43,7 @@ final class CosmosQueryCodecTests: XCTestCase {
         var response = Cosmos_Auth_V1beta1_QueryAccountResponse()
         response.account.typeURL = "/cosmos.auth.v1beta1.BaseAccount"
         response.account.value = try account.serializedData()
-        let payload = try XCTUnwrap(CosmosQueryCodec.decodeAccountPayload(try response.serializedData()))
+        let payload = try XCTUnwrap(CosmosQueryCodec.decodeAccountPayload(response.serializedData()))
         XCTAssertEqual(payload.typeURL, "/cosmos.auth.v1beta1.BaseAccount")
         XCTAssertEqual(payload.address, "thor1sender")
         XCTAssertEqual(payload.accountNumber, 7)
@@ -58,7 +58,7 @@ final class CosmosQueryCodecTests: XCTestCase {
             "/cosmos.vesting.v1beta1.ContinuousVestingAccount",
             "/cosmos.vesting.v1beta1.DelayedVestingAccount",
             "/cosmos.vesting.v1beta1.PeriodicVestingAccount",
-            "/cosmos.vesting.v1beta1.PermanentLockedAccount"
+            "/cosmos.vesting.v1beta1.PermanentLockedAccount",
         ]
         var base = Cosmos_Auth_V1beta1_BaseAccount()
         base.address = "thor1sender"
@@ -125,5 +125,4 @@ final class CosmosQueryCodecTests: XCTestCase {
         var response = Cosmos_Auth_V1beta1_QueryAccountResponse(); response.account.typeURL = "/cosmos.auth.v1beta1.BaseAccount"; response.account.value = try account.serializedData()
         XCTAssertThrowsError(try CosmosQueryCodec.decodeAccountPayload(response.serializedData()))
     }
-
 }

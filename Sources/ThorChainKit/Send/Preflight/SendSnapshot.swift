@@ -80,7 +80,7 @@ struct SendSnapshot: Equatable, Hashable, Sendable {
             familyID: "rorcual-mainnet", chainID: "thorchain-1", height: height,
             sender: "thor1x0jkvqdh2hlpeztd5zyyk70n3efx6mhudkmnn2",
             recipient: "thor1tgxm5jw6hrlvslrd6lqpk4jwuu4g29dxytrean", accountNumber: 1, sequence: 2,
-            amount: 100, nativeFee: 2, mimir: MimirSnapshot(haltChainGlobal: -1, nodePauseChainGlobal: -1, haltTHORChain: -1, solvencyHaltTHORChain: -1),
+            amount: 100, nativeFee: 2, mimir: MimirSnapshot(haltChainGlobal: -1, nodePauseChainGlobal: -1, haltNativeChain: -1, solvencyHaltNativeChain: -1),
             memoMaximumBytes: 256
         )
     }
@@ -90,7 +90,7 @@ struct SendSnapshot: Equatable, Hashable, Sendable {
         func append(_ value: Data) { var length = UInt64(value.count).bigEndian; data.append(Data(bytes: &length, count: 8)); data.append(value) }
         append(Data(familyID.utf8)); append(Data(chainID.utf8)); append(Data(restEndpoint.utf8)); append(Data(rpcEndpoint.utf8)); append(Data(manifestRevision.utf8)); append(Data(String(height).utf8)); append(Data(sender.utf8)); append(Data(recipient.utf8))
         append(Data(String(accountNumber).utf8)); append(Data(String(sequence).utf8)); append(Data((accountPublicKey ?? "").utf8)); append(accountPublicKeyData ?? Data()); append(amount); append(Data(denom.utf8)); append(fee); append(total)
-        append(Data("\(mimir.haltChainGlobal),\(mimir.nodePauseChainGlobal),\(mimir.haltTHORChain),\(mimir.solvencyHaltTHORChain)".utf8))
+        append(Data("\(mimir.haltChainGlobal),\(mimir.nodePauseChainGlobal),\(mimir.haltNativeChain),\(mimir.solvencyHaltNativeChain)".utf8))
         append(Data(String(memoMaximumBytes).utf8)); append(Data(classification.rawValue.utf8)); append(Data(policyRevision.utf8))
         return Data(SHA256.hash(data: data))
     }

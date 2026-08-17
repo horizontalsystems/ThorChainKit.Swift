@@ -1,6 +1,6 @@
+import BigInt
 import CryptoKit
 import Foundation
-import BigInt
 import SwiftProtobuf
 
 struct SignPayload: Sendable, CustomDebugStringConvertible, CustomReflectable {
@@ -172,7 +172,7 @@ enum DirectSignCodec {
 
     private static func addressPayload(_ raw: String) throws -> Data {
         let decoded = try Bech32Codec.decode(raw)
-        guard raw == raw.lowercased(), ["thor", "sthor", "cthor"].contains(decoded.hrp) else {
+        guard raw == raw.lowercased(), ["thor", "sthor", "cthor", "maya", "smaya"].contains(decoded.hrp) else {
             throw SendError.invalidRecipient
         }
         let payload = try BitConversion.convert(decoded.words, fromBits: 5, toBits: 8, pad: false)

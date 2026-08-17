@@ -1,19 +1,18 @@
 import BigInt
 import Combine
 import Foundation
-import XCTest
 @testable import ThorChainKit
+import XCTest
 
 final class SendPublicApiTests: XCTestCase {
-
     func testFallbackQuotePathRefusesANonRuneDenom() async throws {
         // Without a preflight the quote is built by a path that predates denoms and would
         // return a RUNE quote whatever was asked for. Refusing is the only safe answer:
         // silently quoting the wrong asset is how the user ends up signing it.
-        let kit = makeTestKit(address: try sendTestAddress(), persistenceNamespace: "fallback-denom")
+        let kit = try makeTestKit(address: sendTestAddress(), persistenceNamespace: "fallback-denom")
 
         do {
-            _ = try await kit.quote(to: try sendOtherAddress(), amount: .exact(1), denom: try Denom(rawValue: "tcy"))
+            _ = try await kit.quote(to: sendOtherAddress(), amount: .exact(1), denom: Denom(rawValue: "tcy"))
             XCTFail("expected the fallback path to refuse a token quote")
         } catch {
             XCTAssertEqual(error as? SendError, .operationUnavailable)
@@ -58,9 +57,4 @@ final class SendPublicApiTests: XCTestCase {
             XCTAssertEqual(error, .invalidAmount)
         }
     }
-
-
-
-
-
 }

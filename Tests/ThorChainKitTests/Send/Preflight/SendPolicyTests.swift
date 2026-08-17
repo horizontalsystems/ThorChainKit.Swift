@@ -1,6 +1,6 @@
 import BigInt
-import XCTest
 @testable import ThorChainKit
+import XCTest
 
 final class SendPolicyTests: XCTestCase {
     func testAmountIsTakenAsGivenAndOnlyZeroIsRefused() throws {

@@ -1,8 +1,8 @@
 import CryptoKit
 import Foundation
 import secp256k1
-import XCTest
 @testable import ThorChainKit
+import XCTest
 
 final class KitCompositionTests: XCTestCase {
     func testKitCompositionRetainsTransactionSenderAndPendingFacade() throws {
@@ -30,11 +30,11 @@ final class KitCompositionTests: XCTestCase {
         let address = try sendTestAddress()
         let walletId = "composition-same-wallet"
         let endpoints = try EndpointConfiguration(families: [
-            try EndpointFamilyDescriptor(
+            EndpointFamilyDescriptor(
                 id: "composition",
                 cosmosRestURL: URL(string: "https://rest.composition.example")!,
                 cometBftURL: URL(string: "https://rpc.composition.example")!
-            )
+            ),
         ])
         let instance = try Kit.instance(
             address: address,
@@ -80,7 +80,7 @@ final class KitCompositionTests: XCTestCase {
 
         var isActive = false
         var urls = [URL]()
-        for _ in 0..<100 {
+        for _ in 0 ..< 100 {
             isActive = await fixture.transactionSender.isAdmissionActive()
             urls = await transport.requestURLs()
             if isActive && !urls.isEmpty { break }
@@ -120,12 +120,12 @@ final class KitCompositionTests: XCTestCase {
             chainID: "thorchain-1",
             height: 12,
             sender: address.raw,
-            recipient: try sendOtherAddress().raw,
+            recipient: sendOtherAddress().raw,
             accountNumber: 1,
             sequence: 2,
             amount: 100,
             nativeFee: 2,
-            mimir: MimirSnapshot(haltChainGlobal: -1, nodePauseChainGlobal: -1, haltTHORChain: -1, solvencyHaltTHORChain: -1),
+            mimir: MimirSnapshot(haltChainGlobal: -1, nodePauseChainGlobal: -1, haltNativeChain: -1, solvencyHaltNativeChain: -1),
             memoMaximumBytes: 256,
             accountPublicKey: "/cosmos.crypto.secp256k1.PubKey",
             accountPublicKeyData: signer.compressedPublicKey
@@ -133,7 +133,7 @@ final class KitCompositionTests: XCTestCase {
         let quote = try await runtime.issuePreflightQuote(
             request: SendQuoteRequest(
                 sender: address,
-                recipient: try sendOtherAddress(),
+                recipient: sendOtherAddress(),
                 amount: .exact(snapshot.amount)
             ),
             snapshot: snapshot
@@ -155,7 +155,6 @@ final class KitCompositionTests: XCTestCase {
         let authInfo = try Cosmos_Tx_V1beta1_AuthInfo(serializedBytes: decodedRaw.authInfoBytes)
         XCTAssertEqual(authInfo.signerInfos.first?.sequence, 9)
     }
-
 }
 
 private actor CompositionTransport: TestingHTTPTransport {
@@ -188,7 +187,8 @@ private actor FixtureBroadcastTransport: TestingHTTPTransport {
         guard request.httpMethod == "POST", let url = request.url, let body = request.httpBody,
               let object = try? JSONSerialization.jsonObject(with: body) as? [String: String],
               let txBytes = object["tx_bytes"], object["mode"] == "BROADCAST_MODE_SYNC",
-              let raw = Data(base64Encoded: txBytes) else {
+              let raw = Data(base64Encoded: txBytes)
+        else {
             throw BroadcastTransportError.invalidResponse
         }
         posts += 1

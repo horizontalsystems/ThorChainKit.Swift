@@ -1,6 +1,6 @@
 import Foundation
-import XCTest
 @testable import ThorChainKit
+import XCTest
 
 final class EndpointPoolTests: XCTestCase {
     func testLeaseSelectsGreatestCometHeightAndBreaksTiesByConfigurationOrder() async throws {
@@ -356,8 +356,7 @@ final class EndpointPoolTests: XCTestCase {
         do {
             _ = try await first.value
             XCTFail("cancelled lease succeeded")
-        } catch is CancellationError {
-        }
+        } catch is CancellationError {}
         await probe.release(1)
 
         let second = Task { try await pool.lease(excludingFamilyIds: []) }
@@ -383,8 +382,7 @@ final class EndpointPoolTests: XCTestCase {
         do {
             _ = try await stale.value
             XCTFail("reset waiter succeeded")
-        } catch is CancellationError {
-        }
+        } catch is CancellationError {}
         await probe.release(1)
 
         let current = Task { try await pool.lease(excludingFamilyIds: []) }

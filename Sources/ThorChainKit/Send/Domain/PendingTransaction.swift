@@ -17,7 +17,7 @@ struct PendingTransaction: Sendable, CustomDebugStringConvertible, CustomReflect
     private let amountMagnitude: Data
     private let nativeFeeMagnitude: Data
 
-    internal init(
+    init(
         transactionId: TransactionID,
         recipient: Address?,
         amountMagnitude: Data,
@@ -54,11 +54,11 @@ struct PendingTransaction: Sendable, CustomDebugStringConvertible, CustomReflect
             "memo": memo as Any,
             "state": state,
             "retryAvailability": retryAvailability,
-            "createdAt": createdAt
+            "createdAt": createdAt,
         ], displayStyle: .struct)
     }
 
-    internal static func isCanonicalMagnitude(_ data: Data, allowingZero: Bool) -> Bool {
+    static func isCanonicalMagnitude(_ data: Data, allowingZero: Bool) -> Bool {
         let value = BigUInt(data)
         if data.isEmpty { return allowingZero && value == 0 }
         guard value > 0 else { return false }

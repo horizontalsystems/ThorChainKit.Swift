@@ -1,7 +1,6 @@
 import BigInt
 import Foundation
 
-
 public enum RetryBlockedReason: String, Hashable, Sendable {
     case sequenceAdvanced, providerInconsistent
 }
@@ -12,7 +11,7 @@ public struct NativeFeeChange: Equatable, Sendable {
     private let previousMagnitude: Data
     private let currentMagnitude: Data
 
-    internal init(previous: BigUInt, current: BigUInt) {
+    init(previous: BigUInt, current: BigUInt) {
         previousMagnitude = SendMagnitude(previous).data
         currentMagnitude = SendMagnitude(current).data
     }
@@ -25,7 +24,7 @@ public struct BroadcastRejection: Equatable, Sendable {
     public let codespace: BroadcastCodespaceCategory
     public let sanitizedLog: String?
 
-    internal init(code: UInt32, codespace: String?, sanitizedLog: String?) {
+    init(code: UInt32, codespace: String?, sanitizedLog: String?) {
         self.code = code == 0 ? 1 : code
         switch codespace?.lowercased() {
         case "sdk": self.codespace = .sdk

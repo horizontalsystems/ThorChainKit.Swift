@@ -144,7 +144,6 @@ final class Syncer: @unchecked Sendable {
         refreshTask = nil
     }
 
-
     private func publish(_ state: SyncState) {
         let account = accountInfoManager.accountState
         let height: Int64?

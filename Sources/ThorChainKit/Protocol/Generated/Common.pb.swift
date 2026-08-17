@@ -16,1920 +16,1936 @@ import SwiftProtobuf
 // incompatible with the version of SwiftProtobuf to which you are linking.
 // Please ensure that you are building against the same version of the API
 // that was used to generate this file.
-fileprivate struct _GeneratedWithProtocGenSwiftVersion: SwiftProtobuf.ProtobufAPIVersionCheck {
-  struct _2: SwiftProtobuf.ProtobufAPIVersion_2 {}
-  typealias Version = _2
+private struct _GeneratedWithProtocGenSwiftVersion: SwiftProtobuf.ProtobufAPIVersionCheck {
+    struct _2: SwiftProtobuf.ProtobufAPIVersion_2 {}
+    typealias Version = _2
 }
 
 enum Common_Status: SwiftProtobuf.Enum, Swift.CaseIterable {
-  typealias RawValue = Int
-  case incomplete // = 0
-  case done // = 1
-  case reverted // = 2
-  case UNRECOGNIZED(Int)
+    typealias RawValue = Int
+    case incomplete // = 0
+    case done // = 1
+    case reverted // = 2
+    case UNRECOGNIZED(Int)
 
-  init() {
-    self = .incomplete
-  }
-
-  init?(rawValue: Int) {
-    switch rawValue {
-    case 0: self = .incomplete
-    case 1: self = .done
-    case 2: self = .reverted
-    default: self = .UNRECOGNIZED(rawValue)
+    init() {
+        self = .incomplete
     }
-  }
 
-  var rawValue: Int {
-    switch self {
-    case .incomplete: return 0
-    case .done: return 1
-    case .reverted: return 2
-    case .UNRECOGNIZED(let i): return i
+    init?(rawValue: Int) {
+        switch rawValue {
+        case 0: self = .incomplete
+        case 1: self = .done
+        case 2: self = .reverted
+        default: self = .UNRECOGNIZED(rawValue)
+        }
     }
-  }
 
-  // The compiler won't synthesize support with the UNRECOGNIZED case.
-  static let allCases: [Common_Status] = [
-    .incomplete,
-    .done,
-    .reverted,
-  ]
+    var rawValue: Int {
+        switch self {
+        case .incomplete: return 0
+        case .done: return 1
+        case .reverted: return 2
+        case let .UNRECOGNIZED(i): return i
+        }
+    }
 
+    // The compiler won't synthesize support with the UNRECOGNIZED case.
+    static let allCases: [Common_Status] = [
+        .incomplete,
+        .done,
+        .reverted,
+    ]
 }
 
 struct Common_Asset: Sendable {
-  // SwiftProtobuf.Message conformance is added in an extension below. See the
-  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
-  // methods supported on all messages.
+    // SwiftProtobuf.Message conformance is added in an extension below. See the
+    // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+    // methods supported on all messages.
 
-  var chain: String = String()
+    var chain: String = .init()
 
-  var symbol: String = String()
+    var symbol: String = .init()
 
-  var ticker: String = String()
+    var ticker: String = .init()
 
-  var synth: Bool = false
+    var synth: Bool = false
 
-  var trade: Bool = false
+    var trade: Bool = false
 
-  var secured: Bool = false
+    var secured: Bool = false
 
-  var unknownFields = SwiftProtobuf.UnknownStorage()
+    var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  init() {}
+    init() {}
 }
 
 struct Common_Coin: Sendable {
-  // SwiftProtobuf.Message conformance is added in an extension below. See the
-  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
-  // methods supported on all messages.
+    // SwiftProtobuf.Message conformance is added in an extension below. See the
+    // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+    // methods supported on all messages.
 
-  var asset: Common_Asset {
-    get {return _asset ?? Common_Asset()}
-    set {_asset = newValue}
-  }
-  /// Returns true if `asset` has been explicitly set.
-  var hasAsset: Bool {return self._asset != nil}
-  /// Clears the value of `asset`. Subsequent reads from it will return its default value.
-  mutating func clearAsset() {self._asset = nil}
+    var asset: Common_Asset {
+        get { return _asset ?? Common_Asset() }
+        set { _asset = newValue }
+    }
 
-  var amount: String = String()
+    /// Returns true if `asset` has been explicitly set.
+    var hasAsset: Bool { return _asset != nil }
+    /// Clears the value of `asset`. Subsequent reads from it will return its default value.
+    mutating func clearAsset() { _asset = nil }
 
-  var decimals: Int64 = 0
+    var amount: String = .init()
 
-  var unknownFields = SwiftProtobuf.UnknownStorage()
+    var decimals: Int64 = 0
 
-  init() {}
+    var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  fileprivate var _asset: Common_Asset? = nil
+    init() {}
+
+    fileprivate var _asset: Common_Asset? = nil
 }
 
 /// PubKeySet contains two pub keys , secp256k1 and ed25519
 struct Common_PubKeySet: Sendable {
-  // SwiftProtobuf.Message conformance is added in an extension below. See the
-  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
-  // methods supported on all messages.
+    // SwiftProtobuf.Message conformance is added in an extension below. See the
+    // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+    // methods supported on all messages.
 
-  var secp256K1: String = String()
+    var secp256K1: String = .init()
 
-  var ed25519: String = String()
+    var ed25519: String = .init()
 
-  var unknownFields = SwiftProtobuf.UnknownStorage()
+    var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  init() {}
+    init() {}
 }
 
 struct Common_Tx: Sendable {
-  // SwiftProtobuf.Message conformance is added in an extension below. See the
-  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
-  // methods supported on all messages.
+    // SwiftProtobuf.Message conformance is added in an extension below. See the
+    // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+    // methods supported on all messages.
 
-  var id: String = String()
+    var id: String = .init()
 
-  var chain: String = String()
+    var chain: String = .init()
 
-  var fromAddress: String = String()
+    var fromAddress: String = .init()
 
-  var toAddress: String = String()
+    var toAddress: String = .init()
 
-  var coins: [Common_Coin] = []
+    var coins: [Common_Coin] = []
 
-  var gas: [Common_Coin] = []
+    var gas: [Common_Coin] = []
 
-  var memo: String = String()
+    var memo: String = .init()
 
-  var unknownFields = SwiftProtobuf.UnknownStorage()
+    var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  init() {}
+    init() {}
 }
 
 struct Common_Fee: Sendable {
-  // SwiftProtobuf.Message conformance is added in an extension below. See the
-  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
-  // methods supported on all messages.
+    // SwiftProtobuf.Message conformance is added in an extension below. See the
+    // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+    // methods supported on all messages.
 
-  var coins: [Common_Coin] = []
+    var coins: [Common_Coin] = []
 
-  var poolDeduct: String = String()
+    var poolDeduct: String = .init()
 
-  var unknownFields = SwiftProtobuf.UnknownStorage()
+    var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  init() {}
+    init() {}
 }
 
 struct Common_ProtoUint: Sendable {
-  // SwiftProtobuf.Message conformance is added in an extension below. See the
-  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
-  // methods supported on all messages.
+    // SwiftProtobuf.Message conformance is added in an extension below. See the
+    // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+    // methods supported on all messages.
 
-  var value: String = String()
+    var value: String = .init()
 
-  var unknownFields = SwiftProtobuf.UnknownStorage()
+    var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  init() {}
+    init() {}
 }
 
 struct Common_OutputRef: Sendable {
-  // SwiftProtobuf.Message conformance is added in an extension below. See the
-  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
-  // methods supported on all messages.
+    // SwiftProtobuf.Message conformance is added in an extension below. See the
+    // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+    // methods supported on all messages.
 
-  var txHash: String = String()
+    var txHash: String = .init()
 
-  var outputIndex: UInt32 = 0
+    var outputIndex: UInt32 = 0
 
-  var keyImage: String = String()
+    var keyImage: String = .init()
 
-  var spendTxHash: String = String()
+    var spendTxHash: String = .init()
 
-  var unknownFields = SwiftProtobuf.UnknownStorage()
+    var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  init() {}
+    init() {}
 }
 
 struct Common_ObservedTx: @unchecked Sendable {
-  // SwiftProtobuf.Message conformance is added in an extension below. See the
-  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
-  // methods supported on all messages.
+    // SwiftProtobuf.Message conformance is added in an extension below. See the
+    // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+    // methods supported on all messages.
 
-  var tx: Common_Tx {
-    get {return _storage._tx ?? Common_Tx()}
-    set {_uniqueStorage()._tx = newValue}
-  }
-  /// Returns true if `tx` has been explicitly set.
-  var hasTx: Bool {return _storage._tx != nil}
-  /// Clears the value of `tx`. Subsequent reads from it will return its default value.
-  mutating func clearTx() {_uniqueStorage()._tx = nil}
+    var tx: Common_Tx {
+        get { return _storage._tx ?? Common_Tx() }
+        set { _uniqueStorage()._tx = newValue }
+    }
 
-  var status: Common_Status {
-    get {return _storage._status}
-    set {_uniqueStorage()._status = newValue}
-  }
+    /// Returns true if `tx` has been explicitly set.
+    var hasTx: Bool { return _storage._tx != nil }
+    /// Clears the value of `tx`. Subsequent reads from it will return its default value.
+    mutating func clearTx() { _uniqueStorage()._tx = nil }
 
-  var outHashes: [String] {
-    get {return _storage._outHashes}
-    set {_uniqueStorage()._outHashes = newValue}
-  }
+    var status: Common_Status {
+        get { return _storage._status }
+        set { _uniqueStorage()._status = newValue }
+    }
 
-  var blockHeight: Int64 {
-    get {return _storage._blockHeight}
-    set {_uniqueStorage()._blockHeight = newValue}
-  }
+    var outHashes: [String] {
+        get { return _storage._outHashes }
+        set { _uniqueStorage()._outHashes = newValue }
+    }
 
-  var signers: [String] {
-    get {return _storage._signers}
-    set {_uniqueStorage()._signers = newValue}
-  }
+    var blockHeight: Int64 {
+        get { return _storage._blockHeight }
+        set { _uniqueStorage()._blockHeight = newValue }
+    }
 
-  var observedPubKey: String {
-    get {return _storage._observedPubKey}
-    set {_uniqueStorage()._observedPubKey = newValue}
-  }
+    var signers: [String] {
+        get { return _storage._signers }
+        set { _uniqueStorage()._signers = newValue }
+    }
 
-  var keysignMs: Int64 {
-    get {return _storage._keysignMs}
-    set {_uniqueStorage()._keysignMs = newValue}
-  }
+    var observedPubKey: String {
+        get { return _storage._observedPubKey }
+        set { _uniqueStorage()._observedPubKey = newValue }
+    }
 
-  var finaliseHeight: Int64 {
-    get {return _storage._finaliseHeight}
-    set {_uniqueStorage()._finaliseHeight = newValue}
-  }
+    var keysignMs: Int64 {
+        get { return _storage._keysignMs }
+        set { _uniqueStorage()._keysignMs = newValue }
+    }
 
-  var aggregator: String {
-    get {return _storage._aggregator}
-    set {_uniqueStorage()._aggregator = newValue}
-  }
+    var finaliseHeight: Int64 {
+        get { return _storage._finaliseHeight }
+        set { _uniqueStorage()._finaliseHeight = newValue }
+    }
 
-  var aggregatorTarget: String {
-    get {return _storage._aggregatorTarget}
-    set {_uniqueStorage()._aggregatorTarget = newValue}
-  }
+    var aggregator: String {
+        get { return _storage._aggregator }
+        set { _uniqueStorage()._aggregator = newValue }
+    }
 
-  var aggregatorTargetLimit: String {
-    get {return _storage._aggregatorTargetLimit}
-    set {_uniqueStorage()._aggregatorTargetLimit = newValue}
-  }
+    var aggregatorTarget: String {
+        get { return _storage._aggregatorTarget }
+        set { _uniqueStorage()._aggregatorTarget = newValue }
+    }
 
-  var spentOutputRefs: [Common_OutputRef] {
-    get {return _storage._spentOutputRefs}
-    set {_uniqueStorage()._spentOutputRefs = newValue}
-  }
+    var aggregatorTargetLimit: String {
+        get { return _storage._aggregatorTargetLimit }
+        set { _uniqueStorage()._aggregatorTargetLimit = newValue }
+    }
 
-  var unknownFields = SwiftProtobuf.UnknownStorage()
+    var spentOutputRefs: [Common_OutputRef] {
+        get { return _storage._spentOutputRefs }
+        set { _uniqueStorage()._spentOutputRefs = newValue }
+    }
 
-  init() {}
+    var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  fileprivate var _storage = _StorageClass.defaultInstance
+    init() {}
+
+    fileprivate var _storage = _StorageClass.defaultInstance
 }
 
 struct Common_Attestation: Sendable {
-  // SwiftProtobuf.Message conformance is added in an extension below. See the
-  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
-  // methods supported on all messages.
+    // SwiftProtobuf.Message conformance is added in an extension below. See the
+    // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+    // methods supported on all messages.
 
-  var pubKey: Data = Data()
+    var pubKey: Data = .init()
 
-  var signature: Data = Data()
+    var signature: Data = .init()
 
-  var unknownFields = SwiftProtobuf.UnknownStorage()
+    var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  init() {}
+    init() {}
 }
 
 struct Common_AttestTx: Sendable {
-  // SwiftProtobuf.Message conformance is added in an extension below. See the
-  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
-  // methods supported on all messages.
+    // SwiftProtobuf.Message conformance is added in an extension below. See the
+    // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+    // methods supported on all messages.
 
-  var obsTx: Common_ObservedTx {
-    get {return _obsTx ?? Common_ObservedTx()}
-    set {_obsTx = newValue}
-  }
-  /// Returns true if `obsTx` has been explicitly set.
-  var hasObsTx: Bool {return self._obsTx != nil}
-  /// Clears the value of `obsTx`. Subsequent reads from it will return its default value.
-  mutating func clearObsTx() {self._obsTx = nil}
+    var obsTx: Common_ObservedTx {
+        get { return _obsTx ?? Common_ObservedTx() }
+        set { _obsTx = newValue }
+    }
 
-  var attestation: Common_Attestation {
-    get {return _attestation ?? Common_Attestation()}
-    set {_attestation = newValue}
-  }
-  /// Returns true if `attestation` has been explicitly set.
-  var hasAttestation: Bool {return self._attestation != nil}
-  /// Clears the value of `attestation`. Subsequent reads from it will return its default value.
-  mutating func clearAttestation() {self._attestation = nil}
+    /// Returns true if `obsTx` has been explicitly set.
+    var hasObsTx: Bool { return _obsTx != nil }
+    /// Clears the value of `obsTx`. Subsequent reads from it will return its default value.
+    mutating func clearObsTx() { _obsTx = nil }
 
-  var inbound: Bool = false
+    var attestation: Common_Attestation {
+        get { return _attestation ?? Common_Attestation() }
+        set { _attestation = newValue }
+    }
 
-  /// allow future observation if this is an instant observation and gas
-  var allowFutureObservation: Bool = false
+    /// Returns true if `attestation` has been explicitly set.
+    var hasAttestation: Bool { return _attestation != nil }
+    /// Clears the value of `attestation`. Subsequent reads from it will return its default value.
+    mutating func clearAttestation() { _attestation = nil }
 
-  var unknownFields = SwiftProtobuf.UnknownStorage()
+    var inbound: Bool = false
 
-  init() {}
+    /// allow future observation if this is an instant observation and gas
+    var allowFutureObservation: Bool = false
 
-  fileprivate var _obsTx: Common_ObservedTx? = nil
-  fileprivate var _attestation: Common_Attestation? = nil
+    var unknownFields = SwiftProtobuf.UnknownStorage()
+
+    init() {}
+
+    fileprivate var _obsTx: Common_ObservedTx? = nil
+    fileprivate var _attestation: Common_Attestation? = nil
 }
 
 struct Common_QuorumTx: Sendable {
-  // SwiftProtobuf.Message conformance is added in an extension below. See the
-  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
-  // methods supported on all messages.
+    // SwiftProtobuf.Message conformance is added in an extension below. See the
+    // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+    // methods supported on all messages.
 
-  var obsTx: Common_ObservedTx {
-    get {return _obsTx ?? Common_ObservedTx()}
-    set {_obsTx = newValue}
-  }
-  /// Returns true if `obsTx` has been explicitly set.
-  var hasObsTx: Bool {return self._obsTx != nil}
-  /// Clears the value of `obsTx`. Subsequent reads from it will return its default value.
-  mutating func clearObsTx() {self._obsTx = nil}
+    var obsTx: Common_ObservedTx {
+        get { return _obsTx ?? Common_ObservedTx() }
+        set { _obsTx = newValue }
+    }
 
-  var attestations: [Common_Attestation] = []
+    /// Returns true if `obsTx` has been explicitly set.
+    var hasObsTx: Bool { return _obsTx != nil }
+    /// Clears the value of `obsTx`. Subsequent reads from it will return its default value.
+    mutating func clearObsTx() { _obsTx = nil }
 
-  var inbound: Bool = false
+    var attestations: [Common_Attestation] = []
 
-  /// allow future observation if this is an instant observation and gas
-  var allowFutureObservation: Bool = false
+    var inbound: Bool = false
 
-  var unknownFields = SwiftProtobuf.UnknownStorage()
+    /// allow future observation if this is an instant observation and gas
+    var allowFutureObservation: Bool = false
 
-  init() {}
+    var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  fileprivate var _obsTx: Common_ObservedTx? = nil
+    init() {}
+
+    fileprivate var _obsTx: Common_ObservedTx? = nil
 }
 
 struct Common_QuorumState: Sendable {
-  // SwiftProtobuf.Message conformance is added in an extension below. See the
-  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
-  // methods supported on all messages.
+    // SwiftProtobuf.Message conformance is added in an extension below. See the
+    // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+    // methods supported on all messages.
 
-  var quoTxs: [Common_QuorumTx] = []
+    var quoTxs: [Common_QuorumTx] = []
 
-  var quoNetworkFees: [Common_QuorumNetworkFee] = []
+    var quoNetworkFees: [Common_QuorumNetworkFee] = []
 
-  var quoSolvencies: [Common_QuorumSolvency] = []
+    var quoSolvencies: [Common_QuorumSolvency] = []
 
-  var quoErrataTxs: [Common_QuorumErrataTx] = []
+    var quoErrataTxs: [Common_QuorumErrataTx] = []
 
-  var quoPriceFeeds: [Common_QuorumPriceFeed] = []
+    var quoPriceFeeds: [Common_QuorumPriceFeed] = []
 
-  var unknownFields = SwiftProtobuf.UnknownStorage()
+    var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  init() {}
+    init() {}
 }
 
 struct Common_NetworkFee: Sendable {
-  // SwiftProtobuf.Message conformance is added in an extension below. See the
-  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
-  // methods supported on all messages.
+    // SwiftProtobuf.Message conformance is added in an extension below. See the
+    // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+    // methods supported on all messages.
 
-  var height: Int64 = 0
+    var height: Int64 = 0
 
-  var chain: String = String()
+    var chain: String = .init()
 
-  var transactionSize: UInt64 = 0
+    var transactionSize: UInt64 = 0
 
-  var transactionRate: UInt64 = 0
+    var transactionRate: UInt64 = 0
 
-  var unknownFields = SwiftProtobuf.UnknownStorage()
+    var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  init() {}
+    init() {}
 }
 
 struct Common_AttestNetworkFee: Sendable {
-  // SwiftProtobuf.Message conformance is added in an extension below. See the
-  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
-  // methods supported on all messages.
+    // SwiftProtobuf.Message conformance is added in an extension below. See the
+    // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+    // methods supported on all messages.
 
-  var networkFee: Common_NetworkFee {
-    get {return _networkFee ?? Common_NetworkFee()}
-    set {_networkFee = newValue}
-  }
-  /// Returns true if `networkFee` has been explicitly set.
-  var hasNetworkFee: Bool {return self._networkFee != nil}
-  /// Clears the value of `networkFee`. Subsequent reads from it will return its default value.
-  mutating func clearNetworkFee() {self._networkFee = nil}
+    var networkFee: Common_NetworkFee {
+        get { return _networkFee ?? Common_NetworkFee() }
+        set { _networkFee = newValue }
+    }
 
-  var attestation: Common_Attestation {
-    get {return _attestation ?? Common_Attestation()}
-    set {_attestation = newValue}
-  }
-  /// Returns true if `attestation` has been explicitly set.
-  var hasAttestation: Bool {return self._attestation != nil}
-  /// Clears the value of `attestation`. Subsequent reads from it will return its default value.
-  mutating func clearAttestation() {self._attestation = nil}
+    /// Returns true if `networkFee` has been explicitly set.
+    var hasNetworkFee: Bool { return _networkFee != nil }
+    /// Clears the value of `networkFee`. Subsequent reads from it will return its default value.
+    mutating func clearNetworkFee() { _networkFee = nil }
 
-  var unknownFields = SwiftProtobuf.UnknownStorage()
+    var attestation: Common_Attestation {
+        get { return _attestation ?? Common_Attestation() }
+        set { _attestation = newValue }
+    }
 
-  init() {}
+    /// Returns true if `attestation` has been explicitly set.
+    var hasAttestation: Bool { return _attestation != nil }
+    /// Clears the value of `attestation`. Subsequent reads from it will return its default value.
+    mutating func clearAttestation() { _attestation = nil }
 
-  fileprivate var _networkFee: Common_NetworkFee? = nil
-  fileprivate var _attestation: Common_Attestation? = nil
+    var unknownFields = SwiftProtobuf.UnknownStorage()
+
+    init() {}
+
+    fileprivate var _networkFee: Common_NetworkFee? = nil
+    fileprivate var _attestation: Common_Attestation? = nil
 }
 
 struct Common_QuorumNetworkFee: Sendable {
-  // SwiftProtobuf.Message conformance is added in an extension below. See the
-  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
-  // methods supported on all messages.
+    // SwiftProtobuf.Message conformance is added in an extension below. See the
+    // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+    // methods supported on all messages.
 
-  var networkFee: Common_NetworkFee {
-    get {return _networkFee ?? Common_NetworkFee()}
-    set {_networkFee = newValue}
-  }
-  /// Returns true if `networkFee` has been explicitly set.
-  var hasNetworkFee: Bool {return self._networkFee != nil}
-  /// Clears the value of `networkFee`. Subsequent reads from it will return its default value.
-  mutating func clearNetworkFee() {self._networkFee = nil}
+    var networkFee: Common_NetworkFee {
+        get { return _networkFee ?? Common_NetworkFee() }
+        set { _networkFee = newValue }
+    }
 
-  var attestations: [Common_Attestation] = []
+    /// Returns true if `networkFee` has been explicitly set.
+    var hasNetworkFee: Bool { return _networkFee != nil }
+    /// Clears the value of `networkFee`. Subsequent reads from it will return its default value.
+    mutating func clearNetworkFee() { _networkFee = nil }
 
-  var unknownFields = SwiftProtobuf.UnknownStorage()
+    var attestations: [Common_Attestation] = []
 
-  init() {}
+    var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  fileprivate var _networkFee: Common_NetworkFee? = nil
+    init() {}
+
+    fileprivate var _networkFee: Common_NetworkFee? = nil
 }
 
 struct Common_Solvency: Sendable {
-  // SwiftProtobuf.Message conformance is added in an extension below. See the
-  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
-  // methods supported on all messages.
+    // SwiftProtobuf.Message conformance is added in an extension below. See the
+    // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+    // methods supported on all messages.
 
-  var id: String = String()
+    var id: String = .init()
 
-  var chain: String = String()
+    var chain: String = .init()
 
-  var pubKey: String = String()
+    var pubKey: String = .init()
 
-  var coins: [Common_Coin] = []
+    var coins: [Common_Coin] = []
 
-  var height: Int64 = 0
+    var height: Int64 = 0
 
-  var unknownFields = SwiftProtobuf.UnknownStorage()
+    var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  init() {}
+    init() {}
 }
 
 struct Common_AttestSolvency: Sendable {
-  // SwiftProtobuf.Message conformance is added in an extension below. See the
-  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
-  // methods supported on all messages.
+    // SwiftProtobuf.Message conformance is added in an extension below. See the
+    // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+    // methods supported on all messages.
 
-  var solvency: Common_Solvency {
-    get {return _solvency ?? Common_Solvency()}
-    set {_solvency = newValue}
-  }
-  /// Returns true if `solvency` has been explicitly set.
-  var hasSolvency: Bool {return self._solvency != nil}
-  /// Clears the value of `solvency`. Subsequent reads from it will return its default value.
-  mutating func clearSolvency() {self._solvency = nil}
+    var solvency: Common_Solvency {
+        get { return _solvency ?? Common_Solvency() }
+        set { _solvency = newValue }
+    }
 
-  var attestation: Common_Attestation {
-    get {return _attestation ?? Common_Attestation()}
-    set {_attestation = newValue}
-  }
-  /// Returns true if `attestation` has been explicitly set.
-  var hasAttestation: Bool {return self._attestation != nil}
-  /// Clears the value of `attestation`. Subsequent reads from it will return its default value.
-  mutating func clearAttestation() {self._attestation = nil}
+    /// Returns true if `solvency` has been explicitly set.
+    var hasSolvency: Bool { return _solvency != nil }
+    /// Clears the value of `solvency`. Subsequent reads from it will return its default value.
+    mutating func clearSolvency() { _solvency = nil }
 
-  var unknownFields = SwiftProtobuf.UnknownStorage()
+    var attestation: Common_Attestation {
+        get { return _attestation ?? Common_Attestation() }
+        set { _attestation = newValue }
+    }
 
-  init() {}
+    /// Returns true if `attestation` has been explicitly set.
+    var hasAttestation: Bool { return _attestation != nil }
+    /// Clears the value of `attestation`. Subsequent reads from it will return its default value.
+    mutating func clearAttestation() { _attestation = nil }
 
-  fileprivate var _solvency: Common_Solvency? = nil
-  fileprivate var _attestation: Common_Attestation? = nil
+    var unknownFields = SwiftProtobuf.UnknownStorage()
+
+    init() {}
+
+    fileprivate var _solvency: Common_Solvency? = nil
+    fileprivate var _attestation: Common_Attestation? = nil
 }
 
 struct Common_QuorumSolvency: Sendable {
-  // SwiftProtobuf.Message conformance is added in an extension below. See the
-  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
-  // methods supported on all messages.
+    // SwiftProtobuf.Message conformance is added in an extension below. See the
+    // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+    // methods supported on all messages.
 
-  var solvency: Common_Solvency {
-    get {return _solvency ?? Common_Solvency()}
-    set {_solvency = newValue}
-  }
-  /// Returns true if `solvency` has been explicitly set.
-  var hasSolvency: Bool {return self._solvency != nil}
-  /// Clears the value of `solvency`. Subsequent reads from it will return its default value.
-  mutating func clearSolvency() {self._solvency = nil}
+    var solvency: Common_Solvency {
+        get { return _solvency ?? Common_Solvency() }
+        set { _solvency = newValue }
+    }
 
-  var attestations: [Common_Attestation] = []
+    /// Returns true if `solvency` has been explicitly set.
+    var hasSolvency: Bool { return _solvency != nil }
+    /// Clears the value of `solvency`. Subsequent reads from it will return its default value.
+    mutating func clearSolvency() { _solvency = nil }
 
-  var unknownFields = SwiftProtobuf.UnknownStorage()
+    var attestations: [Common_Attestation] = []
 
-  init() {}
+    var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  fileprivate var _solvency: Common_Solvency? = nil
+    init() {}
+
+    fileprivate var _solvency: Common_Solvency? = nil
 }
 
 struct Common_ErrataTx: Sendable {
-  // SwiftProtobuf.Message conformance is added in an extension below. See the
-  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
-  // methods supported on all messages.
+    // SwiftProtobuf.Message conformance is added in an extension below. See the
+    // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+    // methods supported on all messages.
 
-  var id: String = String()
+    var id: String = .init()
 
-  var chain: String = String()
+    var chain: String = .init()
 
-  var unknownFields = SwiftProtobuf.UnknownStorage()
+    var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  init() {}
+    init() {}
 }
 
 struct Common_AttestErrataTx: Sendable {
-  // SwiftProtobuf.Message conformance is added in an extension below. See the
-  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
-  // methods supported on all messages.
+    // SwiftProtobuf.Message conformance is added in an extension below. See the
+    // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+    // methods supported on all messages.
 
-  var errataTx: Common_ErrataTx {
-    get {return _errataTx ?? Common_ErrataTx()}
-    set {_errataTx = newValue}
-  }
-  /// Returns true if `errataTx` has been explicitly set.
-  var hasErrataTx: Bool {return self._errataTx != nil}
-  /// Clears the value of `errataTx`. Subsequent reads from it will return its default value.
-  mutating func clearErrataTx() {self._errataTx = nil}
+    var errataTx: Common_ErrataTx {
+        get { return _errataTx ?? Common_ErrataTx() }
+        set { _errataTx = newValue }
+    }
 
-  var attestation: Common_Attestation {
-    get {return _attestation ?? Common_Attestation()}
-    set {_attestation = newValue}
-  }
-  /// Returns true if `attestation` has been explicitly set.
-  var hasAttestation: Bool {return self._attestation != nil}
-  /// Clears the value of `attestation`. Subsequent reads from it will return its default value.
-  mutating func clearAttestation() {self._attestation = nil}
+    /// Returns true if `errataTx` has been explicitly set.
+    var hasErrataTx: Bool { return _errataTx != nil }
+    /// Clears the value of `errataTx`. Subsequent reads from it will return its default value.
+    mutating func clearErrataTx() { _errataTx = nil }
 
-  var unknownFields = SwiftProtobuf.UnknownStorage()
+    var attestation: Common_Attestation {
+        get { return _attestation ?? Common_Attestation() }
+        set { _attestation = newValue }
+    }
 
-  init() {}
+    /// Returns true if `attestation` has been explicitly set.
+    var hasAttestation: Bool { return _attestation != nil }
+    /// Clears the value of `attestation`. Subsequent reads from it will return its default value.
+    mutating func clearAttestation() { _attestation = nil }
 
-  fileprivate var _errataTx: Common_ErrataTx? = nil
-  fileprivate var _attestation: Common_Attestation? = nil
+    var unknownFields = SwiftProtobuf.UnknownStorage()
+
+    init() {}
+
+    fileprivate var _errataTx: Common_ErrataTx? = nil
+    fileprivate var _attestation: Common_Attestation? = nil
 }
 
 struct Common_QuorumErrataTx: Sendable {
-  // SwiftProtobuf.Message conformance is added in an extension below. See the
-  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
-  // methods supported on all messages.
+    // SwiftProtobuf.Message conformance is added in an extension below. See the
+    // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+    // methods supported on all messages.
 
-  var errataTx: Common_ErrataTx {
-    get {return _errataTx ?? Common_ErrataTx()}
-    set {_errataTx = newValue}
-  }
-  /// Returns true if `errataTx` has been explicitly set.
-  var hasErrataTx: Bool {return self._errataTx != nil}
-  /// Clears the value of `errataTx`. Subsequent reads from it will return its default value.
-  mutating func clearErrataTx() {self._errataTx = nil}
+    var errataTx: Common_ErrataTx {
+        get { return _errataTx ?? Common_ErrataTx() }
+        set { _errataTx = newValue }
+    }
 
-  var attestations: [Common_Attestation] = []
+    /// Returns true if `errataTx` has been explicitly set.
+    var hasErrataTx: Bool { return _errataTx != nil }
+    /// Clears the value of `errataTx`. Subsequent reads from it will return its default value.
+    mutating func clearErrataTx() { _errataTx = nil }
 
-  var unknownFields = SwiftProtobuf.UnknownStorage()
+    var attestations: [Common_Attestation] = []
 
-  init() {}
+    var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  fileprivate var _errataTx: Common_ErrataTx? = nil
+    init() {}
+
+    fileprivate var _errataTx: Common_ErrataTx? = nil
 }
 
 struct Common_PriceFeed: Sendable {
-  // SwiftProtobuf.Message conformance is added in an extension below. See the
-  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
-  // methods supported on all messages.
+    // SwiftProtobuf.Message conformance is added in an extension below. See the
+    // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+    // methods supported on all messages.
 
-  /// time of sending node in milliseconds, only used to check
-  /// which price feed is more recent
-  var version: Data = Data()
+    /// time of sending node in milliseconds, only used to check
+    /// which price feed is more recent
+    var version: Data = .init()
 
-  var time: Int64 = 0
+    var time: Int64 = 0
 
-  var rates: [Common_OraclePrice] = []
+    var rates: [Common_OraclePrice] = []
 
-  var unknownFields = SwiftProtobuf.UnknownStorage()
+    var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  init() {}
+    init() {}
 }
 
 struct Common_AttestPriceFeed: Sendable {
-  // SwiftProtobuf.Message conformance is added in an extension below. See the
-  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
-  // methods supported on all messages.
+    // SwiftProtobuf.Message conformance is added in an extension below. See the
+    // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+    // methods supported on all messages.
 
-  var priceFeed: Common_PriceFeed {
-    get {return _priceFeed ?? Common_PriceFeed()}
-    set {_priceFeed = newValue}
-  }
-  /// Returns true if `priceFeed` has been explicitly set.
-  var hasPriceFeed: Bool {return self._priceFeed != nil}
-  /// Clears the value of `priceFeed`. Subsequent reads from it will return its default value.
-  mutating func clearPriceFeed() {self._priceFeed = nil}
+    var priceFeed: Common_PriceFeed {
+        get { return _priceFeed ?? Common_PriceFeed() }
+        set { _priceFeed = newValue }
+    }
 
-  var attestation: Common_Attestation {
-    get {return _attestation ?? Common_Attestation()}
-    set {_attestation = newValue}
-  }
-  /// Returns true if `attestation` has been explicitly set.
-  var hasAttestation: Bool {return self._attestation != nil}
-  /// Clears the value of `attestation`. Subsequent reads from it will return its default value.
-  mutating func clearAttestation() {self._attestation = nil}
+    /// Returns true if `priceFeed` has been explicitly set.
+    var hasPriceFeed: Bool { return _priceFeed != nil }
+    /// Clears the value of `priceFeed`. Subsequent reads from it will return its default value.
+    mutating func clearPriceFeed() { _priceFeed = nil }
 
-  var unknownFields = SwiftProtobuf.UnknownStorage()
+    var attestation: Common_Attestation {
+        get { return _attestation ?? Common_Attestation() }
+        set { _attestation = newValue }
+    }
 
-  init() {}
+    /// Returns true if `attestation` has been explicitly set.
+    var hasAttestation: Bool { return _attestation != nil }
+    /// Clears the value of `attestation`. Subsequent reads from it will return its default value.
+    mutating func clearAttestation() { _attestation = nil }
 
-  fileprivate var _priceFeed: Common_PriceFeed? = nil
-  fileprivate var _attestation: Common_Attestation? = nil
+    var unknownFields = SwiftProtobuf.UnknownStorage()
+
+    init() {}
+
+    fileprivate var _priceFeed: Common_PriceFeed? = nil
+    fileprivate var _attestation: Common_Attestation? = nil
 }
 
 struct Common_QuorumPriceFeed: Sendable {
-  // SwiftProtobuf.Message conformance is added in an extension below. See the
-  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
-  // methods supported on all messages.
+    // SwiftProtobuf.Message conformance is added in an extension below. See the
+    // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+    // methods supported on all messages.
 
-  var priceFeed: Common_PriceFeed {
-    get {return _priceFeed ?? Common_PriceFeed()}
-    set {_priceFeed = newValue}
-  }
-  /// Returns true if `priceFeed` has been explicitly set.
-  var hasPriceFeed: Bool {return self._priceFeed != nil}
-  /// Clears the value of `priceFeed`. Subsequent reads from it will return its default value.
-  mutating func clearPriceFeed() {self._priceFeed = nil}
+    var priceFeed: Common_PriceFeed {
+        get { return _priceFeed ?? Common_PriceFeed() }
+        set { _priceFeed = newValue }
+    }
 
-  var attestations: [Common_Attestation] = []
+    /// Returns true if `priceFeed` has been explicitly set.
+    var hasPriceFeed: Bool { return _priceFeed != nil }
+    /// Clears the value of `priceFeed`. Subsequent reads from it will return its default value.
+    mutating func clearPriceFeed() { _priceFeed = nil }
 
-  var unknownFields = SwiftProtobuf.UnknownStorage()
+    var attestations: [Common_Attestation] = []
 
-  init() {}
+    var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  fileprivate var _priceFeed: Common_PriceFeed? = nil
+    init() {}
+
+    fileprivate var _priceFeed: Common_PriceFeed? = nil
 }
 
 struct Common_QuorumPriceFeedBatch: Sendable {
-  // SwiftProtobuf.Message conformance is added in an extension below. See the
-  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
-  // methods supported on all messages.
+    // SwiftProtobuf.Message conformance is added in an extension below. See the
+    // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+    // methods supported on all messages.
 
-  var quorumPriceFeeds: [Common_QuorumPriceFeed] = []
+    var quorumPriceFeeds: [Common_QuorumPriceFeed] = []
 
-  var unknownFields = SwiftProtobuf.UnknownStorage()
+    var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  init() {}
+    init() {}
 }
 
 struct Common_OraclePrice: Sendable {
-  // SwiftProtobuf.Message conformance is added in an extension below. See the
-  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
-  // methods supported on all messages.
+    // SwiftProtobuf.Message conformance is added in an extension below. See the
+    // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+    // methods supported on all messages.
 
-  var amount: UInt64 = 0
+    var amount: UInt64 = 0
 
-  var decimals: UInt32 = 0
+    var decimals: UInt32 = 0
 
-  var unknownFields = SwiftProtobuf.UnknownStorage()
+    var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  init() {}
+    init() {}
 }
 
 struct Common_AttestationBatch: Sendable {
-  // SwiftProtobuf.Message conformance is added in an extension below. See the
-  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
-  // methods supported on all messages.
+    // SwiftProtobuf.Message conformance is added in an extension below. See the
+    // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+    // methods supported on all messages.
 
-  var attestTxs: [Common_AttestTx] = []
+    var attestTxs: [Common_AttestTx] = []
 
-  var attestNetworkFees: [Common_AttestNetworkFee] = []
+    var attestNetworkFees: [Common_AttestNetworkFee] = []
 
-  var attestSolvencies: [Common_AttestSolvency] = []
+    var attestSolvencies: [Common_AttestSolvency] = []
 
-  var attestErrataTxs: [Common_AttestErrataTx] = []
+    var attestErrataTxs: [Common_AttestErrataTx] = []
 
-  var attestPriceFeeds: [Common_AttestPriceFeed] = []
+    var attestPriceFeeds: [Common_AttestPriceFeed] = []
 
-  var unknownFields = SwiftProtobuf.UnknownStorage()
+    var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  init() {}
+    init() {}
 }
 
 // MARK: - Code below here is support for the SwiftProtobuf runtime.
 
-fileprivate let _protobuf_package = "common"
+private let _protobuf_package = "common"
 
 extension Common_Status: SwiftProtobuf._ProtoNameProviding {
-  static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\0incomplete\0\u{1}done\0\u{1}reverted\0")
+    static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{2}\0incomplete\0\u{1}done\0\u{1}reverted\0")
 }
 
 extension Common_Asset: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  static let protoMessageName: String = _protobuf_package + ".Asset"
-  static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}chain\0\u{1}symbol\0\u{1}ticker\0\u{1}synth\0\u{1}trade\0\u{1}secured\0")
+    static let protoMessageName: String = _protobuf_package + ".Asset"
+    static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}chain\0\u{1}symbol\0\u{1}ticker\0\u{1}synth\0\u{1}trade\0\u{1}secured\0")
 
-  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
-    while let fieldNumber = try decoder.nextFieldNumber() {
-      // The use of inline closures is to circumvent an issue where the compiler
-      // allocates stack space for every case branch when no optimizations are
-      // enabled. https://github.com/apple/swift-protobuf/issues/1034
-      switch fieldNumber {
-      case 1: try { try decoder.decodeSingularStringField(value: &self.chain) }()
-      case 2: try { try decoder.decodeSingularStringField(value: &self.symbol) }()
-      case 3: try { try decoder.decodeSingularStringField(value: &self.ticker) }()
-      case 4: try { try decoder.decodeSingularBoolField(value: &self.synth) }()
-      case 5: try { try decoder.decodeSingularBoolField(value: &self.trade) }()
-      case 6: try { try decoder.decodeSingularBoolField(value: &self.secured) }()
-      default: break
-      }
+    mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+        while let fieldNumber = try decoder.nextFieldNumber() {
+            // The use of inline closures is to circumvent an issue where the compiler
+            // allocates stack space for every case branch when no optimizations are
+            // enabled. https://github.com/apple/swift-protobuf/issues/1034
+            switch fieldNumber {
+            case 1: try decoder.decodeSingularStringField(value: &chain)
+            case 2: try decoder.decodeSingularStringField(value: &symbol)
+            case 3: try decoder.decodeSingularStringField(value: &ticker)
+            case 4: try decoder.decodeSingularBoolField(value: &synth)
+            case 5: try decoder.decodeSingularBoolField(value: &trade)
+            case 6: try decoder.decodeSingularBoolField(value: &secured)
+            default: break
+            }
+        }
     }
-  }
 
-  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    if !self.chain.isEmpty {
-      try visitor.visitSingularStringField(value: self.chain, fieldNumber: 1)
+    func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+        if !chain.isEmpty {
+            try visitor.visitSingularStringField(value: chain, fieldNumber: 1)
+        }
+        if !symbol.isEmpty {
+            try visitor.visitSingularStringField(value: symbol, fieldNumber: 2)
+        }
+        if !ticker.isEmpty {
+            try visitor.visitSingularStringField(value: ticker, fieldNumber: 3)
+        }
+        if synth != false {
+            try visitor.visitSingularBoolField(value: synth, fieldNumber: 4)
+        }
+        if trade != false {
+            try visitor.visitSingularBoolField(value: trade, fieldNumber: 5)
+        }
+        if secured != false {
+            try visitor.visitSingularBoolField(value: secured, fieldNumber: 6)
+        }
+        try unknownFields.traverse(visitor: &visitor)
     }
-    if !self.symbol.isEmpty {
-      try visitor.visitSingularStringField(value: self.symbol, fieldNumber: 2)
-    }
-    if !self.ticker.isEmpty {
-      try visitor.visitSingularStringField(value: self.ticker, fieldNumber: 3)
-    }
-    if self.synth != false {
-      try visitor.visitSingularBoolField(value: self.synth, fieldNumber: 4)
-    }
-    if self.trade != false {
-      try visitor.visitSingularBoolField(value: self.trade, fieldNumber: 5)
-    }
-    if self.secured != false {
-      try visitor.visitSingularBoolField(value: self.secured, fieldNumber: 6)
-    }
-    try unknownFields.traverse(visitor: &visitor)
-  }
 
-  static func ==(lhs: Common_Asset, rhs: Common_Asset) -> Bool {
-    if lhs.chain != rhs.chain {return false}
-    if lhs.symbol != rhs.symbol {return false}
-    if lhs.ticker != rhs.ticker {return false}
-    if lhs.synth != rhs.synth {return false}
-    if lhs.trade != rhs.trade {return false}
-    if lhs.secured != rhs.secured {return false}
-    if lhs.unknownFields != rhs.unknownFields {return false}
-    return true
-  }
+    static func == (lhs: Common_Asset, rhs: Common_Asset) -> Bool {
+        if lhs.chain != rhs.chain { return false }
+        if lhs.symbol != rhs.symbol { return false }
+        if lhs.ticker != rhs.ticker { return false }
+        if lhs.synth != rhs.synth { return false }
+        if lhs.trade != rhs.trade { return false }
+        if lhs.secured != rhs.secured { return false }
+        if lhs.unknownFields != rhs.unknownFields { return false }
+        return true
+    }
 }
 
 extension Common_Coin: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  static let protoMessageName: String = _protobuf_package + ".Coin"
-  static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}asset\0\u{1}amount\0\u{1}decimals\0")
+    static let protoMessageName: String = _protobuf_package + ".Coin"
+    static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}asset\0\u{1}amount\0\u{1}decimals\0")
 
-  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
-    while let fieldNumber = try decoder.nextFieldNumber() {
-      // The use of inline closures is to circumvent an issue where the compiler
-      // allocates stack space for every case branch when no optimizations are
-      // enabled. https://github.com/apple/swift-protobuf/issues/1034
-      switch fieldNumber {
-      case 1: try { try decoder.decodeSingularMessageField(value: &self._asset) }()
-      case 2: try { try decoder.decodeSingularStringField(value: &self.amount) }()
-      case 3: try { try decoder.decodeSingularInt64Field(value: &self.decimals) }()
-      default: break
-      }
+    mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+        while let fieldNumber = try decoder.nextFieldNumber() {
+            // The use of inline closures is to circumvent an issue where the compiler
+            // allocates stack space for every case branch when no optimizations are
+            // enabled. https://github.com/apple/swift-protobuf/issues/1034
+            switch fieldNumber {
+            case 1: try decoder.decodeSingularMessageField(value: &_asset)
+            case 2: try decoder.decodeSingularStringField(value: &amount)
+            case 3: try decoder.decodeSingularInt64Field(value: &decimals)
+            default: break
+            }
+        }
     }
-  }
 
-  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    // The use of inline closures is to circumvent an issue where the compiler
-    // allocates stack space for every if/case branch local when no optimizations
-    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
-    // https://github.com/apple/swift-protobuf/issues/1182
-    try { if let v = self._asset {
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
-    } }()
-    if !self.amount.isEmpty {
-      try visitor.visitSingularStringField(value: self.amount, fieldNumber: 2)
+    func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+        // The use of inline closures is to circumvent an issue where the compiler
+        // allocates stack space for every if/case branch local when no optimizations
+        // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+        // https://github.com/apple/swift-protobuf/issues/1182
+        try { if let v = self._asset {
+            try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
+        } }()
+        if !amount.isEmpty {
+            try visitor.visitSingularStringField(value: amount, fieldNumber: 2)
+        }
+        if decimals != 0 {
+            try visitor.visitSingularInt64Field(value: decimals, fieldNumber: 3)
+        }
+        try unknownFields.traverse(visitor: &visitor)
     }
-    if self.decimals != 0 {
-      try visitor.visitSingularInt64Field(value: self.decimals, fieldNumber: 3)
-    }
-    try unknownFields.traverse(visitor: &visitor)
-  }
 
-  static func ==(lhs: Common_Coin, rhs: Common_Coin) -> Bool {
-    if lhs._asset != rhs._asset {return false}
-    if lhs.amount != rhs.amount {return false}
-    if lhs.decimals != rhs.decimals {return false}
-    if lhs.unknownFields != rhs.unknownFields {return false}
-    return true
-  }
+    static func == (lhs: Common_Coin, rhs: Common_Coin) -> Bool {
+        if lhs._asset != rhs._asset { return false }
+        if lhs.amount != rhs.amount { return false }
+        if lhs.decimals != rhs.decimals { return false }
+        if lhs.unknownFields != rhs.unknownFields { return false }
+        return true
+    }
 }
 
 extension Common_PubKeySet: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  static let protoMessageName: String = _protobuf_package + ".PubKeySet"
-  static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}secp256k1\0\u{1}ed25519\0")
+    static let protoMessageName: String = _protobuf_package + ".PubKeySet"
+    static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}secp256k1\0\u{1}ed25519\0")
 
-  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
-    while let fieldNumber = try decoder.nextFieldNumber() {
-      // The use of inline closures is to circumvent an issue where the compiler
-      // allocates stack space for every case branch when no optimizations are
-      // enabled. https://github.com/apple/swift-protobuf/issues/1034
-      switch fieldNumber {
-      case 1: try { try decoder.decodeSingularStringField(value: &self.secp256K1) }()
-      case 2: try { try decoder.decodeSingularStringField(value: &self.ed25519) }()
-      default: break
-      }
+    mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+        while let fieldNumber = try decoder.nextFieldNumber() {
+            // The use of inline closures is to circumvent an issue where the compiler
+            // allocates stack space for every case branch when no optimizations are
+            // enabled. https://github.com/apple/swift-protobuf/issues/1034
+            switch fieldNumber {
+            case 1: try decoder.decodeSingularStringField(value: &secp256K1)
+            case 2: try decoder.decodeSingularStringField(value: &ed25519)
+            default: break
+            }
+        }
     }
-  }
 
-  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    if !self.secp256K1.isEmpty {
-      try visitor.visitSingularStringField(value: self.secp256K1, fieldNumber: 1)
+    func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+        if !secp256K1.isEmpty {
+            try visitor.visitSingularStringField(value: secp256K1, fieldNumber: 1)
+        }
+        if !ed25519.isEmpty {
+            try visitor.visitSingularStringField(value: ed25519, fieldNumber: 2)
+        }
+        try unknownFields.traverse(visitor: &visitor)
     }
-    if !self.ed25519.isEmpty {
-      try visitor.visitSingularStringField(value: self.ed25519, fieldNumber: 2)
-    }
-    try unknownFields.traverse(visitor: &visitor)
-  }
 
-  static func ==(lhs: Common_PubKeySet, rhs: Common_PubKeySet) -> Bool {
-    if lhs.secp256K1 != rhs.secp256K1 {return false}
-    if lhs.ed25519 != rhs.ed25519 {return false}
-    if lhs.unknownFields != rhs.unknownFields {return false}
-    return true
-  }
+    static func == (lhs: Common_PubKeySet, rhs: Common_PubKeySet) -> Bool {
+        if lhs.secp256K1 != rhs.secp256K1 { return false }
+        if lhs.ed25519 != rhs.ed25519 { return false }
+        if lhs.unknownFields != rhs.unknownFields { return false }
+        return true
+    }
 }
 
 extension Common_Tx: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  static let protoMessageName: String = _protobuf_package + ".Tx"
-  static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}id\0\u{1}chain\0\u{3}from_address\0\u{3}to_address\0\u{1}coins\0\u{1}gas\0\u{1}memo\0")
+    static let protoMessageName: String = _protobuf_package + ".Tx"
+    static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}id\0\u{1}chain\0\u{3}from_address\0\u{3}to_address\0\u{1}coins\0\u{1}gas\0\u{1}memo\0")
 
-  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
-    while let fieldNumber = try decoder.nextFieldNumber() {
-      // The use of inline closures is to circumvent an issue where the compiler
-      // allocates stack space for every case branch when no optimizations are
-      // enabled. https://github.com/apple/swift-protobuf/issues/1034
-      switch fieldNumber {
-      case 1: try { try decoder.decodeSingularStringField(value: &self.id) }()
-      case 2: try { try decoder.decodeSingularStringField(value: &self.chain) }()
-      case 3: try { try decoder.decodeSingularStringField(value: &self.fromAddress) }()
-      case 4: try { try decoder.decodeSingularStringField(value: &self.toAddress) }()
-      case 5: try { try decoder.decodeRepeatedMessageField(value: &self.coins) }()
-      case 6: try { try decoder.decodeRepeatedMessageField(value: &self.gas) }()
-      case 7: try { try decoder.decodeSingularStringField(value: &self.memo) }()
-      default: break
-      }
+    mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+        while let fieldNumber = try decoder.nextFieldNumber() {
+            // The use of inline closures is to circumvent an issue where the compiler
+            // allocates stack space for every case branch when no optimizations are
+            // enabled. https://github.com/apple/swift-protobuf/issues/1034
+            switch fieldNumber {
+            case 1: try decoder.decodeSingularStringField(value: &id)
+            case 2: try decoder.decodeSingularStringField(value: &chain)
+            case 3: try decoder.decodeSingularStringField(value: &fromAddress)
+            case 4: try decoder.decodeSingularStringField(value: &toAddress)
+            case 5: try decoder.decodeRepeatedMessageField(value: &coins)
+            case 6: try decoder.decodeRepeatedMessageField(value: &gas)
+            case 7: try decoder.decodeSingularStringField(value: &memo)
+            default: break
+            }
+        }
     }
-  }
 
-  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    if !self.id.isEmpty {
-      try visitor.visitSingularStringField(value: self.id, fieldNumber: 1)
+    func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+        if !id.isEmpty {
+            try visitor.visitSingularStringField(value: id, fieldNumber: 1)
+        }
+        if !chain.isEmpty {
+            try visitor.visitSingularStringField(value: chain, fieldNumber: 2)
+        }
+        if !fromAddress.isEmpty {
+            try visitor.visitSingularStringField(value: fromAddress, fieldNumber: 3)
+        }
+        if !toAddress.isEmpty {
+            try visitor.visitSingularStringField(value: toAddress, fieldNumber: 4)
+        }
+        if !coins.isEmpty {
+            try visitor.visitRepeatedMessageField(value: coins, fieldNumber: 5)
+        }
+        if !gas.isEmpty {
+            try visitor.visitRepeatedMessageField(value: gas, fieldNumber: 6)
+        }
+        if !memo.isEmpty {
+            try visitor.visitSingularStringField(value: memo, fieldNumber: 7)
+        }
+        try unknownFields.traverse(visitor: &visitor)
     }
-    if !self.chain.isEmpty {
-      try visitor.visitSingularStringField(value: self.chain, fieldNumber: 2)
-    }
-    if !self.fromAddress.isEmpty {
-      try visitor.visitSingularStringField(value: self.fromAddress, fieldNumber: 3)
-    }
-    if !self.toAddress.isEmpty {
-      try visitor.visitSingularStringField(value: self.toAddress, fieldNumber: 4)
-    }
-    if !self.coins.isEmpty {
-      try visitor.visitRepeatedMessageField(value: self.coins, fieldNumber: 5)
-    }
-    if !self.gas.isEmpty {
-      try visitor.visitRepeatedMessageField(value: self.gas, fieldNumber: 6)
-    }
-    if !self.memo.isEmpty {
-      try visitor.visitSingularStringField(value: self.memo, fieldNumber: 7)
-    }
-    try unknownFields.traverse(visitor: &visitor)
-  }
 
-  static func ==(lhs: Common_Tx, rhs: Common_Tx) -> Bool {
-    if lhs.id != rhs.id {return false}
-    if lhs.chain != rhs.chain {return false}
-    if lhs.fromAddress != rhs.fromAddress {return false}
-    if lhs.toAddress != rhs.toAddress {return false}
-    if lhs.coins != rhs.coins {return false}
-    if lhs.gas != rhs.gas {return false}
-    if lhs.memo != rhs.memo {return false}
-    if lhs.unknownFields != rhs.unknownFields {return false}
-    return true
-  }
+    static func == (lhs: Common_Tx, rhs: Common_Tx) -> Bool {
+        if lhs.id != rhs.id { return false }
+        if lhs.chain != rhs.chain { return false }
+        if lhs.fromAddress != rhs.fromAddress { return false }
+        if lhs.toAddress != rhs.toAddress { return false }
+        if lhs.coins != rhs.coins { return false }
+        if lhs.gas != rhs.gas { return false }
+        if lhs.memo != rhs.memo { return false }
+        if lhs.unknownFields != rhs.unknownFields { return false }
+        return true
+    }
 }
 
 extension Common_Fee: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  static let protoMessageName: String = _protobuf_package + ".Fee"
-  static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}coins\0\u{3}pool_deduct\0")
+    static let protoMessageName: String = _protobuf_package + ".Fee"
+    static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}coins\0\u{3}pool_deduct\0")
 
-  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
-    while let fieldNumber = try decoder.nextFieldNumber() {
-      // The use of inline closures is to circumvent an issue where the compiler
-      // allocates stack space for every case branch when no optimizations are
-      // enabled. https://github.com/apple/swift-protobuf/issues/1034
-      switch fieldNumber {
-      case 1: try { try decoder.decodeRepeatedMessageField(value: &self.coins) }()
-      case 2: try { try decoder.decodeSingularStringField(value: &self.poolDeduct) }()
-      default: break
-      }
+    mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+        while let fieldNumber = try decoder.nextFieldNumber() {
+            // The use of inline closures is to circumvent an issue where the compiler
+            // allocates stack space for every case branch when no optimizations are
+            // enabled. https://github.com/apple/swift-protobuf/issues/1034
+            switch fieldNumber {
+            case 1: try decoder.decodeRepeatedMessageField(value: &coins)
+            case 2: try decoder.decodeSingularStringField(value: &poolDeduct)
+            default: break
+            }
+        }
     }
-  }
 
-  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    if !self.coins.isEmpty {
-      try visitor.visitRepeatedMessageField(value: self.coins, fieldNumber: 1)
+    func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+        if !coins.isEmpty {
+            try visitor.visitRepeatedMessageField(value: coins, fieldNumber: 1)
+        }
+        if !poolDeduct.isEmpty {
+            try visitor.visitSingularStringField(value: poolDeduct, fieldNumber: 2)
+        }
+        try unknownFields.traverse(visitor: &visitor)
     }
-    if !self.poolDeduct.isEmpty {
-      try visitor.visitSingularStringField(value: self.poolDeduct, fieldNumber: 2)
-    }
-    try unknownFields.traverse(visitor: &visitor)
-  }
 
-  static func ==(lhs: Common_Fee, rhs: Common_Fee) -> Bool {
-    if lhs.coins != rhs.coins {return false}
-    if lhs.poolDeduct != rhs.poolDeduct {return false}
-    if lhs.unknownFields != rhs.unknownFields {return false}
-    return true
-  }
+    static func == (lhs: Common_Fee, rhs: Common_Fee) -> Bool {
+        if lhs.coins != rhs.coins { return false }
+        if lhs.poolDeduct != rhs.poolDeduct { return false }
+        if lhs.unknownFields != rhs.unknownFields { return false }
+        return true
+    }
 }
 
 extension Common_ProtoUint: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  static let protoMessageName: String = _protobuf_package + ".ProtoUint"
-  static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}value\0")
+    static let protoMessageName: String = _protobuf_package + ".ProtoUint"
+    static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}value\0")
 
-  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
-    while let fieldNumber = try decoder.nextFieldNumber() {
-      // The use of inline closures is to circumvent an issue where the compiler
-      // allocates stack space for every case branch when no optimizations are
-      // enabled. https://github.com/apple/swift-protobuf/issues/1034
-      switch fieldNumber {
-      case 1: try { try decoder.decodeSingularStringField(value: &self.value) }()
-      default: break
-      }
+    mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+        while let fieldNumber = try decoder.nextFieldNumber() {
+            // The use of inline closures is to circumvent an issue where the compiler
+            // allocates stack space for every case branch when no optimizations are
+            // enabled. https://github.com/apple/swift-protobuf/issues/1034
+            switch fieldNumber {
+            case 1: try decoder.decodeSingularStringField(value: &value)
+            default: break
+            }
+        }
     }
-  }
 
-  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    if !self.value.isEmpty {
-      try visitor.visitSingularStringField(value: self.value, fieldNumber: 1)
+    func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+        if !value.isEmpty {
+            try visitor.visitSingularStringField(value: value, fieldNumber: 1)
+        }
+        try unknownFields.traverse(visitor: &visitor)
     }
-    try unknownFields.traverse(visitor: &visitor)
-  }
 
-  static func ==(lhs: Common_ProtoUint, rhs: Common_ProtoUint) -> Bool {
-    if lhs.value != rhs.value {return false}
-    if lhs.unknownFields != rhs.unknownFields {return false}
-    return true
-  }
+    static func == (lhs: Common_ProtoUint, rhs: Common_ProtoUint) -> Bool {
+        if lhs.value != rhs.value { return false }
+        if lhs.unknownFields != rhs.unknownFields { return false }
+        return true
+    }
 }
 
 extension Common_OutputRef: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  static let protoMessageName: String = _protobuf_package + ".OutputRef"
-  static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}tx_hash\0\u{3}output_index\0\u{3}key_image\0\u{3}spend_tx_hash\0")
+    static let protoMessageName: String = _protobuf_package + ".OutputRef"
+    static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}tx_hash\0\u{3}output_index\0\u{3}key_image\0\u{3}spend_tx_hash\0")
 
-  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
-    while let fieldNumber = try decoder.nextFieldNumber() {
-      // The use of inline closures is to circumvent an issue where the compiler
-      // allocates stack space for every case branch when no optimizations are
-      // enabled. https://github.com/apple/swift-protobuf/issues/1034
-      switch fieldNumber {
-      case 1: try { try decoder.decodeSingularStringField(value: &self.txHash) }()
-      case 2: try { try decoder.decodeSingularUInt32Field(value: &self.outputIndex) }()
-      case 3: try { try decoder.decodeSingularStringField(value: &self.keyImage) }()
-      case 4: try { try decoder.decodeSingularStringField(value: &self.spendTxHash) }()
-      default: break
-      }
+    mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+        while let fieldNumber = try decoder.nextFieldNumber() {
+            // The use of inline closures is to circumvent an issue where the compiler
+            // allocates stack space for every case branch when no optimizations are
+            // enabled. https://github.com/apple/swift-protobuf/issues/1034
+            switch fieldNumber {
+            case 1: try decoder.decodeSingularStringField(value: &txHash)
+            case 2: try decoder.decodeSingularUInt32Field(value: &outputIndex)
+            case 3: try decoder.decodeSingularStringField(value: &keyImage)
+            case 4: try decoder.decodeSingularStringField(value: &spendTxHash)
+            default: break
+            }
+        }
     }
-  }
 
-  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    if !self.txHash.isEmpty {
-      try visitor.visitSingularStringField(value: self.txHash, fieldNumber: 1)
+    func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+        if !txHash.isEmpty {
+            try visitor.visitSingularStringField(value: txHash, fieldNumber: 1)
+        }
+        if outputIndex != 0 {
+            try visitor.visitSingularUInt32Field(value: outputIndex, fieldNumber: 2)
+        }
+        if !keyImage.isEmpty {
+            try visitor.visitSingularStringField(value: keyImage, fieldNumber: 3)
+        }
+        if !spendTxHash.isEmpty {
+            try visitor.visitSingularStringField(value: spendTxHash, fieldNumber: 4)
+        }
+        try unknownFields.traverse(visitor: &visitor)
     }
-    if self.outputIndex != 0 {
-      try visitor.visitSingularUInt32Field(value: self.outputIndex, fieldNumber: 2)
-    }
-    if !self.keyImage.isEmpty {
-      try visitor.visitSingularStringField(value: self.keyImage, fieldNumber: 3)
-    }
-    if !self.spendTxHash.isEmpty {
-      try visitor.visitSingularStringField(value: self.spendTxHash, fieldNumber: 4)
-    }
-    try unknownFields.traverse(visitor: &visitor)
-  }
 
-  static func ==(lhs: Common_OutputRef, rhs: Common_OutputRef) -> Bool {
-    if lhs.txHash != rhs.txHash {return false}
-    if lhs.outputIndex != rhs.outputIndex {return false}
-    if lhs.keyImage != rhs.keyImage {return false}
-    if lhs.spendTxHash != rhs.spendTxHash {return false}
-    if lhs.unknownFields != rhs.unknownFields {return false}
-    return true
-  }
+    static func == (lhs: Common_OutputRef, rhs: Common_OutputRef) -> Bool {
+        if lhs.txHash != rhs.txHash { return false }
+        if lhs.outputIndex != rhs.outputIndex { return false }
+        if lhs.keyImage != rhs.keyImage { return false }
+        if lhs.spendTxHash != rhs.spendTxHash { return false }
+        if lhs.unknownFields != rhs.unknownFields { return false }
+        return true
+    }
 }
 
 extension Common_ObservedTx: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  static let protoMessageName: String = _protobuf_package + ".ObservedTx"
-  static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}tx\0\u{1}status\0\u{3}out_hashes\0\u{3}block_height\0\u{1}signers\0\u{3}observed_pub_key\0\u{3}keysign_ms\0\u{3}finalise_height\0\u{1}aggregator\0\u{3}aggregator_target\0\u{3}aggregator_target_limit\0\u{3}spent_output_refs\0")
+    static let protoMessageName: String = _protobuf_package + ".ObservedTx"
+    static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}tx\0\u{1}status\0\u{3}out_hashes\0\u{3}block_height\0\u{1}signers\0\u{3}observed_pub_key\0\u{3}keysign_ms\0\u{3}finalise_height\0\u{1}aggregator\0\u{3}aggregator_target\0\u{3}aggregator_target_limit\0\u{3}spent_output_refs\0")
 
-  fileprivate class _StorageClass {
-    var _tx: Common_Tx? = nil
-    var _status: Common_Status = .incomplete
-    var _outHashes: [String] = []
-    var _blockHeight: Int64 = 0
-    var _signers: [String] = []
-    var _observedPubKey: String = String()
-    var _keysignMs: Int64 = 0
-    var _finaliseHeight: Int64 = 0
-    var _aggregator: String = String()
-    var _aggregatorTarget: String = String()
-    var _aggregatorTargetLimit: String = String()
-    var _spentOutputRefs: [Common_OutputRef] = []
+    fileprivate class _StorageClass {
+        var _tx: Common_Tx?
+        var _status: Common_Status = .incomplete
+        var _outHashes: [String] = []
+        var _blockHeight: Int64 = 0
+        var _signers: [String] = []
+        var _observedPubKey: String = .init()
+        var _keysignMs: Int64 = 0
+        var _finaliseHeight: Int64 = 0
+        var _aggregator: String = .init()
+        var _aggregatorTarget: String = .init()
+        var _aggregatorTargetLimit: String = .init()
+        var _spentOutputRefs: [Common_OutputRef] = []
 
-      // This property is used as the initial default value for new instances of the type.
-      // The type itself is protecting the reference to its storage via CoW semantics.
-      // This will force a copy to be made of this reference when the first mutation occurs;
-      // hence, it is safe to mark this as `nonisolated(unsafe)`.
-      static nonisolated(unsafe) let defaultInstance = _StorageClass()
+        // This property is used as the initial default value for new instances of the type.
+        // The type itself is protecting the reference to its storage via CoW semantics.
+        // This will force a copy to be made of this reference when the first mutation occurs;
+        // hence, it is safe to mark this as `nonisolated(unsafe)`.
+        nonisolated(unsafe) static let defaultInstance = _StorageClass()
 
-    private init() {}
+        private init() {}
 
-    init(copying source: _StorageClass) {
-      _tx = source._tx
-      _status = source._status
-      _outHashes = source._outHashes
-      _blockHeight = source._blockHeight
-      _signers = source._signers
-      _observedPubKey = source._observedPubKey
-      _keysignMs = source._keysignMs
-      _finaliseHeight = source._finaliseHeight
-      _aggregator = source._aggregator
-      _aggregatorTarget = source._aggregatorTarget
-      _aggregatorTargetLimit = source._aggregatorTargetLimit
-      _spentOutputRefs = source._spentOutputRefs
-    }
-  }
-
-  fileprivate mutating func _uniqueStorage() -> _StorageClass {
-    if !isKnownUniquelyReferenced(&_storage) {
-      _storage = _StorageClass(copying: _storage)
-    }
-    return _storage
-  }
-
-  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
-    _ = _uniqueStorage()
-    try withExtendedLifetime(_storage) { (_storage: _StorageClass) in
-      while let fieldNumber = try decoder.nextFieldNumber() {
-        // The use of inline closures is to circumvent an issue where the compiler
-        // allocates stack space for every case branch when no optimizations are
-        // enabled. https://github.com/apple/swift-protobuf/issues/1034
-        switch fieldNumber {
-        case 1: try { try decoder.decodeSingularMessageField(value: &_storage._tx) }()
-        case 2: try { try decoder.decodeSingularEnumField(value: &_storage._status) }()
-        case 3: try { try decoder.decodeRepeatedStringField(value: &_storage._outHashes) }()
-        case 4: try { try decoder.decodeSingularInt64Field(value: &_storage._blockHeight) }()
-        case 5: try { try decoder.decodeRepeatedStringField(value: &_storage._signers) }()
-        case 6: try { try decoder.decodeSingularStringField(value: &_storage._observedPubKey) }()
-        case 7: try { try decoder.decodeSingularInt64Field(value: &_storage._keysignMs) }()
-        case 8: try { try decoder.decodeSingularInt64Field(value: &_storage._finaliseHeight) }()
-        case 9: try { try decoder.decodeSingularStringField(value: &_storage._aggregator) }()
-        case 10: try { try decoder.decodeSingularStringField(value: &_storage._aggregatorTarget) }()
-        case 11: try { try decoder.decodeSingularStringField(value: &_storage._aggregatorTargetLimit) }()
-        case 12: try { try decoder.decodeRepeatedMessageField(value: &_storage._spentOutputRefs) }()
-        default: break
+        init(copying source: _StorageClass) {
+            _tx = source._tx
+            _status = source._status
+            _outHashes = source._outHashes
+            _blockHeight = source._blockHeight
+            _signers = source._signers
+            _observedPubKey = source._observedPubKey
+            _keysignMs = source._keysignMs
+            _finaliseHeight = source._finaliseHeight
+            _aggregator = source._aggregator
+            _aggregatorTarget = source._aggregatorTarget
+            _aggregatorTargetLimit = source._aggregatorTargetLimit
+            _spentOutputRefs = source._spentOutputRefs
         }
-      }
     }
-  }
 
-  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    try withExtendedLifetime(_storage) { (_storage: _StorageClass) in
-      // The use of inline closures is to circumvent an issue where the compiler
-      // allocates stack space for every if/case branch local when no optimizations
-      // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
-      // https://github.com/apple/swift-protobuf/issues/1182
-      try { if let v = _storage._tx {
-        try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
-      } }()
-      if _storage._status != .incomplete {
-        try visitor.visitSingularEnumField(value: _storage._status, fieldNumber: 2)
-      }
-      if !_storage._outHashes.isEmpty {
-        try visitor.visitRepeatedStringField(value: _storage._outHashes, fieldNumber: 3)
-      }
-      if _storage._blockHeight != 0 {
-        try visitor.visitSingularInt64Field(value: _storage._blockHeight, fieldNumber: 4)
-      }
-      if !_storage._signers.isEmpty {
-        try visitor.visitRepeatedStringField(value: _storage._signers, fieldNumber: 5)
-      }
-      if !_storage._observedPubKey.isEmpty {
-        try visitor.visitSingularStringField(value: _storage._observedPubKey, fieldNumber: 6)
-      }
-      if _storage._keysignMs != 0 {
-        try visitor.visitSingularInt64Field(value: _storage._keysignMs, fieldNumber: 7)
-      }
-      if _storage._finaliseHeight != 0 {
-        try visitor.visitSingularInt64Field(value: _storage._finaliseHeight, fieldNumber: 8)
-      }
-      if !_storage._aggregator.isEmpty {
-        try visitor.visitSingularStringField(value: _storage._aggregator, fieldNumber: 9)
-      }
-      if !_storage._aggregatorTarget.isEmpty {
-        try visitor.visitSingularStringField(value: _storage._aggregatorTarget, fieldNumber: 10)
-      }
-      if !_storage._aggregatorTargetLimit.isEmpty {
-        try visitor.visitSingularStringField(value: _storage._aggregatorTargetLimit, fieldNumber: 11)
-      }
-      if !_storage._spentOutputRefs.isEmpty {
-        try visitor.visitRepeatedMessageField(value: _storage._spentOutputRefs, fieldNumber: 12)
-      }
+    fileprivate mutating func _uniqueStorage() -> _StorageClass {
+        if !isKnownUniquelyReferenced(&_storage) {
+            _storage = _StorageClass(copying: _storage)
+        }
+        return _storage
     }
-    try unknownFields.traverse(visitor: &visitor)
-  }
 
-  static func ==(lhs: Common_ObservedTx, rhs: Common_ObservedTx) -> Bool {
-    if lhs._storage !== rhs._storage {
-      let storagesAreEqual: Bool = withExtendedLifetime((lhs._storage, rhs._storage)) { (_args: (_StorageClass, _StorageClass)) in
-        let _storage = _args.0
-        let rhs_storage = _args.1
-        if _storage._tx != rhs_storage._tx {return false}
-        if _storage._status != rhs_storage._status {return false}
-        if _storage._outHashes != rhs_storage._outHashes {return false}
-        if _storage._blockHeight != rhs_storage._blockHeight {return false}
-        if _storage._signers != rhs_storage._signers {return false}
-        if _storage._observedPubKey != rhs_storage._observedPubKey {return false}
-        if _storage._keysignMs != rhs_storage._keysignMs {return false}
-        if _storage._finaliseHeight != rhs_storage._finaliseHeight {return false}
-        if _storage._aggregator != rhs_storage._aggregator {return false}
-        if _storage._aggregatorTarget != rhs_storage._aggregatorTarget {return false}
-        if _storage._aggregatorTargetLimit != rhs_storage._aggregatorTargetLimit {return false}
-        if _storage._spentOutputRefs != rhs_storage._spentOutputRefs {return false}
+    mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+        _ = _uniqueStorage()
+        try withExtendedLifetime(_storage) { (_storage: _StorageClass) in
+            while let fieldNumber = try decoder.nextFieldNumber() {
+                // The use of inline closures is to circumvent an issue where the compiler
+                // allocates stack space for every case branch when no optimizations are
+                // enabled. https://github.com/apple/swift-protobuf/issues/1034
+                switch fieldNumber {
+                case 1: try decoder.decodeSingularMessageField(value: &_storage._tx)
+                case 2: try decoder.decodeSingularEnumField(value: &_storage._status)
+                case 3: try decoder.decodeRepeatedStringField(value: &_storage._outHashes)
+                case 4: try decoder.decodeSingularInt64Field(value: &_storage._blockHeight)
+                case 5: try decoder.decodeRepeatedStringField(value: &_storage._signers)
+                case 6: try decoder.decodeSingularStringField(value: &_storage._observedPubKey)
+                case 7: try decoder.decodeSingularInt64Field(value: &_storage._keysignMs)
+                case 8: try decoder.decodeSingularInt64Field(value: &_storage._finaliseHeight)
+                case 9: try decoder.decodeSingularStringField(value: &_storage._aggregator)
+                case 10: try decoder.decodeSingularStringField(value: &_storage._aggregatorTarget)
+                case 11: try decoder.decodeSingularStringField(value: &_storage._aggregatorTargetLimit)
+                case 12: try decoder.decodeRepeatedMessageField(value: &_storage._spentOutputRefs)
+                default: break
+                }
+            }
+        }
+    }
+
+    func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+        try withExtendedLifetime(_storage) { (_storage: _StorageClass) in
+            // The use of inline closures is to circumvent an issue where the compiler
+            // allocates stack space for every if/case branch local when no optimizations
+            // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+            // https://github.com/apple/swift-protobuf/issues/1182
+            try { if let v = _storage._tx {
+                try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
+            } }()
+            if _storage._status != .incomplete {
+                try visitor.visitSingularEnumField(value: _storage._status, fieldNumber: 2)
+            }
+            if !_storage._outHashes.isEmpty {
+                try visitor.visitRepeatedStringField(value: _storage._outHashes, fieldNumber: 3)
+            }
+            if _storage._blockHeight != 0 {
+                try visitor.visitSingularInt64Field(value: _storage._blockHeight, fieldNumber: 4)
+            }
+            if !_storage._signers.isEmpty {
+                try visitor.visitRepeatedStringField(value: _storage._signers, fieldNumber: 5)
+            }
+            if !_storage._observedPubKey.isEmpty {
+                try visitor.visitSingularStringField(value: _storage._observedPubKey, fieldNumber: 6)
+            }
+            if _storage._keysignMs != 0 {
+                try visitor.visitSingularInt64Field(value: _storage._keysignMs, fieldNumber: 7)
+            }
+            if _storage._finaliseHeight != 0 {
+                try visitor.visitSingularInt64Field(value: _storage._finaliseHeight, fieldNumber: 8)
+            }
+            if !_storage._aggregator.isEmpty {
+                try visitor.visitSingularStringField(value: _storage._aggregator, fieldNumber: 9)
+            }
+            if !_storage._aggregatorTarget.isEmpty {
+                try visitor.visitSingularStringField(value: _storage._aggregatorTarget, fieldNumber: 10)
+            }
+            if !_storage._aggregatorTargetLimit.isEmpty {
+                try visitor.visitSingularStringField(value: _storage._aggregatorTargetLimit, fieldNumber: 11)
+            }
+            if !_storage._spentOutputRefs.isEmpty {
+                try visitor.visitRepeatedMessageField(value: _storage._spentOutputRefs, fieldNumber: 12)
+            }
+        }
+        try unknownFields.traverse(visitor: &visitor)
+    }
+
+    static func == (lhs: Common_ObservedTx, rhs: Common_ObservedTx) -> Bool {
+        if lhs._storage !== rhs._storage {
+            let storagesAreEqual: Bool = withExtendedLifetime((lhs._storage, rhs._storage)) { (_args: (_StorageClass, _StorageClass)) in
+                let _storage = _args.0
+                let rhs_storage = _args.1
+                if _storage._tx != rhs_storage._tx { return false }
+                if _storage._status != rhs_storage._status { return false }
+                if _storage._outHashes != rhs_storage._outHashes { return false }
+                if _storage._blockHeight != rhs_storage._blockHeight { return false }
+                if _storage._signers != rhs_storage._signers { return false }
+                if _storage._observedPubKey != rhs_storage._observedPubKey { return false }
+                if _storage._keysignMs != rhs_storage._keysignMs { return false }
+                if _storage._finaliseHeight != rhs_storage._finaliseHeight { return false }
+                if _storage._aggregator != rhs_storage._aggregator { return false }
+                if _storage._aggregatorTarget != rhs_storage._aggregatorTarget { return false }
+                if _storage._aggregatorTargetLimit != rhs_storage._aggregatorTargetLimit { return false }
+                if _storage._spentOutputRefs != rhs_storage._spentOutputRefs { return false }
+                return true
+            }
+            if !storagesAreEqual { return false }
+        }
+        if lhs.unknownFields != rhs.unknownFields { return false }
         return true
-      }
-      if !storagesAreEqual {return false}
     }
-    if lhs.unknownFields != rhs.unknownFields {return false}
-    return true
-  }
 }
 
 extension Common_Attestation: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  static let protoMessageName: String = _protobuf_package + ".Attestation"
-  static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}PubKey\0\u{1}Signature\0")
+    static let protoMessageName: String = _protobuf_package + ".Attestation"
+    static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}PubKey\0\u{1}Signature\0")
 
-  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
-    while let fieldNumber = try decoder.nextFieldNumber() {
-      // The use of inline closures is to circumvent an issue where the compiler
-      // allocates stack space for every case branch when no optimizations are
-      // enabled. https://github.com/apple/swift-protobuf/issues/1034
-      switch fieldNumber {
-      case 1: try { try decoder.decodeSingularBytesField(value: &self.pubKey) }()
-      case 2: try { try decoder.decodeSingularBytesField(value: &self.signature) }()
-      default: break
-      }
+    mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+        while let fieldNumber = try decoder.nextFieldNumber() {
+            // The use of inline closures is to circumvent an issue where the compiler
+            // allocates stack space for every case branch when no optimizations are
+            // enabled. https://github.com/apple/swift-protobuf/issues/1034
+            switch fieldNumber {
+            case 1: try decoder.decodeSingularBytesField(value: &pubKey)
+            case 2: try decoder.decodeSingularBytesField(value: &signature)
+            default: break
+            }
+        }
     }
-  }
 
-  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    if !self.pubKey.isEmpty {
-      try visitor.visitSingularBytesField(value: self.pubKey, fieldNumber: 1)
+    func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+        if !pubKey.isEmpty {
+            try visitor.visitSingularBytesField(value: pubKey, fieldNumber: 1)
+        }
+        if !signature.isEmpty {
+            try visitor.visitSingularBytesField(value: signature, fieldNumber: 2)
+        }
+        try unknownFields.traverse(visitor: &visitor)
     }
-    if !self.signature.isEmpty {
-      try visitor.visitSingularBytesField(value: self.signature, fieldNumber: 2)
-    }
-    try unknownFields.traverse(visitor: &visitor)
-  }
 
-  static func ==(lhs: Common_Attestation, rhs: Common_Attestation) -> Bool {
-    if lhs.pubKey != rhs.pubKey {return false}
-    if lhs.signature != rhs.signature {return false}
-    if lhs.unknownFields != rhs.unknownFields {return false}
-    return true
-  }
+    static func == (lhs: Common_Attestation, rhs: Common_Attestation) -> Bool {
+        if lhs.pubKey != rhs.pubKey { return false }
+        if lhs.signature != rhs.signature { return false }
+        if lhs.unknownFields != rhs.unknownFields { return false }
+        return true
+    }
 }
 
 extension Common_AttestTx: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  static let protoMessageName: String = _protobuf_package + ".AttestTx"
-  static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}obsTx\0\u{1}attestation\0\u{1}inbound\0\u{3}allow_future_observation\0")
+    static let protoMessageName: String = _protobuf_package + ".AttestTx"
+    static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}obsTx\0\u{1}attestation\0\u{1}inbound\0\u{3}allow_future_observation\0")
 
-  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
-    while let fieldNumber = try decoder.nextFieldNumber() {
-      // The use of inline closures is to circumvent an issue where the compiler
-      // allocates stack space for every case branch when no optimizations are
-      // enabled. https://github.com/apple/swift-protobuf/issues/1034
-      switch fieldNumber {
-      case 1: try { try decoder.decodeSingularMessageField(value: &self._obsTx) }()
-      case 2: try { try decoder.decodeSingularMessageField(value: &self._attestation) }()
-      case 3: try { try decoder.decodeSingularBoolField(value: &self.inbound) }()
-      case 4: try { try decoder.decodeSingularBoolField(value: &self.allowFutureObservation) }()
-      default: break
-      }
+    mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+        while let fieldNumber = try decoder.nextFieldNumber() {
+            // The use of inline closures is to circumvent an issue where the compiler
+            // allocates stack space for every case branch when no optimizations are
+            // enabled. https://github.com/apple/swift-protobuf/issues/1034
+            switch fieldNumber {
+            case 1: try decoder.decodeSingularMessageField(value: &_obsTx)
+            case 2: try decoder.decodeSingularMessageField(value: &_attestation)
+            case 3: try decoder.decodeSingularBoolField(value: &inbound)
+            case 4: try decoder.decodeSingularBoolField(value: &allowFutureObservation)
+            default: break
+            }
+        }
     }
-  }
 
-  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    // The use of inline closures is to circumvent an issue where the compiler
-    // allocates stack space for every if/case branch local when no optimizations
-    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
-    // https://github.com/apple/swift-protobuf/issues/1182
-    try { if let v = self._obsTx {
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
-    } }()
-    try { if let v = self._attestation {
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 2)
-    } }()
-    if self.inbound != false {
-      try visitor.visitSingularBoolField(value: self.inbound, fieldNumber: 3)
+    func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+        // The use of inline closures is to circumvent an issue where the compiler
+        // allocates stack space for every if/case branch local when no optimizations
+        // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+        // https://github.com/apple/swift-protobuf/issues/1182
+        try { if let v = self._obsTx {
+            try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
+        } }()
+        try { if let v = self._attestation {
+            try visitor.visitSingularMessageField(value: v, fieldNumber: 2)
+        } }()
+        if inbound != false {
+            try visitor.visitSingularBoolField(value: inbound, fieldNumber: 3)
+        }
+        if allowFutureObservation != false {
+            try visitor.visitSingularBoolField(value: allowFutureObservation, fieldNumber: 4)
+        }
+        try unknownFields.traverse(visitor: &visitor)
     }
-    if self.allowFutureObservation != false {
-      try visitor.visitSingularBoolField(value: self.allowFutureObservation, fieldNumber: 4)
-    }
-    try unknownFields.traverse(visitor: &visitor)
-  }
 
-  static func ==(lhs: Common_AttestTx, rhs: Common_AttestTx) -> Bool {
-    if lhs._obsTx != rhs._obsTx {return false}
-    if lhs._attestation != rhs._attestation {return false}
-    if lhs.inbound != rhs.inbound {return false}
-    if lhs.allowFutureObservation != rhs.allowFutureObservation {return false}
-    if lhs.unknownFields != rhs.unknownFields {return false}
-    return true
-  }
+    static func == (lhs: Common_AttestTx, rhs: Common_AttestTx) -> Bool {
+        if lhs._obsTx != rhs._obsTx { return false }
+        if lhs._attestation != rhs._attestation { return false }
+        if lhs.inbound != rhs.inbound { return false }
+        if lhs.allowFutureObservation != rhs.allowFutureObservation { return false }
+        if lhs.unknownFields != rhs.unknownFields { return false }
+        return true
+    }
 }
 
 extension Common_QuorumTx: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  static let protoMessageName: String = _protobuf_package + ".QuorumTx"
-  static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}obsTx\0\u{1}attestations\0\u{1}inbound\0\u{3}allow_future_observation\0")
+    static let protoMessageName: String = _protobuf_package + ".QuorumTx"
+    static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}obsTx\0\u{1}attestations\0\u{1}inbound\0\u{3}allow_future_observation\0")
 
-  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
-    while let fieldNumber = try decoder.nextFieldNumber() {
-      // The use of inline closures is to circumvent an issue where the compiler
-      // allocates stack space for every case branch when no optimizations are
-      // enabled. https://github.com/apple/swift-protobuf/issues/1034
-      switch fieldNumber {
-      case 1: try { try decoder.decodeSingularMessageField(value: &self._obsTx) }()
-      case 2: try { try decoder.decodeRepeatedMessageField(value: &self.attestations) }()
-      case 3: try { try decoder.decodeSingularBoolField(value: &self.inbound) }()
-      case 4: try { try decoder.decodeSingularBoolField(value: &self.allowFutureObservation) }()
-      default: break
-      }
+    mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+        while let fieldNumber = try decoder.nextFieldNumber() {
+            // The use of inline closures is to circumvent an issue where the compiler
+            // allocates stack space for every case branch when no optimizations are
+            // enabled. https://github.com/apple/swift-protobuf/issues/1034
+            switch fieldNumber {
+            case 1: try decoder.decodeSingularMessageField(value: &_obsTx)
+            case 2: try decoder.decodeRepeatedMessageField(value: &attestations)
+            case 3: try decoder.decodeSingularBoolField(value: &inbound)
+            case 4: try decoder.decodeSingularBoolField(value: &allowFutureObservation)
+            default: break
+            }
+        }
     }
-  }
 
-  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    // The use of inline closures is to circumvent an issue where the compiler
-    // allocates stack space for every if/case branch local when no optimizations
-    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
-    // https://github.com/apple/swift-protobuf/issues/1182
-    try { if let v = self._obsTx {
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
-    } }()
-    if !self.attestations.isEmpty {
-      try visitor.visitRepeatedMessageField(value: self.attestations, fieldNumber: 2)
+    func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+        // The use of inline closures is to circumvent an issue where the compiler
+        // allocates stack space for every if/case branch local when no optimizations
+        // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+        // https://github.com/apple/swift-protobuf/issues/1182
+        try { if let v = self._obsTx {
+            try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
+        } }()
+        if !attestations.isEmpty {
+            try visitor.visitRepeatedMessageField(value: attestations, fieldNumber: 2)
+        }
+        if inbound != false {
+            try visitor.visitSingularBoolField(value: inbound, fieldNumber: 3)
+        }
+        if allowFutureObservation != false {
+            try visitor.visitSingularBoolField(value: allowFutureObservation, fieldNumber: 4)
+        }
+        try unknownFields.traverse(visitor: &visitor)
     }
-    if self.inbound != false {
-      try visitor.visitSingularBoolField(value: self.inbound, fieldNumber: 3)
-    }
-    if self.allowFutureObservation != false {
-      try visitor.visitSingularBoolField(value: self.allowFutureObservation, fieldNumber: 4)
-    }
-    try unknownFields.traverse(visitor: &visitor)
-  }
 
-  static func ==(lhs: Common_QuorumTx, rhs: Common_QuorumTx) -> Bool {
-    if lhs._obsTx != rhs._obsTx {return false}
-    if lhs.attestations != rhs.attestations {return false}
-    if lhs.inbound != rhs.inbound {return false}
-    if lhs.allowFutureObservation != rhs.allowFutureObservation {return false}
-    if lhs.unknownFields != rhs.unknownFields {return false}
-    return true
-  }
+    static func == (lhs: Common_QuorumTx, rhs: Common_QuorumTx) -> Bool {
+        if lhs._obsTx != rhs._obsTx { return false }
+        if lhs.attestations != rhs.attestations { return false }
+        if lhs.inbound != rhs.inbound { return false }
+        if lhs.allowFutureObservation != rhs.allowFutureObservation { return false }
+        if lhs.unknownFields != rhs.unknownFields { return false }
+        return true
+    }
 }
 
 extension Common_QuorumState: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  static let protoMessageName: String = _protobuf_package + ".QuorumState"
-  static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}quoTxs\0\u{1}quoNetworkFees\0\u{1}quoSolvencies\0\u{1}quoErrataTxs\0\u{1}quoPriceFeeds\0")
+    static let protoMessageName: String = _protobuf_package + ".QuorumState"
+    static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}quoTxs\0\u{1}quoNetworkFees\0\u{1}quoSolvencies\0\u{1}quoErrataTxs\0\u{1}quoPriceFeeds\0")
 
-  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
-    while let fieldNumber = try decoder.nextFieldNumber() {
-      // The use of inline closures is to circumvent an issue where the compiler
-      // allocates stack space for every case branch when no optimizations are
-      // enabled. https://github.com/apple/swift-protobuf/issues/1034
-      switch fieldNumber {
-      case 1: try { try decoder.decodeRepeatedMessageField(value: &self.quoTxs) }()
-      case 2: try { try decoder.decodeRepeatedMessageField(value: &self.quoNetworkFees) }()
-      case 3: try { try decoder.decodeRepeatedMessageField(value: &self.quoSolvencies) }()
-      case 4: try { try decoder.decodeRepeatedMessageField(value: &self.quoErrataTxs) }()
-      case 5: try { try decoder.decodeRepeatedMessageField(value: &self.quoPriceFeeds) }()
-      default: break
-      }
+    mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+        while let fieldNumber = try decoder.nextFieldNumber() {
+            // The use of inline closures is to circumvent an issue where the compiler
+            // allocates stack space for every case branch when no optimizations are
+            // enabled. https://github.com/apple/swift-protobuf/issues/1034
+            switch fieldNumber {
+            case 1: try decoder.decodeRepeatedMessageField(value: &quoTxs)
+            case 2: try decoder.decodeRepeatedMessageField(value: &quoNetworkFees)
+            case 3: try decoder.decodeRepeatedMessageField(value: &quoSolvencies)
+            case 4: try decoder.decodeRepeatedMessageField(value: &quoErrataTxs)
+            case 5: try decoder.decodeRepeatedMessageField(value: &quoPriceFeeds)
+            default: break
+            }
+        }
     }
-  }
 
-  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    if !self.quoTxs.isEmpty {
-      try visitor.visitRepeatedMessageField(value: self.quoTxs, fieldNumber: 1)
+    func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+        if !quoTxs.isEmpty {
+            try visitor.visitRepeatedMessageField(value: quoTxs, fieldNumber: 1)
+        }
+        if !quoNetworkFees.isEmpty {
+            try visitor.visitRepeatedMessageField(value: quoNetworkFees, fieldNumber: 2)
+        }
+        if !quoSolvencies.isEmpty {
+            try visitor.visitRepeatedMessageField(value: quoSolvencies, fieldNumber: 3)
+        }
+        if !quoErrataTxs.isEmpty {
+            try visitor.visitRepeatedMessageField(value: quoErrataTxs, fieldNumber: 4)
+        }
+        if !quoPriceFeeds.isEmpty {
+            try visitor.visitRepeatedMessageField(value: quoPriceFeeds, fieldNumber: 5)
+        }
+        try unknownFields.traverse(visitor: &visitor)
     }
-    if !self.quoNetworkFees.isEmpty {
-      try visitor.visitRepeatedMessageField(value: self.quoNetworkFees, fieldNumber: 2)
-    }
-    if !self.quoSolvencies.isEmpty {
-      try visitor.visitRepeatedMessageField(value: self.quoSolvencies, fieldNumber: 3)
-    }
-    if !self.quoErrataTxs.isEmpty {
-      try visitor.visitRepeatedMessageField(value: self.quoErrataTxs, fieldNumber: 4)
-    }
-    if !self.quoPriceFeeds.isEmpty {
-      try visitor.visitRepeatedMessageField(value: self.quoPriceFeeds, fieldNumber: 5)
-    }
-    try unknownFields.traverse(visitor: &visitor)
-  }
 
-  static func ==(lhs: Common_QuorumState, rhs: Common_QuorumState) -> Bool {
-    if lhs.quoTxs != rhs.quoTxs {return false}
-    if lhs.quoNetworkFees != rhs.quoNetworkFees {return false}
-    if lhs.quoSolvencies != rhs.quoSolvencies {return false}
-    if lhs.quoErrataTxs != rhs.quoErrataTxs {return false}
-    if lhs.quoPriceFeeds != rhs.quoPriceFeeds {return false}
-    if lhs.unknownFields != rhs.unknownFields {return false}
-    return true
-  }
+    static func == (lhs: Common_QuorumState, rhs: Common_QuorumState) -> Bool {
+        if lhs.quoTxs != rhs.quoTxs { return false }
+        if lhs.quoNetworkFees != rhs.quoNetworkFees { return false }
+        if lhs.quoSolvencies != rhs.quoSolvencies { return false }
+        if lhs.quoErrataTxs != rhs.quoErrataTxs { return false }
+        if lhs.quoPriceFeeds != rhs.quoPriceFeeds { return false }
+        if lhs.unknownFields != rhs.unknownFields { return false }
+        return true
+    }
 }
 
 extension Common_NetworkFee: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  static let protoMessageName: String = _protobuf_package + ".NetworkFee"
-  static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}height\0\u{1}chain\0\u{3}transaction_size\0\u{3}transaction_rate\0")
+    static let protoMessageName: String = _protobuf_package + ".NetworkFee"
+    static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}height\0\u{1}chain\0\u{3}transaction_size\0\u{3}transaction_rate\0")
 
-  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
-    while let fieldNumber = try decoder.nextFieldNumber() {
-      // The use of inline closures is to circumvent an issue where the compiler
-      // allocates stack space for every case branch when no optimizations are
-      // enabled. https://github.com/apple/swift-protobuf/issues/1034
-      switch fieldNumber {
-      case 1: try { try decoder.decodeSingularInt64Field(value: &self.height) }()
-      case 2: try { try decoder.decodeSingularStringField(value: &self.chain) }()
-      case 3: try { try decoder.decodeSingularUInt64Field(value: &self.transactionSize) }()
-      case 4: try { try decoder.decodeSingularUInt64Field(value: &self.transactionRate) }()
-      default: break
-      }
+    mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+        while let fieldNumber = try decoder.nextFieldNumber() {
+            // The use of inline closures is to circumvent an issue where the compiler
+            // allocates stack space for every case branch when no optimizations are
+            // enabled. https://github.com/apple/swift-protobuf/issues/1034
+            switch fieldNumber {
+            case 1: try decoder.decodeSingularInt64Field(value: &height)
+            case 2: try decoder.decodeSingularStringField(value: &chain)
+            case 3: try decoder.decodeSingularUInt64Field(value: &transactionSize)
+            case 4: try decoder.decodeSingularUInt64Field(value: &transactionRate)
+            default: break
+            }
+        }
     }
-  }
 
-  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    if self.height != 0 {
-      try visitor.visitSingularInt64Field(value: self.height, fieldNumber: 1)
+    func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+        if height != 0 {
+            try visitor.visitSingularInt64Field(value: height, fieldNumber: 1)
+        }
+        if !chain.isEmpty {
+            try visitor.visitSingularStringField(value: chain, fieldNumber: 2)
+        }
+        if transactionSize != 0 {
+            try visitor.visitSingularUInt64Field(value: transactionSize, fieldNumber: 3)
+        }
+        if transactionRate != 0 {
+            try visitor.visitSingularUInt64Field(value: transactionRate, fieldNumber: 4)
+        }
+        try unknownFields.traverse(visitor: &visitor)
     }
-    if !self.chain.isEmpty {
-      try visitor.visitSingularStringField(value: self.chain, fieldNumber: 2)
-    }
-    if self.transactionSize != 0 {
-      try visitor.visitSingularUInt64Field(value: self.transactionSize, fieldNumber: 3)
-    }
-    if self.transactionRate != 0 {
-      try visitor.visitSingularUInt64Field(value: self.transactionRate, fieldNumber: 4)
-    }
-    try unknownFields.traverse(visitor: &visitor)
-  }
 
-  static func ==(lhs: Common_NetworkFee, rhs: Common_NetworkFee) -> Bool {
-    if lhs.height != rhs.height {return false}
-    if lhs.chain != rhs.chain {return false}
-    if lhs.transactionSize != rhs.transactionSize {return false}
-    if lhs.transactionRate != rhs.transactionRate {return false}
-    if lhs.unknownFields != rhs.unknownFields {return false}
-    return true
-  }
+    static func == (lhs: Common_NetworkFee, rhs: Common_NetworkFee) -> Bool {
+        if lhs.height != rhs.height { return false }
+        if lhs.chain != rhs.chain { return false }
+        if lhs.transactionSize != rhs.transactionSize { return false }
+        if lhs.transactionRate != rhs.transactionRate { return false }
+        if lhs.unknownFields != rhs.unknownFields { return false }
+        return true
+    }
 }
 
 extension Common_AttestNetworkFee: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  static let protoMessageName: String = _protobuf_package + ".AttestNetworkFee"
-  static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}network_fee\0\u{1}attestation\0")
+    static let protoMessageName: String = _protobuf_package + ".AttestNetworkFee"
+    static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}network_fee\0\u{1}attestation\0")
 
-  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
-    while let fieldNumber = try decoder.nextFieldNumber() {
-      // The use of inline closures is to circumvent an issue where the compiler
-      // allocates stack space for every case branch when no optimizations are
-      // enabled. https://github.com/apple/swift-protobuf/issues/1034
-      switch fieldNumber {
-      case 1: try { try decoder.decodeSingularMessageField(value: &self._networkFee) }()
-      case 2: try { try decoder.decodeSingularMessageField(value: &self._attestation) }()
-      default: break
-      }
+    mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+        while let fieldNumber = try decoder.nextFieldNumber() {
+            // The use of inline closures is to circumvent an issue where the compiler
+            // allocates stack space for every case branch when no optimizations are
+            // enabled. https://github.com/apple/swift-protobuf/issues/1034
+            switch fieldNumber {
+            case 1: try decoder.decodeSingularMessageField(value: &_networkFee)
+            case 2: try decoder.decodeSingularMessageField(value: &_attestation)
+            default: break
+            }
+        }
     }
-  }
 
-  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    // The use of inline closures is to circumvent an issue where the compiler
-    // allocates stack space for every if/case branch local when no optimizations
-    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
-    // https://github.com/apple/swift-protobuf/issues/1182
-    try { if let v = self._networkFee {
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
-    } }()
-    try { if let v = self._attestation {
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 2)
-    } }()
-    try unknownFields.traverse(visitor: &visitor)
-  }
+    func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+        // The use of inline closures is to circumvent an issue where the compiler
+        // allocates stack space for every if/case branch local when no optimizations
+        // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+        // https://github.com/apple/swift-protobuf/issues/1182
+        try { if let v = self._networkFee {
+            try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
+        } }()
+        try { if let v = self._attestation {
+            try visitor.visitSingularMessageField(value: v, fieldNumber: 2)
+        } }()
+        try unknownFields.traverse(visitor: &visitor)
+    }
 
-  static func ==(lhs: Common_AttestNetworkFee, rhs: Common_AttestNetworkFee) -> Bool {
-    if lhs._networkFee != rhs._networkFee {return false}
-    if lhs._attestation != rhs._attestation {return false}
-    if lhs.unknownFields != rhs.unknownFields {return false}
-    return true
-  }
+    static func == (lhs: Common_AttestNetworkFee, rhs: Common_AttestNetworkFee) -> Bool {
+        if lhs._networkFee != rhs._networkFee { return false }
+        if lhs._attestation != rhs._attestation { return false }
+        if lhs.unknownFields != rhs.unknownFields { return false }
+        return true
+    }
 }
 
 extension Common_QuorumNetworkFee: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  static let protoMessageName: String = _protobuf_package + ".QuorumNetworkFee"
-  static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}network_fee\0\u{1}attestations\0")
+    static let protoMessageName: String = _protobuf_package + ".QuorumNetworkFee"
+    static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}network_fee\0\u{1}attestations\0")
 
-  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
-    while let fieldNumber = try decoder.nextFieldNumber() {
-      // The use of inline closures is to circumvent an issue where the compiler
-      // allocates stack space for every case branch when no optimizations are
-      // enabled. https://github.com/apple/swift-protobuf/issues/1034
-      switch fieldNumber {
-      case 1: try { try decoder.decodeSingularMessageField(value: &self._networkFee) }()
-      case 2: try { try decoder.decodeRepeatedMessageField(value: &self.attestations) }()
-      default: break
-      }
+    mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+        while let fieldNumber = try decoder.nextFieldNumber() {
+            // The use of inline closures is to circumvent an issue where the compiler
+            // allocates stack space for every case branch when no optimizations are
+            // enabled. https://github.com/apple/swift-protobuf/issues/1034
+            switch fieldNumber {
+            case 1: try decoder.decodeSingularMessageField(value: &_networkFee)
+            case 2: try decoder.decodeRepeatedMessageField(value: &attestations)
+            default: break
+            }
+        }
     }
-  }
 
-  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    // The use of inline closures is to circumvent an issue where the compiler
-    // allocates stack space for every if/case branch local when no optimizations
-    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
-    // https://github.com/apple/swift-protobuf/issues/1182
-    try { if let v = self._networkFee {
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
-    } }()
-    if !self.attestations.isEmpty {
-      try visitor.visitRepeatedMessageField(value: self.attestations, fieldNumber: 2)
+    func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+        // The use of inline closures is to circumvent an issue where the compiler
+        // allocates stack space for every if/case branch local when no optimizations
+        // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+        // https://github.com/apple/swift-protobuf/issues/1182
+        try { if let v = self._networkFee {
+            try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
+        } }()
+        if !attestations.isEmpty {
+            try visitor.visitRepeatedMessageField(value: attestations, fieldNumber: 2)
+        }
+        try unknownFields.traverse(visitor: &visitor)
     }
-    try unknownFields.traverse(visitor: &visitor)
-  }
 
-  static func ==(lhs: Common_QuorumNetworkFee, rhs: Common_QuorumNetworkFee) -> Bool {
-    if lhs._networkFee != rhs._networkFee {return false}
-    if lhs.attestations != rhs.attestations {return false}
-    if lhs.unknownFields != rhs.unknownFields {return false}
-    return true
-  }
+    static func == (lhs: Common_QuorumNetworkFee, rhs: Common_QuorumNetworkFee) -> Bool {
+        if lhs._networkFee != rhs._networkFee { return false }
+        if lhs.attestations != rhs.attestations { return false }
+        if lhs.unknownFields != rhs.unknownFields { return false }
+        return true
+    }
 }
 
 extension Common_Solvency: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  static let protoMessageName: String = _protobuf_package + ".Solvency"
-  static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}id\0\u{1}chain\0\u{3}pub_key\0\u{1}coins\0\u{1}height\0")
+    static let protoMessageName: String = _protobuf_package + ".Solvency"
+    static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}id\0\u{1}chain\0\u{3}pub_key\0\u{1}coins\0\u{1}height\0")
 
-  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
-    while let fieldNumber = try decoder.nextFieldNumber() {
-      // The use of inline closures is to circumvent an issue where the compiler
-      // allocates stack space for every case branch when no optimizations are
-      // enabled. https://github.com/apple/swift-protobuf/issues/1034
-      switch fieldNumber {
-      case 1: try { try decoder.decodeSingularStringField(value: &self.id) }()
-      case 2: try { try decoder.decodeSingularStringField(value: &self.chain) }()
-      case 3: try { try decoder.decodeSingularStringField(value: &self.pubKey) }()
-      case 4: try { try decoder.decodeRepeatedMessageField(value: &self.coins) }()
-      case 5: try { try decoder.decodeSingularInt64Field(value: &self.height) }()
-      default: break
-      }
+    mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+        while let fieldNumber = try decoder.nextFieldNumber() {
+            // The use of inline closures is to circumvent an issue where the compiler
+            // allocates stack space for every case branch when no optimizations are
+            // enabled. https://github.com/apple/swift-protobuf/issues/1034
+            switch fieldNumber {
+            case 1: try decoder.decodeSingularStringField(value: &id)
+            case 2: try decoder.decodeSingularStringField(value: &chain)
+            case 3: try decoder.decodeSingularStringField(value: &pubKey)
+            case 4: try decoder.decodeRepeatedMessageField(value: &coins)
+            case 5: try decoder.decodeSingularInt64Field(value: &height)
+            default: break
+            }
+        }
     }
-  }
 
-  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    if !self.id.isEmpty {
-      try visitor.visitSingularStringField(value: self.id, fieldNumber: 1)
+    func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+        if !id.isEmpty {
+            try visitor.visitSingularStringField(value: id, fieldNumber: 1)
+        }
+        if !chain.isEmpty {
+            try visitor.visitSingularStringField(value: chain, fieldNumber: 2)
+        }
+        if !pubKey.isEmpty {
+            try visitor.visitSingularStringField(value: pubKey, fieldNumber: 3)
+        }
+        if !coins.isEmpty {
+            try visitor.visitRepeatedMessageField(value: coins, fieldNumber: 4)
+        }
+        if height != 0 {
+            try visitor.visitSingularInt64Field(value: height, fieldNumber: 5)
+        }
+        try unknownFields.traverse(visitor: &visitor)
     }
-    if !self.chain.isEmpty {
-      try visitor.visitSingularStringField(value: self.chain, fieldNumber: 2)
-    }
-    if !self.pubKey.isEmpty {
-      try visitor.visitSingularStringField(value: self.pubKey, fieldNumber: 3)
-    }
-    if !self.coins.isEmpty {
-      try visitor.visitRepeatedMessageField(value: self.coins, fieldNumber: 4)
-    }
-    if self.height != 0 {
-      try visitor.visitSingularInt64Field(value: self.height, fieldNumber: 5)
-    }
-    try unknownFields.traverse(visitor: &visitor)
-  }
 
-  static func ==(lhs: Common_Solvency, rhs: Common_Solvency) -> Bool {
-    if lhs.id != rhs.id {return false}
-    if lhs.chain != rhs.chain {return false}
-    if lhs.pubKey != rhs.pubKey {return false}
-    if lhs.coins != rhs.coins {return false}
-    if lhs.height != rhs.height {return false}
-    if lhs.unknownFields != rhs.unknownFields {return false}
-    return true
-  }
+    static func == (lhs: Common_Solvency, rhs: Common_Solvency) -> Bool {
+        if lhs.id != rhs.id { return false }
+        if lhs.chain != rhs.chain { return false }
+        if lhs.pubKey != rhs.pubKey { return false }
+        if lhs.coins != rhs.coins { return false }
+        if lhs.height != rhs.height { return false }
+        if lhs.unknownFields != rhs.unknownFields { return false }
+        return true
+    }
 }
 
 extension Common_AttestSolvency: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  static let protoMessageName: String = _protobuf_package + ".AttestSolvency"
-  static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}solvency\0\u{1}attestation\0")
+    static let protoMessageName: String = _protobuf_package + ".AttestSolvency"
+    static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}solvency\0\u{1}attestation\0")
 
-  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
-    while let fieldNumber = try decoder.nextFieldNumber() {
-      // The use of inline closures is to circumvent an issue where the compiler
-      // allocates stack space for every case branch when no optimizations are
-      // enabled. https://github.com/apple/swift-protobuf/issues/1034
-      switch fieldNumber {
-      case 1: try { try decoder.decodeSingularMessageField(value: &self._solvency) }()
-      case 2: try { try decoder.decodeSingularMessageField(value: &self._attestation) }()
-      default: break
-      }
+    mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+        while let fieldNumber = try decoder.nextFieldNumber() {
+            // The use of inline closures is to circumvent an issue where the compiler
+            // allocates stack space for every case branch when no optimizations are
+            // enabled. https://github.com/apple/swift-protobuf/issues/1034
+            switch fieldNumber {
+            case 1: try decoder.decodeSingularMessageField(value: &_solvency)
+            case 2: try decoder.decodeSingularMessageField(value: &_attestation)
+            default: break
+            }
+        }
     }
-  }
 
-  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    // The use of inline closures is to circumvent an issue where the compiler
-    // allocates stack space for every if/case branch local when no optimizations
-    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
-    // https://github.com/apple/swift-protobuf/issues/1182
-    try { if let v = self._solvency {
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
-    } }()
-    try { if let v = self._attestation {
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 2)
-    } }()
-    try unknownFields.traverse(visitor: &visitor)
-  }
+    func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+        // The use of inline closures is to circumvent an issue where the compiler
+        // allocates stack space for every if/case branch local when no optimizations
+        // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+        // https://github.com/apple/swift-protobuf/issues/1182
+        try { if let v = self._solvency {
+            try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
+        } }()
+        try { if let v = self._attestation {
+            try visitor.visitSingularMessageField(value: v, fieldNumber: 2)
+        } }()
+        try unknownFields.traverse(visitor: &visitor)
+    }
 
-  static func ==(lhs: Common_AttestSolvency, rhs: Common_AttestSolvency) -> Bool {
-    if lhs._solvency != rhs._solvency {return false}
-    if lhs._attestation != rhs._attestation {return false}
-    if lhs.unknownFields != rhs.unknownFields {return false}
-    return true
-  }
+    static func == (lhs: Common_AttestSolvency, rhs: Common_AttestSolvency) -> Bool {
+        if lhs._solvency != rhs._solvency { return false }
+        if lhs._attestation != rhs._attestation { return false }
+        if lhs.unknownFields != rhs.unknownFields { return false }
+        return true
+    }
 }
 
 extension Common_QuorumSolvency: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  static let protoMessageName: String = _protobuf_package + ".QuorumSolvency"
-  static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}solvency\0\u{1}attestations\0")
+    static let protoMessageName: String = _protobuf_package + ".QuorumSolvency"
+    static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}solvency\0\u{1}attestations\0")
 
-  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
-    while let fieldNumber = try decoder.nextFieldNumber() {
-      // The use of inline closures is to circumvent an issue where the compiler
-      // allocates stack space for every case branch when no optimizations are
-      // enabled. https://github.com/apple/swift-protobuf/issues/1034
-      switch fieldNumber {
-      case 1: try { try decoder.decodeSingularMessageField(value: &self._solvency) }()
-      case 2: try { try decoder.decodeRepeatedMessageField(value: &self.attestations) }()
-      default: break
-      }
+    mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+        while let fieldNumber = try decoder.nextFieldNumber() {
+            // The use of inline closures is to circumvent an issue where the compiler
+            // allocates stack space for every case branch when no optimizations are
+            // enabled. https://github.com/apple/swift-protobuf/issues/1034
+            switch fieldNumber {
+            case 1: try decoder.decodeSingularMessageField(value: &_solvency)
+            case 2: try decoder.decodeRepeatedMessageField(value: &attestations)
+            default: break
+            }
+        }
     }
-  }
 
-  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    // The use of inline closures is to circumvent an issue where the compiler
-    // allocates stack space for every if/case branch local when no optimizations
-    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
-    // https://github.com/apple/swift-protobuf/issues/1182
-    try { if let v = self._solvency {
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
-    } }()
-    if !self.attestations.isEmpty {
-      try visitor.visitRepeatedMessageField(value: self.attestations, fieldNumber: 2)
+    func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+        // The use of inline closures is to circumvent an issue where the compiler
+        // allocates stack space for every if/case branch local when no optimizations
+        // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+        // https://github.com/apple/swift-protobuf/issues/1182
+        try { if let v = self._solvency {
+            try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
+        } }()
+        if !attestations.isEmpty {
+            try visitor.visitRepeatedMessageField(value: attestations, fieldNumber: 2)
+        }
+        try unknownFields.traverse(visitor: &visitor)
     }
-    try unknownFields.traverse(visitor: &visitor)
-  }
 
-  static func ==(lhs: Common_QuorumSolvency, rhs: Common_QuorumSolvency) -> Bool {
-    if lhs._solvency != rhs._solvency {return false}
-    if lhs.attestations != rhs.attestations {return false}
-    if lhs.unknownFields != rhs.unknownFields {return false}
-    return true
-  }
+    static func == (lhs: Common_QuorumSolvency, rhs: Common_QuorumSolvency) -> Bool {
+        if lhs._solvency != rhs._solvency { return false }
+        if lhs.attestations != rhs.attestations { return false }
+        if lhs.unknownFields != rhs.unknownFields { return false }
+        return true
+    }
 }
 
 extension Common_ErrataTx: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  static let protoMessageName: String = _protobuf_package + ".ErrataTx"
-  static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}id\0\u{1}chain\0")
+    static let protoMessageName: String = _protobuf_package + ".ErrataTx"
+    static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}id\0\u{1}chain\0")
 
-  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
-    while let fieldNumber = try decoder.nextFieldNumber() {
-      // The use of inline closures is to circumvent an issue where the compiler
-      // allocates stack space for every case branch when no optimizations are
-      // enabled. https://github.com/apple/swift-protobuf/issues/1034
-      switch fieldNumber {
-      case 1: try { try decoder.decodeSingularStringField(value: &self.id) }()
-      case 2: try { try decoder.decodeSingularStringField(value: &self.chain) }()
-      default: break
-      }
+    mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+        while let fieldNumber = try decoder.nextFieldNumber() {
+            // The use of inline closures is to circumvent an issue where the compiler
+            // allocates stack space for every case branch when no optimizations are
+            // enabled. https://github.com/apple/swift-protobuf/issues/1034
+            switch fieldNumber {
+            case 1: try decoder.decodeSingularStringField(value: &id)
+            case 2: try decoder.decodeSingularStringField(value: &chain)
+            default: break
+            }
+        }
     }
-  }
 
-  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    if !self.id.isEmpty {
-      try visitor.visitSingularStringField(value: self.id, fieldNumber: 1)
+    func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+        if !id.isEmpty {
+            try visitor.visitSingularStringField(value: id, fieldNumber: 1)
+        }
+        if !chain.isEmpty {
+            try visitor.visitSingularStringField(value: chain, fieldNumber: 2)
+        }
+        try unknownFields.traverse(visitor: &visitor)
     }
-    if !self.chain.isEmpty {
-      try visitor.visitSingularStringField(value: self.chain, fieldNumber: 2)
-    }
-    try unknownFields.traverse(visitor: &visitor)
-  }
 
-  static func ==(lhs: Common_ErrataTx, rhs: Common_ErrataTx) -> Bool {
-    if lhs.id != rhs.id {return false}
-    if lhs.chain != rhs.chain {return false}
-    if lhs.unknownFields != rhs.unknownFields {return false}
-    return true
-  }
+    static func == (lhs: Common_ErrataTx, rhs: Common_ErrataTx) -> Bool {
+        if lhs.id != rhs.id { return false }
+        if lhs.chain != rhs.chain { return false }
+        if lhs.unknownFields != rhs.unknownFields { return false }
+        return true
+    }
 }
 
 extension Common_AttestErrataTx: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  static let protoMessageName: String = _protobuf_package + ".AttestErrataTx"
-  static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}errata_tx\0\u{1}attestation\0")
+    static let protoMessageName: String = _protobuf_package + ".AttestErrataTx"
+    static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}errata_tx\0\u{1}attestation\0")
 
-  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
-    while let fieldNumber = try decoder.nextFieldNumber() {
-      // The use of inline closures is to circumvent an issue where the compiler
-      // allocates stack space for every case branch when no optimizations are
-      // enabled. https://github.com/apple/swift-protobuf/issues/1034
-      switch fieldNumber {
-      case 1: try { try decoder.decodeSingularMessageField(value: &self._errataTx) }()
-      case 2: try { try decoder.decodeSingularMessageField(value: &self._attestation) }()
-      default: break
-      }
+    mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+        while let fieldNumber = try decoder.nextFieldNumber() {
+            // The use of inline closures is to circumvent an issue where the compiler
+            // allocates stack space for every case branch when no optimizations are
+            // enabled. https://github.com/apple/swift-protobuf/issues/1034
+            switch fieldNumber {
+            case 1: try decoder.decodeSingularMessageField(value: &_errataTx)
+            case 2: try decoder.decodeSingularMessageField(value: &_attestation)
+            default: break
+            }
+        }
     }
-  }
 
-  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    // The use of inline closures is to circumvent an issue where the compiler
-    // allocates stack space for every if/case branch local when no optimizations
-    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
-    // https://github.com/apple/swift-protobuf/issues/1182
-    try { if let v = self._errataTx {
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
-    } }()
-    try { if let v = self._attestation {
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 2)
-    } }()
-    try unknownFields.traverse(visitor: &visitor)
-  }
+    func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+        // The use of inline closures is to circumvent an issue where the compiler
+        // allocates stack space for every if/case branch local when no optimizations
+        // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+        // https://github.com/apple/swift-protobuf/issues/1182
+        try { if let v = self._errataTx {
+            try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
+        } }()
+        try { if let v = self._attestation {
+            try visitor.visitSingularMessageField(value: v, fieldNumber: 2)
+        } }()
+        try unknownFields.traverse(visitor: &visitor)
+    }
 
-  static func ==(lhs: Common_AttestErrataTx, rhs: Common_AttestErrataTx) -> Bool {
-    if lhs._errataTx != rhs._errataTx {return false}
-    if lhs._attestation != rhs._attestation {return false}
-    if lhs.unknownFields != rhs.unknownFields {return false}
-    return true
-  }
+    static func == (lhs: Common_AttestErrataTx, rhs: Common_AttestErrataTx) -> Bool {
+        if lhs._errataTx != rhs._errataTx { return false }
+        if lhs._attestation != rhs._attestation { return false }
+        if lhs.unknownFields != rhs.unknownFields { return false }
+        return true
+    }
 }
 
 extension Common_QuorumErrataTx: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  static let protoMessageName: String = _protobuf_package + ".QuorumErrataTx"
-  static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}errata_tx\0\u{1}attestations\0")
+    static let protoMessageName: String = _protobuf_package + ".QuorumErrataTx"
+    static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}errata_tx\0\u{1}attestations\0")
 
-  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
-    while let fieldNumber = try decoder.nextFieldNumber() {
-      // The use of inline closures is to circumvent an issue where the compiler
-      // allocates stack space for every case branch when no optimizations are
-      // enabled. https://github.com/apple/swift-protobuf/issues/1034
-      switch fieldNumber {
-      case 1: try { try decoder.decodeSingularMessageField(value: &self._errataTx) }()
-      case 2: try { try decoder.decodeRepeatedMessageField(value: &self.attestations) }()
-      default: break
-      }
+    mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+        while let fieldNumber = try decoder.nextFieldNumber() {
+            // The use of inline closures is to circumvent an issue where the compiler
+            // allocates stack space for every case branch when no optimizations are
+            // enabled. https://github.com/apple/swift-protobuf/issues/1034
+            switch fieldNumber {
+            case 1: try decoder.decodeSingularMessageField(value: &_errataTx)
+            case 2: try decoder.decodeRepeatedMessageField(value: &attestations)
+            default: break
+            }
+        }
     }
-  }
 
-  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    // The use of inline closures is to circumvent an issue where the compiler
-    // allocates stack space for every if/case branch local when no optimizations
-    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
-    // https://github.com/apple/swift-protobuf/issues/1182
-    try { if let v = self._errataTx {
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
-    } }()
-    if !self.attestations.isEmpty {
-      try visitor.visitRepeatedMessageField(value: self.attestations, fieldNumber: 2)
+    func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+        // The use of inline closures is to circumvent an issue where the compiler
+        // allocates stack space for every if/case branch local when no optimizations
+        // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+        // https://github.com/apple/swift-protobuf/issues/1182
+        try { if let v = self._errataTx {
+            try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
+        } }()
+        if !attestations.isEmpty {
+            try visitor.visitRepeatedMessageField(value: attestations, fieldNumber: 2)
+        }
+        try unknownFields.traverse(visitor: &visitor)
     }
-    try unknownFields.traverse(visitor: &visitor)
-  }
 
-  static func ==(lhs: Common_QuorumErrataTx, rhs: Common_QuorumErrataTx) -> Bool {
-    if lhs._errataTx != rhs._errataTx {return false}
-    if lhs.attestations != rhs.attestations {return false}
-    if lhs.unknownFields != rhs.unknownFields {return false}
-    return true
-  }
+    static func == (lhs: Common_QuorumErrataTx, rhs: Common_QuorumErrataTx) -> Bool {
+        if lhs._errataTx != rhs._errataTx { return false }
+        if lhs.attestations != rhs.attestations { return false }
+        if lhs.unknownFields != rhs.unknownFields { return false }
+        return true
+    }
 }
 
 extension Common_PriceFeed: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  static let protoMessageName: String = _protobuf_package + ".PriceFeed"
-  static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}version\0\u{1}time\0\u{1}rates\0")
+    static let protoMessageName: String = _protobuf_package + ".PriceFeed"
+    static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}version\0\u{1}time\0\u{1}rates\0")
 
-  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
-    while let fieldNumber = try decoder.nextFieldNumber() {
-      // The use of inline closures is to circumvent an issue where the compiler
-      // allocates stack space for every case branch when no optimizations are
-      // enabled. https://github.com/apple/swift-protobuf/issues/1034
-      switch fieldNumber {
-      case 1: try { try decoder.decodeSingularBytesField(value: &self.version) }()
-      case 2: try { try decoder.decodeSingularInt64Field(value: &self.time) }()
-      case 3: try { try decoder.decodeRepeatedMessageField(value: &self.rates) }()
-      default: break
-      }
+    mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+        while let fieldNumber = try decoder.nextFieldNumber() {
+            // The use of inline closures is to circumvent an issue where the compiler
+            // allocates stack space for every case branch when no optimizations are
+            // enabled. https://github.com/apple/swift-protobuf/issues/1034
+            switch fieldNumber {
+            case 1: try decoder.decodeSingularBytesField(value: &version)
+            case 2: try decoder.decodeSingularInt64Field(value: &time)
+            case 3: try decoder.decodeRepeatedMessageField(value: &rates)
+            default: break
+            }
+        }
     }
-  }
 
-  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    if !self.version.isEmpty {
-      try visitor.visitSingularBytesField(value: self.version, fieldNumber: 1)
+    func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+        if !version.isEmpty {
+            try visitor.visitSingularBytesField(value: version, fieldNumber: 1)
+        }
+        if time != 0 {
+            try visitor.visitSingularInt64Field(value: time, fieldNumber: 2)
+        }
+        if !rates.isEmpty {
+            try visitor.visitRepeatedMessageField(value: rates, fieldNumber: 3)
+        }
+        try unknownFields.traverse(visitor: &visitor)
     }
-    if self.time != 0 {
-      try visitor.visitSingularInt64Field(value: self.time, fieldNumber: 2)
-    }
-    if !self.rates.isEmpty {
-      try visitor.visitRepeatedMessageField(value: self.rates, fieldNumber: 3)
-    }
-    try unknownFields.traverse(visitor: &visitor)
-  }
 
-  static func ==(lhs: Common_PriceFeed, rhs: Common_PriceFeed) -> Bool {
-    if lhs.version != rhs.version {return false}
-    if lhs.time != rhs.time {return false}
-    if lhs.rates != rhs.rates {return false}
-    if lhs.unknownFields != rhs.unknownFields {return false}
-    return true
-  }
+    static func == (lhs: Common_PriceFeed, rhs: Common_PriceFeed) -> Bool {
+        if lhs.version != rhs.version { return false }
+        if lhs.time != rhs.time { return false }
+        if lhs.rates != rhs.rates { return false }
+        if lhs.unknownFields != rhs.unknownFields { return false }
+        return true
+    }
 }
 
 extension Common_AttestPriceFeed: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  static let protoMessageName: String = _protobuf_package + ".AttestPriceFeed"
-  static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}price_feed\0\u{1}attestation\0")
+    static let protoMessageName: String = _protobuf_package + ".AttestPriceFeed"
+    static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}price_feed\0\u{1}attestation\0")
 
-  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
-    while let fieldNumber = try decoder.nextFieldNumber() {
-      // The use of inline closures is to circumvent an issue where the compiler
-      // allocates stack space for every case branch when no optimizations are
-      // enabled. https://github.com/apple/swift-protobuf/issues/1034
-      switch fieldNumber {
-      case 1: try { try decoder.decodeSingularMessageField(value: &self._priceFeed) }()
-      case 2: try { try decoder.decodeSingularMessageField(value: &self._attestation) }()
-      default: break
-      }
+    mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+        while let fieldNumber = try decoder.nextFieldNumber() {
+            // The use of inline closures is to circumvent an issue where the compiler
+            // allocates stack space for every case branch when no optimizations are
+            // enabled. https://github.com/apple/swift-protobuf/issues/1034
+            switch fieldNumber {
+            case 1: try decoder.decodeSingularMessageField(value: &_priceFeed)
+            case 2: try decoder.decodeSingularMessageField(value: &_attestation)
+            default: break
+            }
+        }
     }
-  }
 
-  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    // The use of inline closures is to circumvent an issue where the compiler
-    // allocates stack space for every if/case branch local when no optimizations
-    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
-    // https://github.com/apple/swift-protobuf/issues/1182
-    try { if let v = self._priceFeed {
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
-    } }()
-    try { if let v = self._attestation {
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 2)
-    } }()
-    try unknownFields.traverse(visitor: &visitor)
-  }
+    func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+        // The use of inline closures is to circumvent an issue where the compiler
+        // allocates stack space for every if/case branch local when no optimizations
+        // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+        // https://github.com/apple/swift-protobuf/issues/1182
+        try { if let v = self._priceFeed {
+            try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
+        } }()
+        try { if let v = self._attestation {
+            try visitor.visitSingularMessageField(value: v, fieldNumber: 2)
+        } }()
+        try unknownFields.traverse(visitor: &visitor)
+    }
 
-  static func ==(lhs: Common_AttestPriceFeed, rhs: Common_AttestPriceFeed) -> Bool {
-    if lhs._priceFeed != rhs._priceFeed {return false}
-    if lhs._attestation != rhs._attestation {return false}
-    if lhs.unknownFields != rhs.unknownFields {return false}
-    return true
-  }
+    static func == (lhs: Common_AttestPriceFeed, rhs: Common_AttestPriceFeed) -> Bool {
+        if lhs._priceFeed != rhs._priceFeed { return false }
+        if lhs._attestation != rhs._attestation { return false }
+        if lhs.unknownFields != rhs.unknownFields { return false }
+        return true
+    }
 }
 
 extension Common_QuorumPriceFeed: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  static let protoMessageName: String = _protobuf_package + ".QuorumPriceFeed"
-  static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}price_feed\0\u{1}attestations\0")
+    static let protoMessageName: String = _protobuf_package + ".QuorumPriceFeed"
+    static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}price_feed\0\u{1}attestations\0")
 
-  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
-    while let fieldNumber = try decoder.nextFieldNumber() {
-      // The use of inline closures is to circumvent an issue where the compiler
-      // allocates stack space for every case branch when no optimizations are
-      // enabled. https://github.com/apple/swift-protobuf/issues/1034
-      switch fieldNumber {
-      case 1: try { try decoder.decodeSingularMessageField(value: &self._priceFeed) }()
-      case 2: try { try decoder.decodeRepeatedMessageField(value: &self.attestations) }()
-      default: break
-      }
+    mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+        while let fieldNumber = try decoder.nextFieldNumber() {
+            // The use of inline closures is to circumvent an issue where the compiler
+            // allocates stack space for every case branch when no optimizations are
+            // enabled. https://github.com/apple/swift-protobuf/issues/1034
+            switch fieldNumber {
+            case 1: try decoder.decodeSingularMessageField(value: &_priceFeed)
+            case 2: try decoder.decodeRepeatedMessageField(value: &attestations)
+            default: break
+            }
+        }
     }
-  }
 
-  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    // The use of inline closures is to circumvent an issue where the compiler
-    // allocates stack space for every if/case branch local when no optimizations
-    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
-    // https://github.com/apple/swift-protobuf/issues/1182
-    try { if let v = self._priceFeed {
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
-    } }()
-    if !self.attestations.isEmpty {
-      try visitor.visitRepeatedMessageField(value: self.attestations, fieldNumber: 2)
+    func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+        // The use of inline closures is to circumvent an issue where the compiler
+        // allocates stack space for every if/case branch local when no optimizations
+        // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+        // https://github.com/apple/swift-protobuf/issues/1182
+        try { if let v = self._priceFeed {
+            try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
+        } }()
+        if !attestations.isEmpty {
+            try visitor.visitRepeatedMessageField(value: attestations, fieldNumber: 2)
+        }
+        try unknownFields.traverse(visitor: &visitor)
     }
-    try unknownFields.traverse(visitor: &visitor)
-  }
 
-  static func ==(lhs: Common_QuorumPriceFeed, rhs: Common_QuorumPriceFeed) -> Bool {
-    if lhs._priceFeed != rhs._priceFeed {return false}
-    if lhs.attestations != rhs.attestations {return false}
-    if lhs.unknownFields != rhs.unknownFields {return false}
-    return true
-  }
+    static func == (lhs: Common_QuorumPriceFeed, rhs: Common_QuorumPriceFeed) -> Bool {
+        if lhs._priceFeed != rhs._priceFeed { return false }
+        if lhs.attestations != rhs.attestations { return false }
+        if lhs.unknownFields != rhs.unknownFields { return false }
+        return true
+    }
 }
 
 extension Common_QuorumPriceFeedBatch: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  static let protoMessageName: String = _protobuf_package + ".QuorumPriceFeedBatch"
-  static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}quorum_price_feeds\0")
+    static let protoMessageName: String = _protobuf_package + ".QuorumPriceFeedBatch"
+    static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}quorum_price_feeds\0")
 
-  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
-    while let fieldNumber = try decoder.nextFieldNumber() {
-      // The use of inline closures is to circumvent an issue where the compiler
-      // allocates stack space for every case branch when no optimizations are
-      // enabled. https://github.com/apple/swift-protobuf/issues/1034
-      switch fieldNumber {
-      case 1: try { try decoder.decodeRepeatedMessageField(value: &self.quorumPriceFeeds) }()
-      default: break
-      }
+    mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+        while let fieldNumber = try decoder.nextFieldNumber() {
+            // The use of inline closures is to circumvent an issue where the compiler
+            // allocates stack space for every case branch when no optimizations are
+            // enabled. https://github.com/apple/swift-protobuf/issues/1034
+            switch fieldNumber {
+            case 1: try decoder.decodeRepeatedMessageField(value: &quorumPriceFeeds)
+            default: break
+            }
+        }
     }
-  }
 
-  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    if !self.quorumPriceFeeds.isEmpty {
-      try visitor.visitRepeatedMessageField(value: self.quorumPriceFeeds, fieldNumber: 1)
+    func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+        if !quorumPriceFeeds.isEmpty {
+            try visitor.visitRepeatedMessageField(value: quorumPriceFeeds, fieldNumber: 1)
+        }
+        try unknownFields.traverse(visitor: &visitor)
     }
-    try unknownFields.traverse(visitor: &visitor)
-  }
 
-  static func ==(lhs: Common_QuorumPriceFeedBatch, rhs: Common_QuorumPriceFeedBatch) -> Bool {
-    if lhs.quorumPriceFeeds != rhs.quorumPriceFeeds {return false}
-    if lhs.unknownFields != rhs.unknownFields {return false}
-    return true
-  }
+    static func == (lhs: Common_QuorumPriceFeedBatch, rhs: Common_QuorumPriceFeedBatch) -> Bool {
+        if lhs.quorumPriceFeeds != rhs.quorumPriceFeeds { return false }
+        if lhs.unknownFields != rhs.unknownFields { return false }
+        return true
+    }
 }
 
 extension Common_OraclePrice: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  static let protoMessageName: String = _protobuf_package + ".OraclePrice"
-  static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}amount\0\u{1}decimals\0")
+    static let protoMessageName: String = _protobuf_package + ".OraclePrice"
+    static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}amount\0\u{1}decimals\0")
 
-  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
-    while let fieldNumber = try decoder.nextFieldNumber() {
-      // The use of inline closures is to circumvent an issue where the compiler
-      // allocates stack space for every case branch when no optimizations are
-      // enabled. https://github.com/apple/swift-protobuf/issues/1034
-      switch fieldNumber {
-      case 1: try { try decoder.decodeSingularUInt64Field(value: &self.amount) }()
-      case 2: try { try decoder.decodeSingularUInt32Field(value: &self.decimals) }()
-      default: break
-      }
+    mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+        while let fieldNumber = try decoder.nextFieldNumber() {
+            // The use of inline closures is to circumvent an issue where the compiler
+            // allocates stack space for every case branch when no optimizations are
+            // enabled. https://github.com/apple/swift-protobuf/issues/1034
+            switch fieldNumber {
+            case 1: try decoder.decodeSingularUInt64Field(value: &amount)
+            case 2: try decoder.decodeSingularUInt32Field(value: &decimals)
+            default: break
+            }
+        }
     }
-  }
 
-  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    if self.amount != 0 {
-      try visitor.visitSingularUInt64Field(value: self.amount, fieldNumber: 1)
+    func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+        if amount != 0 {
+            try visitor.visitSingularUInt64Field(value: amount, fieldNumber: 1)
+        }
+        if decimals != 0 {
+            try visitor.visitSingularUInt32Field(value: decimals, fieldNumber: 2)
+        }
+        try unknownFields.traverse(visitor: &visitor)
     }
-    if self.decimals != 0 {
-      try visitor.visitSingularUInt32Field(value: self.decimals, fieldNumber: 2)
-    }
-    try unknownFields.traverse(visitor: &visitor)
-  }
 
-  static func ==(lhs: Common_OraclePrice, rhs: Common_OraclePrice) -> Bool {
-    if lhs.amount != rhs.amount {return false}
-    if lhs.decimals != rhs.decimals {return false}
-    if lhs.unknownFields != rhs.unknownFields {return false}
-    return true
-  }
+    static func == (lhs: Common_OraclePrice, rhs: Common_OraclePrice) -> Bool {
+        if lhs.amount != rhs.amount { return false }
+        if lhs.decimals != rhs.decimals { return false }
+        if lhs.unknownFields != rhs.unknownFields { return false }
+        return true
+    }
 }
 
 extension Common_AttestationBatch: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  static let protoMessageName: String = _protobuf_package + ".AttestationBatch"
-  static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}attest_txs\0\u{3}attest_network_fees\0\u{3}attest_solvencies\0\u{3}attest_errata_txs\0\u{3}attest_price_feeds\0")
+    static let protoMessageName: String = _protobuf_package + ".AttestationBatch"
+    static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}attest_txs\0\u{3}attest_network_fees\0\u{3}attest_solvencies\0\u{3}attest_errata_txs\0\u{3}attest_price_feeds\0")
 
-  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
-    while let fieldNumber = try decoder.nextFieldNumber() {
-      // The use of inline closures is to circumvent an issue where the compiler
-      // allocates stack space for every case branch when no optimizations are
-      // enabled. https://github.com/apple/swift-protobuf/issues/1034
-      switch fieldNumber {
-      case 1: try { try decoder.decodeRepeatedMessageField(value: &self.attestTxs) }()
-      case 2: try { try decoder.decodeRepeatedMessageField(value: &self.attestNetworkFees) }()
-      case 3: try { try decoder.decodeRepeatedMessageField(value: &self.attestSolvencies) }()
-      case 4: try { try decoder.decodeRepeatedMessageField(value: &self.attestErrataTxs) }()
-      case 5: try { try decoder.decodeRepeatedMessageField(value: &self.attestPriceFeeds) }()
-      default: break
-      }
+    mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+        while let fieldNumber = try decoder.nextFieldNumber() {
+            // The use of inline closures is to circumvent an issue where the compiler
+            // allocates stack space for every case branch when no optimizations are
+            // enabled. https://github.com/apple/swift-protobuf/issues/1034
+            switch fieldNumber {
+            case 1: try decoder.decodeRepeatedMessageField(value: &attestTxs)
+            case 2: try decoder.decodeRepeatedMessageField(value: &attestNetworkFees)
+            case 3: try decoder.decodeRepeatedMessageField(value: &attestSolvencies)
+            case 4: try decoder.decodeRepeatedMessageField(value: &attestErrataTxs)
+            case 5: try decoder.decodeRepeatedMessageField(value: &attestPriceFeeds)
+            default: break
+            }
+        }
     }
-  }
 
-  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    if !self.attestTxs.isEmpty {
-      try visitor.visitRepeatedMessageField(value: self.attestTxs, fieldNumber: 1)
+    func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+        if !attestTxs.isEmpty {
+            try visitor.visitRepeatedMessageField(value: attestTxs, fieldNumber: 1)
+        }
+        if !attestNetworkFees.isEmpty {
+            try visitor.visitRepeatedMessageField(value: attestNetworkFees, fieldNumber: 2)
+        }
+        if !attestSolvencies.isEmpty {
+            try visitor.visitRepeatedMessageField(value: attestSolvencies, fieldNumber: 3)
+        }
+        if !attestErrataTxs.isEmpty {
+            try visitor.visitRepeatedMessageField(value: attestErrataTxs, fieldNumber: 4)
+        }
+        if !attestPriceFeeds.isEmpty {
+            try visitor.visitRepeatedMessageField(value: attestPriceFeeds, fieldNumber: 5)
+        }
+        try unknownFields.traverse(visitor: &visitor)
     }
-    if !self.attestNetworkFees.isEmpty {
-      try visitor.visitRepeatedMessageField(value: self.attestNetworkFees, fieldNumber: 2)
-    }
-    if !self.attestSolvencies.isEmpty {
-      try visitor.visitRepeatedMessageField(value: self.attestSolvencies, fieldNumber: 3)
-    }
-    if !self.attestErrataTxs.isEmpty {
-      try visitor.visitRepeatedMessageField(value: self.attestErrataTxs, fieldNumber: 4)
-    }
-    if !self.attestPriceFeeds.isEmpty {
-      try visitor.visitRepeatedMessageField(value: self.attestPriceFeeds, fieldNumber: 5)
-    }
-    try unknownFields.traverse(visitor: &visitor)
-  }
 
-  static func ==(lhs: Common_AttestationBatch, rhs: Common_AttestationBatch) -> Bool {
-    if lhs.attestTxs != rhs.attestTxs {return false}
-    if lhs.attestNetworkFees != rhs.attestNetworkFees {return false}
-    if lhs.attestSolvencies != rhs.attestSolvencies {return false}
-    if lhs.attestErrataTxs != rhs.attestErrataTxs {return false}
-    if lhs.attestPriceFeeds != rhs.attestPriceFeeds {return false}
-    if lhs.unknownFields != rhs.unknownFields {return false}
-    return true
-  }
+    static func == (lhs: Common_AttestationBatch, rhs: Common_AttestationBatch) -> Bool {
+        if lhs.attestTxs != rhs.attestTxs { return false }
+        if lhs.attestNetworkFees != rhs.attestNetworkFees { return false }
+        if lhs.attestSolvencies != rhs.attestSolvencies { return false }
+        if lhs.attestErrataTxs != rhs.attestErrataTxs { return false }
+        if lhs.attestPriceFeeds != rhs.attestPriceFeeds { return false }
+        if lhs.unknownFields != rhs.unknownFields { return false }
+        return true
+    }
 }

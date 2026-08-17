@@ -24,7 +24,7 @@ struct CompactSignature: Sendable, Equatable {
         stride(from: 0, to: value.count, by: 2).map { index in
             let start = value.index(value.startIndex, offsetBy: index)
             let end = value.index(start, offsetBy: 2)
-            return UInt8(value[start..<end], radix: 16)!
+            return UInt8(value[start ..< end], radix: 16)!
         }
     }
 }

@@ -80,33 +80,33 @@ final class TransactionRepository: @unchecked Sendable {
                 continue
             }
             try db.execute(
-                    sql: """
-                    INSERT INTO transactions
-                    (persistence_namespace, tx_hash, block_height, timestamp, type, status, memo, incoming, outgoing, fee, processed)
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0)
-                    ON CONFLICT(persistence_namespace, tx_hash) DO UPDATE SET
-                        block_height = excluded.block_height,
-                        timestamp = excluded.timestamp,
-                        type = excluded.type,
-                        status = excluded.status,
-                        memo = excluded.memo,
-                        incoming = excluded.incoming,
-                        outgoing = excluded.outgoing,
-                        fee = excluded.fee,
-                        processed = 0
-                    """,
-                    arguments: [
-                        persistenceNamespace,
-                        transaction.transactionId.hash,
-                        transaction.blockHeight,
-                        transaction.timestampNanoseconds,
-                        transaction.type,
-                        transaction.status,
-                        transaction.memo,
-                        try Self.transferData(transaction.incoming),
-                        try Self.transferData(transaction.outgoing),
-                        transaction.fee.map(String.init),
-                    ]
+                sql: """
+                INSERT INTO transactions
+                (persistence_namespace, tx_hash, block_height, timestamp, type, status, memo, incoming, outgoing, fee, processed)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0)
+                ON CONFLICT(persistence_namespace, tx_hash) DO UPDATE SET
+                    block_height = excluded.block_height,
+                    timestamp = excluded.timestamp,
+                    type = excluded.type,
+                    status = excluded.status,
+                    memo = excluded.memo,
+                    incoming = excluded.incoming,
+                    outgoing = excluded.outgoing,
+                    fee = excluded.fee,
+                    processed = 0
+                """,
+                arguments: [
+                    persistenceNamespace,
+                    transaction.transactionId.hash,
+                    transaction.blockHeight,
+                    transaction.timestampNanoseconds,
+                    transaction.type,
+                    transaction.status,
+                    transaction.memo,
+                    Self.transferData(transaction.incoming),
+                    Self.transferData(transaction.outgoing),
+                    transaction.fee.map(String.init),
+                ]
             )
             changed.append(transaction)
         }
@@ -131,8 +131,8 @@ final class TransactionRepository: @unchecked Sendable {
                     transaction.type,
                     transaction.status,
                     transaction.memo,
-                    try Self.transferData(transaction.incoming),
-                    try Self.transferData(transaction.outgoing),
+                    Self.transferData(transaction.incoming),
+                    Self.transferData(transaction.outgoing),
                     transaction.fee.map(String.init),
                 ]
             )
@@ -229,7 +229,7 @@ final class TransactionRepository: @unchecked Sendable {
             throw StorageError.invalid
         }
         let feeRaw: String? = row["fee"]
-        return Transaction(
+        return try Transaction(
             transactionId: transactionId,
             blockHeight: height,
             timestamp: Date(timeIntervalSince1970: TimeInterval(timestamp) / 1_000_000_000),
@@ -237,8 +237,8 @@ final class TransactionRepository: @unchecked Sendable {
             type: type,
             status: status,
             memo: row["memo"],
-            incoming: try transfers(incoming),
-            outgoing: try transfers(outgoing),
+            incoming: transfers(incoming),
+            outgoing: transfers(outgoing),
             fee: feeRaw.flatMap { BigUInt($0) }
         )
     }

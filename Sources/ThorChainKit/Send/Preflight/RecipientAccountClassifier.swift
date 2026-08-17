@@ -29,7 +29,7 @@ enum RecipientAccountClassifier {
         "/cosmos.vesting.v1beta1.ContinuousVestingAccount",
         "/cosmos.vesting.v1beta1.DelayedVestingAccount",
         "/cosmos.vesting.v1beta1.PeriodicVestingAccount",
-        "/cosmos.vesting.v1beta1.PermanentLockedAccount"
+        "/cosmos.vesting.v1beta1.PermanentLockedAccount",
     ]
 
     static func classify(_ response: RecipientAccountResponse, expectedHeight: Int64, recipient: String, forbidden: ForbiddenModuleAddressSet) throws -> RecipientAccountClassification {
