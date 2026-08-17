@@ -17,10 +17,11 @@ public struct LiveSecretLoader {
         guard let attributes = try? fileManager.attributesOfItem(atPath: url.path),
               attributes[.type] as? FileAttributeType == .typeRegular,
               let size = attributes[.size] as? NSNumber,
-              (1...4096).contains(size.intValue)
+              (1 ... 4096).contains(size.intValue)
         else { throw LiveSecretError.unavailable }
         if let permissions = attributes[.posixPermissions] as? NSNumber,
-           permissions.intValue & 0o777 != 0o600 {
+           permissions.intValue & 0o777 != 0o600
+        {
             throw LiveSecretError.unavailable
         }
         defer { try? fileManager.removeItem(at: url) }
@@ -30,7 +31,7 @@ public struct LiveSecretLoader {
         let allowedKeys = Set([
             "THORCHAIN_NETWORK",
             "THORCHAIN_MAINNET_MNEMONIC",
-            "THORCHAIN_MAINNET_RECIPIENT_ADDRESS"
+            "THORCHAIN_MAINNET_RECIPIENT_ADDRESS",
         ])
         var values = [String: String]()
         for line in text.split(whereSeparator: \.isNewline) {

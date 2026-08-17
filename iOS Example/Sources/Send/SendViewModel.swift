@@ -27,7 +27,7 @@ final class SendViewModel: ObservableObject {
     private var signer: (any Signer)? { runtime.signer }
 
     init(runtime: ExampleRuntime) {
-        self.recipient = runtime.recipient
+        recipient = runtime.recipient
         self.runtime = runtime
         modeBadge = runtime.mode.rawValue
         runtime.kit.pendingTransactionsPublisher

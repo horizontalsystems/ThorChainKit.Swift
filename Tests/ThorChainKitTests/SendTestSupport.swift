@@ -1,5 +1,5 @@
-import Foundation
 import BigInt
+import Foundation
 @testable import ThorChainKit
 
 typealias SendRuntime = TransactionSender
@@ -33,7 +33,7 @@ func makeTestKit(
 }
 
 private struct TestAccountReader: IAccountProvider {
-    func read(address: Address) async throws -> AccountReadTransport {
+    func read(address _: Address) async throws -> AccountReadTransport {
         try AccountReadTransport(acceptedHeight: 1, account: nil, balances: [], familyId: "test", observedAt: Date())
     }
 }
@@ -55,14 +55,14 @@ func sendOtherAddress() throws -> Address {
 final class TestSendClock: ISendMonotonicClock, @unchecked Sendable {
     var now: UInt64
 
-    init(now: UInt64 = 1_000) {
+    init(now: UInt64 = 1000) {
         self.now = now
     }
 }
 
 func issueTestQuote(
     in store: QuoteStore,
-    clock: TestSendClock,
+    clock _: TestSendClock,
     generation: UInt64 = 7,
     amount: BigUInt = 100,
     nativeFee: BigUInt = 2,
@@ -72,8 +72,8 @@ func issueTestQuote(
     let nativeFeeMagnitude = SendMagnitude(nativeFee).data
     let totalDebitMagnitude = SendMagnitude(amount + nativeFee).data
     return try store.issue(
-        sender: try sendTestAddress(),
-        recipient: try sendTestAddress(),
+        sender: sendTestAddress(),
+        recipient: sendTestAddress(),
         amountMagnitude: amountMagnitude,
         nativeFeeMagnitude: nativeFeeMagnitude,
         totalDebitMagnitude: totalDebitMagnitude,

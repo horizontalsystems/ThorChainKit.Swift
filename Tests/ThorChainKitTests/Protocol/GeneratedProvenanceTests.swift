@@ -32,7 +32,7 @@ final class GeneratedProvenanceTests: XCTestCase {
             "d7c79a05a5c7fae89f0aff26d112e0b60f082fc7fc424e8910be99c86b656260",
             "a2bef0fb7e233ff2f442da08b3764be6ce59cc3f2df05cd1c9a44dbb5b55c18f",
             "bc4cb71a5b49ce23e7b9ff8e5cd9f42efa9527c8f2d2e3861c901c7e86be202e",
-            "cmp \"$tmp/cosmos/tx/v1beta1/tx.pb.swift\""
+            "cmp \"$tmp/cosmos/tx/v1beta1/tx.pb.swift\"",
         ] {
             XCTAssertTrue(provenance.contains(marker), "missing provenance marker: \(marker)")
         }
@@ -44,7 +44,7 @@ final class GeneratedProvenanceTests: XCTestCase {
             ("Sources/ThorChainKit/Network/Generated/Query/upstream/cosmos/base/v1beta1/coin.proto", "408b074f81f3dafb440cd61921bf244eab2ff20cb1f2a9f247265d031481c9ec"),
             ("Sources/ThorChainKit/Network/Generated/Query/upstream/google/protobuf/any.proto", "d7c79a05a5c7fae89f0aff26d112e0b60f082fc7fc424e8910be99c86b656260"),
             ("Sources/ThorChainKit/Network/Generated/Query/upstream/gogoproto/gogo.proto", "a2bef0fb7e233ff2f442da08b3764be6ce59cc3f2df05cd1c9a44dbb5b55c18f"),
-            ("Sources/ThorChainKit/Network/Generated/Query/upstream/amino/amino.proto", "bc4cb71a5b49ce23e7b9ff8e5cd9f42efa9527c8f2d2e3861c901c7e86be202e")
+            ("Sources/ThorChainKit/Network/Generated/Query/upstream/amino/amino.proto", "bc4cb71a5b49ce23e7b9ff8e5cd9f42efa9527c8f2d2e3861c901c7e86be202e"),
         ]
         for (path, expectedHash) in inputHashes {
             let data = try Data(contentsOf: root.appendingPathComponent(path))

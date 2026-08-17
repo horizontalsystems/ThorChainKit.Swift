@@ -1,6 +1,6 @@
 import BigInt
-import XCTest
 @testable import ThorChainKit
+import XCTest
 
 final class SendDomainTests: XCTestCase {
     func testSendAmountSnapshotsBigUIntAndPreservesMaximumIntent() {
@@ -10,7 +10,6 @@ final class SendDomainTests: XCTestCase {
 
         XCTAssertEqual(amount.exactAmount, BigUInt("18446744073709551617"))
     }
-
 
     func testErrorDebugProjectionDoesNotExposeSensitiveText() {
         let error = SendError.broadcastRejected(

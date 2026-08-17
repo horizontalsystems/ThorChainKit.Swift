@@ -1,6 +1,6 @@
 import Foundation
-import XCTest
 @testable import ThorChainKit
+import XCTest
 
 final class BroadcastClassifierTests: XCTestCase {
     func testStrictWireMatrix() throws {

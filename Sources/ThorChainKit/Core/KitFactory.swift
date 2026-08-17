@@ -65,7 +65,8 @@ public extension Kit {
             storage: transactionStorage,
             repository: transactionRepository,
             journal: journal,
-            pendingTransactionManager: pendingTransactionManager
+            pendingTransactionManager: pendingTransactionManager,
+            chain: address.network.chain
         )
         try transactionManager.reconcileLocalTransactions()
         let transactionSyncer = endpoints.midgardURLs.isEmpty ? nil : TransactionSyncer(
@@ -114,7 +115,7 @@ public extension Kit {
             provider: ThorNodeSendPreflightProvider(
                 node: ThorNodeSendClient(transport: liveClient),
                 leaseProvider: { try await pool.lease(excludingFamilyIds: []) },
-                capabilities: NativeRuneEndpointRegistry.capabilities().map { capability in
+                capabilities: SendEndpointRegistry.capabilities(chain: address.network.chain).map { capability in
                     SendFamilyCapability(
                         familyID: capability.familyID,
                         manifestRevision: capability.manifestRevision,
@@ -137,8 +138,10 @@ public extension Kit {
                         }
                     )
                 },
+                network: address.network,
                 runtime: transactionSender
-            )
+            ),
+            network: address.network
         )
         return Kit(
             address: address,
@@ -218,7 +221,8 @@ public extension Kit {
             storage: transactionStorage,
             repository: transactionRepository,
             journal: journal,
-            pendingTransactionManager: pendingTransactionManager
+            pendingTransactionManager: pendingTransactionManager,
+            chain: address.network.chain
         )
         try transactionManager.reconcileLocalTransactions()
         let transactionSyncer = endpoints.midgardURLs.isEmpty ? nil : TransactionSyncer(
@@ -268,7 +272,7 @@ public extension Kit {
             provider: ThorNodeSendPreflightProvider(
                 node: ThorNodeSendClient(transport: liveClient),
                 leaseProvider: { try await pool.lease(excludingFamilyIds: []) },
-                capabilities: NativeRuneEndpointRegistry.capabilities().map { capability in
+                capabilities: SendEndpointRegistry.capabilities(chain: address.network.chain).map { capability in
                     SendFamilyCapability(
                         familyID: capability.familyID,
                         manifestRevision: capability.manifestRevision,
@@ -291,8 +295,10 @@ public extension Kit {
                         }
                     )
                 },
+                network: address.network,
                 runtime: transactionSender
-            )
+            ),
+            network: address.network
         )
         return Kit(
             address: address,

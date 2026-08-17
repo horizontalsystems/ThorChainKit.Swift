@@ -1,16 +1,16 @@
 import Foundation
-import XCTest
 @testable import ThorChainKit
+import XCTest
 
 final class AddressCodecTests: XCTestCase {
     private let payload = Data(hex: "5a0dba49dab8fec87c6dd7c01b564ee72a8515a6")
 
     func testEncodeAndDecodeBindsAllSupportedNetworks() throws {
         let codec = AddressCodec()
-        let networks = [
+        let networks = try [
             Network.mainnet,
-            try Network.stagenet(expectedChainId: "stage-1"),
-            try Network.chainnet(expectedChainId: "chain-1"),
+            Network.stagenet(expectedChainId: "stage-1"),
+            Network.chainnet(expectedChainId: "chain-1"),
         ]
 
         for network in networks {
@@ -62,7 +62,7 @@ final class AddressCodecTests: XCTestCase {
             "A12UEL5L",
             "a12uel5l",
             "an83characterlonghumanreadablepartthatcontainsthenumber1andtheexcludedcharactersbio1tt5tgs",
-            "abcdef1qpzry9x8gf2tvdw0s3jn54khce6mua7lmqqqxw"
+            "abcdef1qpzry9x8gf2tvdw0s3jn54khce6mua7lmqqqxw",
         ]
         for vector in valid {
             XCTAssertNoThrow(try Bech32Codec.decode(vector), vector)
@@ -76,7 +76,7 @@ final class AddressCodecTests: XCTestCase {
             "li1dgmt3",
             "A1G7SGD8",
             "10a06t8",
-            "1qzzfhee"
+            "1qzzfhee",
         ]
         for vector in invalid {
             XCTAssertThrowsError(try Bech32Codec.decode(vector), vector)
@@ -84,7 +84,7 @@ final class AddressCodecTests: XCTestCase {
     }
 
     func testBitConversionPaddingKnownAnswers() throws {
-        XCTAssertEqual(try BitConversion.convert([0xff], fromBits: 8, toBits: 5, pad: true), [31, 28])
+        XCTAssertEqual(try BitConversion.convert([0xFF], fromBits: 8, toBits: 5, pad: true), [31, 28])
         XCTAssertEqual(try BitConversion.convert([31, 28], fromBits: 5, toBits: 8, pad: false), [255])
         XCTAssertThrowsError(try BitConversion.convert([31, 29], fromBits: 5, toBits: 8, pad: false)) { error in
             XCTAssertEqual(error as? AddressError, .invalidPadding)
@@ -109,15 +109,15 @@ final class AddressCodecTests: XCTestCase {
 
         var state = seed
         let codec = AddressCodec()
-        for _ in 0..<count {
+        for _ in 0 ..< count {
             var bytes = [UInt8]()
-            for _ in 0..<3 {
-                state &+= 0x9E3779B97F4A7C15
+            for _ in 0 ..< 3 {
+                state &+= 0x9E37_79B9_7F4A_7C15
                 var value = state
-                value = (value ^ (value >> 30)) &* 0xBF58476D1CE4E5B9
-                value = (value ^ (value >> 27)) &* 0x94D049BB133111EB
+                value = (value ^ (value >> 30)) &* 0xBF58_476D_1CE4_E5B9
+                value = (value ^ (value >> 27)) &* 0x94D0_49BB_1331_11EB
                 value ^= value >> 31
-                bytes.append(contentsOf: (0..<8).map { UInt8(truncatingIfNeeded: value >> (8 * $0)) })
+                bytes.append(contentsOf: (0 ..< 8).map { UInt8(truncatingIfNeeded: value >> (8 * $0)) })
             }
             let payload = Data(bytes.prefix(20))
             let address = try codec.encode(payload: payload, network: .mainnet)
@@ -144,7 +144,7 @@ private extension String {
         stride(from: 0, to: count, by: size).map { offset in
             let start = index(startIndex, offsetBy: offset)
             let end = index(start, offsetBy: min(size, distance(from: start, to: endIndex)))
-            return String(self[start..<end])
+            return String(self[start ..< end])
         }
     }
 }

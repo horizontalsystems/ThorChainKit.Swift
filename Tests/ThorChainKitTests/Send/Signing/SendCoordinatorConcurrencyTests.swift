@@ -1,10 +1,10 @@
 import Foundation
-import XCTest
 @testable import ThorChainKit
+import XCTest
 
 final class SendCoordinatorConcurrencyTests: XCTestCase {
     func testSameAccountDifferentSequencesUseOneGate() async throws {
-        let runtime = SendRuntime(address: try sendTestAddress(), persistenceNamespace: "coordinator-gate")
+        let runtime = try SendRuntime(address: sendTestAddress(), persistenceNamespace: "coordinator-gate")
         await runtime.activate(generation: 1)
 
         let firstAdmission = await runtime.beginAccountAttempt("sender")
@@ -18,7 +18,7 @@ final class SendCoordinatorConcurrencyTests: XCTestCase {
     }
 
     func testReleasedSignerFenceAllowsExactlyOneFreshAttempt() async throws {
-        let runtime = SendRuntime(address: try sendTestAddress(), persistenceNamespace: "coordinator-release")
+        let runtime = try SendRuntime(address: sendTestAddress(), persistenceNamespace: "coordinator-release")
         await runtime.activate(generation: 1)
 
         let fence = await runtime.beginSignerFence("sender")
@@ -32,7 +32,7 @@ final class SendCoordinatorConcurrencyTests: XCTestCase {
     }
 
     func testCancelledSignerRetainsFence() async throws {
-        let runtime = SendRuntime(address: try sendTestAddress(), persistenceNamespace: "coordinator-fence")
+        let runtime = try SendRuntime(address: sendTestAddress(), persistenceNamespace: "coordinator-fence")
         await runtime.activate(generation: 1)
 
         let fence = await runtime.beginSignerFence("sender")

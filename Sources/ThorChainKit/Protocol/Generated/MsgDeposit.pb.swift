@@ -16,74 +16,74 @@ import SwiftProtobuf
 // incompatible with the version of SwiftProtobuf to which you are linking.
 // Please ensure that you are building against the same version of the API
 // that was used to generate this file.
-fileprivate struct _GeneratedWithProtocGenSwiftVersion: SwiftProtobuf.ProtobufAPIVersionCheck {
-  struct _2: SwiftProtobuf.ProtobufAPIVersion_2 {}
-  typealias Version = _2
+private struct _GeneratedWithProtocGenSwiftVersion: SwiftProtobuf.ProtobufAPIVersionCheck {
+    struct _2: SwiftProtobuf.ProtobufAPIVersion_2 {}
+    typealias Version = _2
 }
 
 struct Types_MsgDeposit: Sendable {
-  // SwiftProtobuf.Message conformance is added in an extension below. See the
-  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
-  // methods supported on all messages.
+    // SwiftProtobuf.Message conformance is added in an extension below. See the
+    // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+    // methods supported on all messages.
 
-  var coins: [Common_Coin] = []
+    var coins: [Common_Coin] = []
 
-  var memo: String = String()
+    var memo: String = .init()
 
-  var signer: Data = Data()
+    var signer: Data = .init()
 
-  var salt: Data = Data()
+    var salt: Data = .init()
 
-  var unknownFields = SwiftProtobuf.UnknownStorage()
+    var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  init() {}
+    init() {}
 }
 
 // MARK: - Code below here is support for the SwiftProtobuf runtime.
 
-fileprivate let _protobuf_package = "types"
+private let _protobuf_package = "types"
 
 extension Types_MsgDeposit: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  static let protoMessageName: String = _protobuf_package + ".MsgDeposit"
-  static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}coins\0\u{1}memo\0\u{1}signer\0\u{1}salt\0")
+    static let protoMessageName: String = _protobuf_package + ".MsgDeposit"
+    static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}coins\0\u{1}memo\0\u{1}signer\0\u{1}salt\0")
 
-  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
-    while let fieldNumber = try decoder.nextFieldNumber() {
-      // The use of inline closures is to circumvent an issue where the compiler
-      // allocates stack space for every case branch when no optimizations are
-      // enabled. https://github.com/apple/swift-protobuf/issues/1034
-      switch fieldNumber {
-      case 1: try { try decoder.decodeRepeatedMessageField(value: &self.coins) }()
-      case 2: try { try decoder.decodeSingularStringField(value: &self.memo) }()
-      case 3: try { try decoder.decodeSingularBytesField(value: &self.signer) }()
-      case 4: try { try decoder.decodeSingularBytesField(value: &self.salt) }()
-      default: break
-      }
+    mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+        while let fieldNumber = try decoder.nextFieldNumber() {
+            // The use of inline closures is to circumvent an issue where the compiler
+            // allocates stack space for every case branch when no optimizations are
+            // enabled. https://github.com/apple/swift-protobuf/issues/1034
+            switch fieldNumber {
+            case 1: try decoder.decodeRepeatedMessageField(value: &coins)
+            case 2: try decoder.decodeSingularStringField(value: &memo)
+            case 3: try decoder.decodeSingularBytesField(value: &signer)
+            case 4: try decoder.decodeSingularBytesField(value: &salt)
+            default: break
+            }
+        }
     }
-  }
 
-  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    if !self.coins.isEmpty {
-      try visitor.visitRepeatedMessageField(value: self.coins, fieldNumber: 1)
+    func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+        if !coins.isEmpty {
+            try visitor.visitRepeatedMessageField(value: coins, fieldNumber: 1)
+        }
+        if !memo.isEmpty {
+            try visitor.visitSingularStringField(value: memo, fieldNumber: 2)
+        }
+        if !signer.isEmpty {
+            try visitor.visitSingularBytesField(value: signer, fieldNumber: 3)
+        }
+        if !salt.isEmpty {
+            try visitor.visitSingularBytesField(value: salt, fieldNumber: 4)
+        }
+        try unknownFields.traverse(visitor: &visitor)
     }
-    if !self.memo.isEmpty {
-      try visitor.visitSingularStringField(value: self.memo, fieldNumber: 2)
-    }
-    if !self.signer.isEmpty {
-      try visitor.visitSingularBytesField(value: self.signer, fieldNumber: 3)
-    }
-    if !self.salt.isEmpty {
-      try visitor.visitSingularBytesField(value: self.salt, fieldNumber: 4)
-    }
-    try unknownFields.traverse(visitor: &visitor)
-  }
 
-  static func ==(lhs: Types_MsgDeposit, rhs: Types_MsgDeposit) -> Bool {
-    if lhs.coins != rhs.coins {return false}
-    if lhs.memo != rhs.memo {return false}
-    if lhs.signer != rhs.signer {return false}
-    if lhs.salt != rhs.salt {return false}
-    if lhs.unknownFields != rhs.unknownFields {return false}
-    return true
-  }
+    static func == (lhs: Types_MsgDeposit, rhs: Types_MsgDeposit) -> Bool {
+        if lhs.coins != rhs.coins { return false }
+        if lhs.memo != rhs.memo { return false }
+        if lhs.signer != rhs.signer { return false }
+        if lhs.salt != rhs.salt { return false }
+        if lhs.unknownFields != rhs.unknownFields { return false }
+        return true
+    }
 }

@@ -1,9 +1,9 @@
-import Foundation
 import BigInt
 import Combine
 import Darwin
-import XCTest
+import Foundation
 @testable import ThorChainKit
+import XCTest
 
 final class PublicApiTests: XCTestCase {
     func testNetworkConstants() throws {
@@ -85,7 +85,7 @@ final class PublicApiTests: XCTestCase {
             try EndpointConfiguration(families: [])
         }
         assertEndpointError(.duplicateFamilyId("first")) {
-            try EndpointConfiguration(families: [first, try self.family(id: " first ")])
+            try EndpointConfiguration(families: [first, self.family(id: " first ")])
         }
         for invalidId in ["", " \n ", "bad\u{7f}id"] {
             assertEndpointError(.invalidFamilyId) {
@@ -157,7 +157,7 @@ final class PublicApiTests: XCTestCase {
 
         let explicit = try EndpointConfiguration(
             families: [first, second],
-            policy: try EndpointPolicy(maximumAttempts: 1)
+            policy: EndpointPolicy(maximumAttempts: 1)
         )
         XCTAssertEqual(explicit.effectiveMaximumAttempts, 1)
         let implicit = try EndpointConfiguration(families: [first, second])
@@ -235,10 +235,10 @@ final class PublicApiTests: XCTestCase {
     }
 
     func testAddressCanonicalizesValidNetworksAndUppercase() throws {
-        let vectors: [(String, Network)] = [
+        let vectors: [(String, Network)] = try [
             ("thor1x0jkvqdh2hlpeztd5zyyk70n3efx6mhudkmnn2", .mainnet),
-            ("sthor1x0jkvqdh2hlpeztd5zyyk70n3efx6mhue08995", try .stagenet(expectedChainId: "stage-1")),
-            ("cthor1x0jkvqdh2hlpeztd5zyyk70n3efx6mhupxcqek", try .chainnet(expectedChainId: "chain-1")),
+            ("sthor1x0jkvqdh2hlpeztd5zyyk70n3efx6mhue08995", .stagenet(expectedChainId: "stage-1")),
+            ("cthor1x0jkvqdh2hlpeztd5zyyk70n3efx6mhupxcqek", .chainnet(expectedChainId: "chain-1")),
         ]
 
         for (raw, network) in vectors {
@@ -305,17 +305,17 @@ final class PublicApiTests: XCTestCase {
                 try Kit.instance(
                     address: address,
                     walletId: walletId,
-                    endpoints: try self.endpoints()
+                    endpoints: self.endpoints()
                 )
             }
         }
     }
 
     func testFactoryDerivesNetworkFromAddress() throws {
-        let vectors: [(String, Network)] = [
+        let vectors: [(String, Network)] = try [
             ("thor1x0jkvqdh2hlpeztd5zyyk70n3efx6mhudkmnn2", .mainnet),
-            ("sthor1x0jkvqdh2hlpeztd5zyyk70n3efx6mhue08995", try .stagenet(expectedChainId: "stage-1")),
-            ("cthor1x0jkvqdh2hlpeztd5zyyk70n3efx6mhupxcqek", try .chainnet(expectedChainId: "chain-1")),
+            ("sthor1x0jkvqdh2hlpeztd5zyyk70n3efx6mhue08995", .stagenet(expectedChainId: "stage-1")),
+            ("cthor1x0jkvqdh2hlpeztd5zyyk70n3efx6mhupxcqek", .chainnet(expectedChainId: "chain-1")),
         ]
 
         for (raw, network) in vectors {
@@ -331,7 +331,7 @@ final class PublicApiTests: XCTestCase {
     }
 
     func testFactoryCreatesNoWorkAndDoesNotStartLifecycle() throws {
-        let kit = makeTestKit(address: try Address(
+        let kit = try makeTestKit(address: Address(
             "thor1x0jkvqdh2hlpeztd5zyyk70n3efx6mhudkmnn2",
             network: .mainnet
         ))
@@ -354,7 +354,7 @@ final class PublicApiTests: XCTestCase {
     }
 
     func testInitialPublishersAllowReentrantSnapshotAndLifecycleAccess() throws {
-        let kit = makeTestKit(address: try Address(
+        let kit = try makeTestKit(address: Address(
             "thor1x0jkvqdh2hlpeztd5zyyk70n3efx6mhudkmnn2",
             network: .mainnet
         ))
@@ -423,7 +423,6 @@ final class PublicApiTests: XCTestCase {
     private func endpoints() throws -> EndpointConfiguration {
         try EndpointConfiguration(families: [family(id: "primary")])
     }
-
 
     private func accountState(
         accountNumber: UInt64?,

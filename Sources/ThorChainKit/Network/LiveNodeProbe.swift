@@ -64,7 +64,7 @@ struct LiveNodeProbe: INodeProber {
                 clientId: clientId
             ).request(path: request.path.split(separator: "/").map(String.init))
             let (data, response) = try await transport.data(for: urlRequest)
-            guard (200..<300).contains(response.statusCode) else {
+            guard (200 ..< 300).contains(response.statusCode) else {
                 let failure = RoleProbeFailure.httpStatus(
                     code: response.statusCode,
                     retryAfterSeconds: response.value(forHTTPHeaderField: "Retry-After").flatMap(Int.init)
@@ -216,6 +216,7 @@ private struct LatestBlockEnvelope: Decodable {
             case height
         }
     }
+
     let block: Block?
 }
 
@@ -231,6 +232,7 @@ private struct CometStatusEnvelope: Decodable {
                 case catchingUp = "catching_up"
             }
         }
+
         let nodeInfo: NodeInfo?
         let syncInfo: SyncInfo?
 
@@ -239,5 +241,6 @@ private struct CometStatusEnvelope: Decodable {
             case syncInfo = "sync_info"
         }
     }
+
     let result: Result?
 }

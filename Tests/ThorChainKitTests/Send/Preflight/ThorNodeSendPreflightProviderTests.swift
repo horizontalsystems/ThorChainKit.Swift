@@ -1,7 +1,7 @@
 import Foundation
-import XCTest
 import SwiftProtobuf
 @testable import ThorChainKit
+import XCTest
 
 final class ThorNodeSendPreflightProviderTests: XCTestCase {
     func testATokenSendReadsNoBalanceAndStillEndsOnRecipientAccount() async throws {
@@ -14,16 +14,16 @@ final class ThorNodeSendPreflightProviderTests: XCTestCase {
 
         let family = try XCTUnwrap(NativeRuneEndpointRegistry.families().first)
         let lease = EndpointLease(family: family, verifiedChainId: "thorchain-1", cosmosReadHeight: 42, cometReferenceHeight: 42, poolGeneration: 1)
-        let transport = MatrixSendTransport(account: try accountResponse.serializedData(), recipient: try recipientResponse.serializedData(), network: try network.serializedData())
+        let transport = try MatrixSendTransport(account: accountResponse.serializedData(), recipient: recipientResponse.serializedData(), network: network.serializedData())
         let capabilities = NativeRuneEndpointRegistry.capabilities().map { capability in
             SendFamilyCapability(familyID: capability.familyID, manifestRevision: capability.manifestRevision, routes: capability.routes.map { route in
                 SendManifestRoute(record: route.record, route: route.route, path: route.path, requestEncoding: route.requestEncoding, decoder: route.decoder, proofMode: route.proofMode, schemaRevision: route.schemaRevision, supportedNodeRevision: route.supportedNodeRevision, historicalHeightParameter: route.historicalHeightParameter, queryKey: route.queryKey, queryParameterName: route.queryParameterName, queryParameterValue: route.queryParameterValue, capabilityStatus: .pass)
             })
         }
         let provider = ThorNodeSendPreflightProvider(node: ThorNodeSendClient(transport: transport), leaseProvider: { lease }, capabilities: capabilities)
-        let request = SendQuoteRequest(
-            sender: try Address(sender, network: .mainnet), recipient: try Address(recipient, network: .mainnet),
-            amount: .exact(100), memo: nil, denom: try Denom(rawValue: "tcy")
+        let request = try SendQuoteRequest(
+            sender: Address(sender, network: .mainnet), recipient: Address(recipient, network: .mainnet),
+            amount: .exact(100), memo: nil, denom: Denom(rawValue: "tcy")
         )
 
         let snapshot = try await provider.snapshot(request: request, lease: lease, height: 42, policy: .standard, attempt: SendPreflightAttempt(clientID: UUID(), generation: 1, attemptID: UUID(), familyID: family.id, routeID: nil))
@@ -58,48 +58,48 @@ final class ThorNodeSendPreflightProviderTests: XCTestCase {
         var recipientResponse = Cosmos_Auth_V1beta1_QueryAccountResponse(); recipientResponse.account.typeURL = "/cosmos.auth.v1beta1.BaseAccount"; var recipientAccount = account; recipientAccount.address = recipient; recipientResponse.account.value = try recipientAccount.serializedData()
         var network = Types_QueryNetworkResponse(); network.nativeTxFeeRune = "7"
         for family in try NativeRuneEndpointRegistry.families() {
-        let lease = EndpointLease(family: family, verifiedChainId: "thorchain-1", cosmosReadHeight: 42, cometReferenceHeight: 42, poolGeneration: 1)
-        let transport = MatrixSendTransport(account: try accountResponse.serializedData(), recipient: try recipientResponse.serializedData(), network: try network.serializedData())
-        let capabilities = NativeRuneEndpointRegistry.capabilities().map { capability in
-            SendFamilyCapability(familyID: capability.familyID, manifestRevision: capability.manifestRevision, routes: capability.routes.map { route in
-                SendManifestRoute(record: route.record, route: route.route, path: route.path, requestEncoding: route.requestEncoding, decoder: route.decoder, proofMode: route.proofMode, schemaRevision: route.schemaRevision, supportedNodeRevision: route.supportedNodeRevision, historicalHeightParameter: route.historicalHeightParameter, queryKey: route.queryKey, queryParameterName: route.queryParameterName, queryParameterValue: route.queryParameterValue, capabilityStatus: .pass)
-            })
-        }
-        let provider = ThorNodeSendPreflightProvider(node: ThorNodeSendClient(transport: transport), leaseProvider: { lease }, capabilities: capabilities)
-        let request = SendQuoteRequest(sender: try Address(sender, network: .mainnet), recipient: try Address(recipient, network: .mainnet), amount: .exact(100), memo: nil)
-        let snapshot = try await provider.snapshot(request: request, lease: lease, height: 42, policy: .standard, attempt: SendPreflightAttempt(clientID: UUID(), generation: 1, attemptID: UUID(), familyID: "rorcual-mainnet", routeID: nil))
-        XCTAssertEqual(snapshot.height, 42)
-        XCTAssertEqual(snapshot.accountNumber, 7)
-        XCTAssertEqual(snapshot.sequence, 9)
-        XCTAssertEqual(snapshot.nativeFee, 7)
-        XCTAssertEqual(transport.routeNames, ["account", "network-fee", "mimir", "recipient-account"])
-        XCTAssertEqual(transport.requests.count, 4)
-        XCTAssertFalse(transport.bulkModuleAccountsCalled, "the broken bulk ModuleAccounts route is a regression counterexample")
-        for request in transport.requests {
-            let components = URLComponents(url: request.url!, resolvingAgainstBaseURL: false)!
-            let path = components.queryItems?.first(where: { $0.name == "path" })?.value
-            if let path {
-                XCTAssertEqual(components.host, family.cometBftURL.host)
-                XCTAssertTrue(["\"/cosmos.auth.v1beta1.Query/Account\"", "\"/types.Query/Network\""].contains(path))
-                XCTAssertTrue(CometABCIEncoding.isCanonicalHex(components.queryItems!.first(where: { $0.name == "data" })!.value!))
-            } else {
-                XCTAssertEqual(components.host, family.cosmosRestURL.host)
-                if components.path.contains("spendable_balances") || components.path.hasSuffix("/params") {
-                    XCTAssertNil(components.queryItems?.first(where: { $0.name == "height" }))
+            let lease = EndpointLease(family: family, verifiedChainId: "thorchain-1", cosmosReadHeight: 42, cometReferenceHeight: 42, poolGeneration: 1)
+            let transport = try MatrixSendTransport(account: accountResponse.serializedData(), recipient: recipientResponse.serializedData(), network: network.serializedData())
+            let capabilities = NativeRuneEndpointRegistry.capabilities().map { capability in
+                SendFamilyCapability(familyID: capability.familyID, manifestRevision: capability.manifestRevision, routes: capability.routes.map { route in
+                    SendManifestRoute(record: route.record, route: route.route, path: route.path, requestEncoding: route.requestEncoding, decoder: route.decoder, proofMode: route.proofMode, schemaRevision: route.schemaRevision, supportedNodeRevision: route.supportedNodeRevision, historicalHeightParameter: route.historicalHeightParameter, queryKey: route.queryKey, queryParameterName: route.queryParameterName, queryParameterValue: route.queryParameterValue, capabilityStatus: .pass)
+                })
+            }
+            let provider = ThorNodeSendPreflightProvider(node: ThorNodeSendClient(transport: transport), leaseProvider: { lease }, capabilities: capabilities)
+            let request = try SendQuoteRequest(sender: Address(sender, network: .mainnet), recipient: Address(recipient, network: .mainnet), amount: .exact(100), memo: nil)
+            let snapshot = try await provider.snapshot(request: request, lease: lease, height: 42, policy: .standard, attempt: SendPreflightAttempt(clientID: UUID(), generation: 1, attemptID: UUID(), familyID: "rorcual-mainnet", routeID: nil))
+            XCTAssertEqual(snapshot.height, 42)
+            XCTAssertEqual(snapshot.accountNumber, 7)
+            XCTAssertEqual(snapshot.sequence, 9)
+            XCTAssertEqual(snapshot.nativeFee, 7)
+            XCTAssertEqual(transport.routeNames, ["account", "network-fee", "mimir", "recipient-account"])
+            XCTAssertEqual(transport.requests.count, 4)
+            XCTAssertFalse(transport.bulkModuleAccountsCalled, "the broken bulk ModuleAccounts route is a regression counterexample")
+            for request in transport.requests {
+                let components = URLComponents(url: request.url!, resolvingAgainstBaseURL: false)!
+                let path = components.queryItems?.first(where: { $0.name == "path" })?.value
+                if let path {
+                    XCTAssertEqual(components.host, family.cometBftURL.host)
+                    XCTAssertTrue(["\"/cosmos.auth.v1beta1.Query/Account\"", "\"/types.Query/Network\""].contains(path))
+                    XCTAssertTrue(CometABCIEncoding.isCanonicalHex(components.queryItems!.first(where: { $0.name == "data" })!.value!))
                 } else {
-                    XCTAssertEqual(components.queryItems?.first(where: { $0.name == "height" })?.value, "42")
+                    XCTAssertEqual(components.host, family.cosmosRestURL.host)
+                    if components.path.contains("spendable_balances") || components.path.hasSuffix("/params") {
+                        XCTAssertNil(components.queryItems?.first(where: { $0.name == "height" }))
+                    } else {
+                        XCTAssertEqual(components.queryItems?.first(where: { $0.name == "height" })?.value, "42")
+                    }
                 }
             }
-        }
-        let runtime = SendRuntime(address: try Address(sender, network: .mainnet))
-        await runtime.activate(generation: 1)
-        let productionTransport = MatrixSendTransport(account: try accountResponse.serializedData(), recipient: try recipientResponse.serializedData(), network: try network.serializedData())
-        let productionProvider = ThorNodeSendPreflightProvider(node: ThorNodeSendClient(transport: productionTransport), leaseProvider: { lease }, capabilities: capabilities, runtime: runtime)
-        let coordinator = SendPreflightCoordinator(runtime: runtime, provider: productionProvider)
-        let prepared = try await coordinator.prepareQuote(request: request)
-        XCTAssertEqual(prepared.snapshot.familyID, family.id)
-        let activeAttempts = await runtime.activePreflightAttemptCount()
-        XCTAssertEqual(activeAttempts, 0)
+            let runtime = try SendRuntime(address: Address(sender, network: .mainnet))
+            await runtime.activate(generation: 1)
+            let productionTransport = try MatrixSendTransport(account: accountResponse.serializedData(), recipient: recipientResponse.serializedData(), network: network.serializedData())
+            let productionProvider = ThorNodeSendPreflightProvider(node: ThorNodeSendClient(transport: productionTransport), leaseProvider: { lease }, capabilities: capabilities, runtime: runtime)
+            let coordinator = SendPreflightCoordinator(runtime: runtime, provider: productionProvider)
+            let prepared = try await coordinator.prepareQuote(request: request)
+            XCTAssertEqual(prepared.snapshot.familyID, family.id)
+            let activeAttempts = await runtime.activePreflightAttemptCount()
+            XCTAssertEqual(activeAttempts, 0)
         }
     }
 
@@ -114,7 +114,7 @@ final class ThorNodeSendPreflightProviderTests: XCTestCase {
                 valid.map { $0.familyID == family.id ? SendFamilyCapability(familyID: $0.familyID, manifestRevision: $0.manifestRevision, routes: $0.routes.map { route in routeCopy(route, path: "") }) : $0 },
                 valid.map { $0.familyID == family.id ? SendFamilyCapability(familyID: $0.familyID, manifestRevision: $0.manifestRevision, routes: $0.routes.map { route in routeCopy(route, schemaRevision: "wrong") }) : $0 },
                 valid.map { $0.familyID == family.id ? SendFamilyCapability(familyID: $0.familyID, manifestRevision: $0.manifestRevision, routes: $0.routes.map { route in routeCopy(route, record: SendManifestRecord(familyID: family.id, role: route.record.role == .rest ? .rpc : .rest, scheme: route.record.scheme, host: route.record.host, port: route.record.port, path: route.record.path)) }) : $0 },
-                valid.map { $0.familyID == family.id ? SendFamilyCapability(familyID: $0.familyID, manifestRevision: $0.manifestRevision, routes: $0.routes.map { route in routeCopy(route, record: SendManifestRecord(familyID: family.id, role: route.record.role, scheme: route.record.scheme, host: "wrong.example", port: route.record.port, path: route.record.path)) }) : $0 }
+                valid.map { $0.familyID == family.id ? SendFamilyCapability(familyID: $0.familyID, manifestRevision: $0.manifestRevision, routes: $0.routes.map { route in routeCopy(route, record: SendManifestRecord(familyID: family.id, role: route.record.role, scheme: route.record.scheme, host: "wrong.example", port: route.record.port, path: route.record.path)) }) : $0 },
             ]
             XCTAssertEqual(canonical.routes.count, 4)
             for capabilities in mutations {
@@ -132,7 +132,7 @@ final class ThorNodeSendPreflightProviderTests: XCTestCase {
     func testProviderCancellationAtEveryPinnedRouteReturnsPromptlyAndDoesNotContinue() async throws {
         let sender = "thor1x0jkvqdh2hlpeztd5zyyk70n3efx6mhudkmnn2"
         let recipient = "thor1tgxm5jw6hrlvslrd6lqpk4jwuu4g29dxytrean"
-        let request = SendQuoteRequest(sender: try Address(sender, network: .mainnet), recipient: try Address(recipient, network: .mainnet), amount: .exact(100))
+        let request = try SendQuoteRequest(sender: Address(sender, network: .mainnet), recipient: Address(recipient, network: .mainnet), amount: .exact(100))
         var account = Cosmos_Auth_V1beta1_BaseAccount(); account.address = sender; account.accountNumber = 7; account.sequence = 9
         var accountResponse = Cosmos_Auth_V1beta1_QueryAccountResponse(); accountResponse.account.typeURL = "/cosmos.auth.v1beta1.BaseAccount"; accountResponse.account.value = try account.serializedData()
         var recipientResponse = Cosmos_Auth_V1beta1_QueryAccountResponse(); recipientResponse.account.typeURL = "/cosmos.auth.v1beta1.BaseAccount"; var recipientAccount = account; recipientAccount.address = recipient; recipientResponse.account.value = try recipientAccount.serializedData()
@@ -141,7 +141,7 @@ final class ThorNodeSendPreflightProviderTests: XCTestCase {
         for family in try NativeRuneEndpointRegistry.families() {
             for route in NativeRuneEndpointRegistry.capabilities().first(where: { $0.familyID == family.id })!.routes {
                 let blocked = expectation(description: "(family.id)/(route.route) dependency started")
-                let transport = MatrixSendTransport(account: try accountResponse.serializedData(), recipient: try recipientResponse.serializedData(), network: try network.serializedData(), blockedRoute: route.route, blockedExpectation: blocked)
+                let transport = try MatrixSendTransport(account: accountResponse.serializedData(), recipient: recipientResponse.serializedData(), network: network.serializedData(), blockedRoute: route.route, blockedExpectation: blocked)
                 let provider = ThorNodeSendPreflightProvider(
                     node: ThorNodeSendClient(transport: transport),
                     leaseProvider: { EndpointLease(family: family, verifiedChainId: "thorchain-1", cosmosReadHeight: 42, cometReferenceHeight: 42, poolGeneration: 1) },
@@ -169,7 +169,9 @@ final class ThorNodeSendPreflightProviderTests: XCTestCase {
                 let beforeRelease = transport.routeNames
                 XCTAssertEqual(beforeRelease.last, route.route)
                 transport.releaseBlocked()
-                for _ in 0..<4 { await Task.yield() }
+                for _ in 0 ..< 4 {
+                    await Task.yield()
+                }
                 XCTAssertEqual(transport.routeNames, beforeRelease, "late route result must not start a subsequent endpoint")
             }
         }

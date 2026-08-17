@@ -37,14 +37,14 @@ public extension Signer {
         try Signer(privateKey: privateKey)
     }
 
-    static func address(seed: Data) throws -> Address {
-        try address(privateKey: privateKey(seed: seed))
+    static func address(seed: Data, network: Network = .mainnet) throws -> Address {
+        try address(privateKey: privateKey(seed: seed), network: network)
     }
 
-    static func address(privateKey: Data) throws -> Address {
+    static func address(privateKey: Data, network: Network = .mainnet) throws -> Address {
         try AccountAddressFactory.address(
             compressedPublicKey: Crypto.publicKey(privateKey: privateKey, compressed: true),
-            network: .mainnet
+            network: network
         )
     }
 

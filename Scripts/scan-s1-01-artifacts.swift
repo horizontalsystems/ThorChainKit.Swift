@@ -107,21 +107,25 @@ let repositoryRoot = canonicalDirectory(repositoryInput.path, label: "repository
 guard repositoryInput.path == repositoryRoot.path else {
     fail("repository root contains a symlink")
 }
+
 let artifactInput = URL(fileURLWithPath: CommandLine.arguments[2], isDirectory: true).standardizedFileURL
 let artifactRoot = canonicalDirectory(artifactInput.path, label: "artifact root")
 guard artifactInput.path == artifactRoot.path, isContained(artifactRoot, in: repositoryRoot) else {
     fail("artifact root is symlinked or outside the repository")
 }
+
 rejectSymlinks(from: repositoryRoot, through: artifactRoot)
 
 let trackedListURL = URL(fileURLWithPath: CommandLine.arguments[3]).standardizedFileURL
 guard isContained(trackedListURL, in: artifactRoot) else {
     fail("tracked-file list is outside the artifact root")
 }
+
 rejectSymlinks(from: repositoryRoot, through: trackedListURL)
 guard let trackedList = try? String(contentsOf: trackedListURL, encoding: .utf8) else {
     fail("tracked-file list is unreadable")
 }
+
 for relativePath in trackedList.split(separator: "\n").map(String.init) {
     let file = repositoryRoot.appendingPathComponent(relativePath).standardizedFileURL
     guard isContained(file, in: repositoryRoot) else {
@@ -177,12 +181,14 @@ for case let file as URL in enumerator {
 guard !pngs.isEmpty else {
     fail("no PNG artifacts were enumerated")
 }
+
 var processedPNGCount = 0
 for png in pngs.sorted(by: { $0.path < $1.path }) {
     let text = recognizedText(in: readAndScan(png), source: png)
     scanText(text, source: "OCR \(png.path)")
     processedPNGCount += 1
 }
+
 guard processedPNGCount == pngs.count else {
     fail("processed PNG count differs from enumeration")
 }

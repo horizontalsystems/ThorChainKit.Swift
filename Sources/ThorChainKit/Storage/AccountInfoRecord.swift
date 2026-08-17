@@ -49,7 +49,7 @@ struct AccountInfoRecord: Equatable, Sendable {
             guard let amount = BigUInt(balance.amountDecimalString), String(amount) == balance.amountDecimalString else {
                 throw StorageError.invalid
             }
-            return (try Denom(rawValue: balance.denom), amount)
+            return try (Denom(rawValue: balance.denom), amount)
         })
         return try AccountState(
             accountNumber: accountNumber,

@@ -1,10 +1,10 @@
 import Foundation
-import XCTest
 @testable import ThorChainKit
+import XCTest
 
 final class KitLifecycleTests: XCTestCase {
     func testKitDelegatesDirectlyToSyncer() async throws {
-        let kit = makeTestKit(address: try sendTestAddress(), persistenceNamespace: "lifecycle")
+        let kit = try makeTestKit(address: sendTestAddress(), persistenceNamespace: "lifecycle")
 
         kit.start()
         kit.start()
@@ -17,7 +17,7 @@ final class KitLifecycleTests: XCTestCase {
     }
 
     func testInitialAccountPublishersReplayEmptyState() throws {
-        let kit = makeTestKit(address: try sendTestAddress(), persistenceNamespace: "lifecycle")
+        let kit = try makeTestKit(address: sendTestAddress(), persistenceNamespace: "lifecycle")
         XCTAssertNil(kit.lastBlockHeight)
         XCTAssertEqual(kit.syncState, .idle(cached: false))
         XCTAssertNil(kit.accountState)

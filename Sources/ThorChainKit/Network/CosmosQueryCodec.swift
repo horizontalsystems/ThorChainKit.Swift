@@ -96,5 +96,4 @@ enum CosmosQueryCodec {
     static func decodeResponseHeight(_ value: Int64?, expected: Int64) throws {
         guard let value, value == expected, value > 0 else { throw SendError.heightUnproven }
     }
-
 }

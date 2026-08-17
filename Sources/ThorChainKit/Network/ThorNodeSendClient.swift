@@ -107,7 +107,7 @@ struct ThorNodeSendClient: Sendable {
             components.queryItems = [
                 URLQueryItem(name: "path", value: "\"\(route.path)\""),
                 URLQueryItem(name: "data", value: CometABCIEncoding.hex(requestData)),
-                URLQueryItem(name: "height", value: String(height))
+                URLQueryItem(name: "height", value: String(height)),
             ]
         }
         var request = URLRequest(url: components.url!)
@@ -118,9 +118,10 @@ struct ThorNodeSendClient: Sendable {
     }
 
     private func validate(response: HTTPURLResponse, request: URLRequest, data: Data) throws {
-        guard (200..<300).contains(response.statusCode), data.count <= maximumBodyBytes,
+        guard (200 ..< 300).contains(response.statusCode), data.count <= maximumBodyBytes,
               response.url == request.url,
-              let type = response.value(forHTTPHeaderField: "Content-Type"), Self.isJSONContentType(type) else {
+              let type = response.value(forHTTPHeaderField: "Content-Type"), Self.isJSONContentType(type)
+        else {
             throw SendError.providerUnavailable
         }
         guard JSONDuplicateKeyGuard.hasNoDuplicates(data) else { throw SendError.providerUnavailable }
@@ -134,8 +135,10 @@ struct ThorNodeSendClient: Sendable {
                 let height: String
                 let value: String?
             }
+
             let response: Response
         }
+
         let jsonrpc: String
         let id: Int
         let result: Result
@@ -188,6 +191,7 @@ enum CometABCIEncoding {
         let body = value.dropFirst(2)
         return body.count % 2 == 0 && body.allSatisfy { $0.isASCII && ("0123456789ABCDEF".contains($0)) }
     }
+
     static func isCanonicalBase64(_ value: String) -> Bool {
         guard !value.isEmpty, value.count % 4 == 0, value.allSatisfy({ $0.isASCII && ("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=".contains($0)) }), let decoded = Data(base64Encoded: value) else { return false }
         return decoded.base64EncodedString() == value
@@ -241,7 +245,7 @@ enum JSONDuplicateKeyGuard {
                 if bytes[index] == 92 { index += 2; continue }
                 if bytes[index] == 34 {
                     var raw = [UInt8](arrayLiteral: 34)
-                    raw.append(contentsOf: bytes[start..<index])
+                    raw.append(contentsOf: bytes[start ..< index])
                     raw.append(34)
                     index += 1
                     return try? JSONDecoder().decode(String.self, from: Data(raw))
@@ -253,11 +257,15 @@ enum JSONDuplicateKeyGuard {
 
         mutating func scalar() -> Bool {
             let start = index
-            while index < bytes.count && ![44, 93, 125, 32, 9, 10, 13].contains(bytes[index]) { index += 1 }
+            while index < bytes.count && ![44, 93, 125, 32, 9, 10, 13].contains(bytes[index]) {
+                index += 1
+            }
             return index > start
         }
 
         mutating func consume(_ byte: UInt8) -> Bool { guard index < bytes.count, bytes[index] == byte else { return false }; index += 1; return true }
-        mutating func whitespace() { while index < bytes.count && [32, 9, 10, 13].contains(bytes[index]) { index += 1 } }
+        mutating func whitespace() { while index < bytes.count, [32, 9, 10, 13].contains(bytes[index]) {
+            index += 1
+        } }
     }
 }

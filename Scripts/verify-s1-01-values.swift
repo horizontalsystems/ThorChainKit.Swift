@@ -119,6 +119,7 @@ let fixtureURL = root.appendingPathComponent(CommandLine.arguments[1])
 guard let expected = try? String(contentsOf: fixtureURL, encoding: .utf8) else {
     fail("fixture is unavailable at \(CommandLine.arguments[1])")
 }
+
 guard actual == expected else {
     fail("normalized syntax differs; actual fixture follows:\n\(actual)")
 }

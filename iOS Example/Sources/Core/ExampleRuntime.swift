@@ -1,10 +1,10 @@
-@_spi(Testing) import ThorChainKit
 import Foundation
+@_spi(Testing) import ThorChainKit
 
 #if EXAMPLE_FIXTURE
-import FixtureSupport
+    import FixtureSupport
 #else
-import LiveSupport
+    import LiveSupport
 #endif
 
 enum ExampleMode: String, Sendable {
@@ -53,69 +53,68 @@ struct ExampleRuntime {
     let recipient: String
     let fixtureNamespace: String?
     let signer: (any Signer)?
-#if EXAMPLE_FIXTURE
-    private let fixtureTransport: FixtureTransport
-    private let fixtureScenario: FixtureScenario
-#endif
+    #if EXAMPLE_FIXTURE
+        private let fixtureTransport: FixtureTransport
+        private let fixtureScenario: FixtureScenario
+    #endif
 
     init() throws {
         network = .mainnet
-#if EXAMPLE_FIXTURE
-        let cosmos = Configuration.cosmosRestURL
-        let comet = Configuration.cometBftURL
-#else
-        let cosmos = Configuration.liveCosmosRestURL
-        let comet = Configuration.liveCometBftURL
-#endif
-        endpointConfiguration = try EndpointConfiguration(families: [try EndpointFamilyDescriptor(
-                id: "rorcual-mainnet",
-                cosmosRestURL: cosmos,
-                cometBftURL: comet
-            )])
-#if EXAMPLE_FIXTURE
-        mode = .fixture
-        let scenario = FixtureScenario()
-        let transport = FixtureTransport(scenario: scenario)
-        fixtureScenario = scenario
-        fixtureTransport = transport
-        let address = try Address(Configuration.address, network: network)
-        recipient = Configuration.recipient
-        fixtureNamespace = scenario.namespace
-        kit = try Kit.fixture(
-            address: address,
-            walletId: scenario.namespace,
-            endpoints: endpointConfiguration,
-            transport: transport,
-            databasePath: try Self.fixtureDatabasePath(namespace: scenario.namespace),
-            observedAt: Date(timeIntervalSince1970: 1)
-        )
-        let golden = FixtureSigner.golden()
-        signer = FixtureSigner(
-            expectedDigest: scenario.expectedDigest,
-            signature: golden.signature,
-            compressedPublicKey: golden.compressedPublicKey
-        )
-#else
-        mode = .live
-        let session = try LiveSendSession(
-            secretURL: Configuration.liveSecretURL,
-            endpoints: endpointConfiguration
-        )
-        kit = session.kit
-        recipient = session.recipient.raw
-        fixtureNamespace = nil
-        signer = session.signer
-#endif
+        #if EXAMPLE_FIXTURE
+            let cosmos = Configuration.cosmosRestURL
+            let comet = Configuration.cometBftURL
+        #else
+            let cosmos = Configuration.liveCosmosRestURL
+            let comet = Configuration.liveCometBftURL
+        #endif
+        endpointConfiguration = try EndpointConfiguration(families: [EndpointFamilyDescriptor(
+            id: "rorcual-mainnet",
+            cosmosRestURL: cosmos,
+            cometBftURL: comet
+        )])
+        #if EXAMPLE_FIXTURE
+            mode = .fixture
+            let scenario = FixtureScenario()
+            let transport = FixtureTransport(scenario: scenario)
+            fixtureScenario = scenario
+            fixtureTransport = transport
+            let address = try Address(Configuration.address, network: network)
+            recipient = Configuration.recipient
+            fixtureNamespace = scenario.namespace
+            kit = try Kit.fixture(
+                address: address,
+                walletId: scenario.namespace,
+                endpoints: endpointConfiguration,
+                transport: transport,
+                databasePath: Self.fixtureDatabasePath(namespace: scenario.namespace),
+                observedAt: Date(timeIntervalSince1970: 1)
+            )
+            let golden = FixtureSigner.golden()
+            signer = FixtureSigner(
+                expectedDigest: scenario.expectedDigest,
+                signature: golden.signature,
+                compressedPublicKey: golden.compressedPublicKey
+            )
+        #else
+            mode = .live
+            let session = try LiveSendSession(
+                secretURL: Configuration.liveSecretURL,
+                endpoints: endpointConfiguration
+            )
+            kit = session.kit
+            recipient = session.recipient.raw
+            fixtureNamespace = nil
+            signer = session.signer
+        #endif
     }
 
     func fixtureRequestCount() async -> Int {
-#if EXAMPLE_FIXTURE
-        return await fixtureTransport.requestCount
-#else
-        return 0
-#endif
+        #if EXAMPLE_FIXTURE
+            return await fixtureTransport.requestCount
+        #else
+            return 0
+        #endif
     }
-
 
     func writeFixtureEvidence(syncState: String, acceptedHeight: Int64?, lastBlockHeight: Int64?, rune: String, requestCount: Int) {
         guard mode == .fixture else { return }
@@ -124,7 +123,7 @@ struct ExampleRuntime {
             "acceptedHeight": acceptedHeight as Any,
             "lastBlockHeight": lastBlockHeight as Any,
             "rune": rune,
-            "requestCount": requestCount
+            "requestCount": requestCount,
         ]
         guard let data = try? JSONSerialization.data(withJSONObject: evidence) else { return }
         let directory = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)[0]
@@ -134,33 +133,33 @@ struct ExampleRuntime {
     }
 
     func setFixtureOffline(_ value: Bool) async {
-#if EXAMPLE_FIXTURE
-        await fixtureTransport.setOffline(value)
-#else
-        _ = value
-#endif
+        #if EXAMPLE_FIXTURE
+            await fixtureTransport.setOffline(value)
+        #else
+            _ = value
+        #endif
     }
 
     func fixturePending() async -> Bool {
-#if EXAMPLE_FIXTURE
-        return await fixtureTransport.isPending
-#else
-        return false
-#endif
+        #if EXAMPLE_FIXTURE
+            return await fixtureTransport.isPending
+        #else
+            return false
+        #endif
     }
 
     func setFixturePending(_ value: Bool) async {
-#if EXAMPLE_FIXTURE
-        await fixtureTransport.setPending(value)
-#else
-        _ = value
-#endif
+        #if EXAMPLE_FIXTURE
+            await fixtureTransport.setPending(value)
+        #else
+            _ = value
+        #endif
     }
 
     func releaseFixturePending() async {
-#if EXAMPLE_FIXTURE
-        await fixtureTransport.releasePending()
-#endif
+        #if EXAMPLE_FIXTURE
+            await fixtureTransport.releasePending()
+        #endif
     }
 
     func isQuoteExpired(_ date: Date) async -> Bool {
@@ -244,7 +243,7 @@ private extension Data {
         self.init(stride(from: 0, to: hex.count, by: 2).compactMap {
             let start = hex.index(hex.startIndex, offsetBy: $0)
             let end = hex.index(start, offsetBy: 2)
-            return UInt8(hex[start..<end], radix: 16)
+            return UInt8(hex[start ..< end], radix: 16)
         })
     }
 }

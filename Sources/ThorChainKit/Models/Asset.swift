@@ -10,6 +10,7 @@ public struct Asset: Hashable, Sendable, CustomStringConvertible {
     public let secured: Bool
 
     public static let rune = Asset(chain: "THOR", symbol: "RUNE", ticker: "RUNE")
+    public static let cacao = Asset(chain: "MAYA", symbol: "CACAO", ticker: "CACAO")
 
     init(chain: String, symbol: String, ticker: String, synth: Bool = false, trade: Bool = false, secured: Bool = false) {
         self.chain = chain

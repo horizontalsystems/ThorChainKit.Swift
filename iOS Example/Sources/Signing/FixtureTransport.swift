@@ -1,7 +1,7 @@
-import Foundation
 import CryptoKit
-import ThorChainKit
 import FixtureSupport
+import Foundation
+import ThorChainKit
 @_spi(Testing) import ThorChainKit
 
 actor FixtureTransport: TestingHTTPTransport {
@@ -23,6 +23,7 @@ actor FixtureTransport: TestingHTTPTransport {
         pending = value
         if !value { releasePending() }
     }
+
     public func releasePending() {
         pending = false
         let waiting = continuations
@@ -64,7 +65,8 @@ actor FixtureTransport: TestingHTTPTransport {
             try requireMethod(request, "GET")
             let query = try queryDictionary(url)
             guard query.count == 3,
-                  let abciPath = query["path"], let data = query["data"], query["height"] == "12345678" else {
+                  let abciPath = query["path"], let data = query["data"], query["height"] == "12345678"
+            else {
                 throw URLError(.cannotParseResponse)
             }
             switch (abciPath, data) {
@@ -82,9 +84,10 @@ actor FixtureTransport: TestingHTTPTransport {
             try requireQuery(url, equals: ["denom": "rune"])
             response = (Data(#"{"balance":{"denom":"rune","amount":"700000000"}}"#.utf8), 200, Self.restHeaders)
         } else if path == "/thorchain/mimir/key/HaltChainGlobal" ||
-                    path == "/thorchain/mimir/key/NodePauseChainGlobal" ||
-                    path == "/thorchain/mimir/key/HaltTHORChain" ||
-                    path == "/thorchain/mimir/key/SolvencyHaltTHORChain" {
+            path == "/thorchain/mimir/key/NodePauseChainGlobal" ||
+            path == "/thorchain/mimir/key/HaltTHORChain" ||
+            path == "/thorchain/mimir/key/SolvencyHaltTHORChain"
+        {
             try requireMethod(request, "GET")
             try requireQuery(url, equals: ["height": "12345678"])
             response = (Data("-1".utf8), 200, Self.restHeaders)
@@ -163,7 +166,6 @@ actor FixtureTransport: TestingHTTPTransport {
     private static let restHeaders = [
         "Content-Type": "application/json",
         "Grpc-Metadata-X-Cosmos-Block-Height": "12345678",
-        "x-cosmos-block-height": "12345678"
+        "x-cosmos-block-height": "12345678",
     ]
-
 }

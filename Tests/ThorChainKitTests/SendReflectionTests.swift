@@ -1,14 +1,13 @@
 import BigInt
 import Foundation
-import XCTest
 @testable import ThorChainKit
+import XCTest
 
 final class SendReflectionTests: XCTestCase {
-
     func testPendingReflectionOmitsStoredMagnitudeFields() throws {
-        let pending = PendingTransaction(
-            transactionId: try XCTUnwrap(TransactionID(hash: String(repeating: "B", count: 64))),
-            recipient: try sendTestAddress(),
+        let pending = try PendingTransaction(
+            transactionId: XCTUnwrap(TransactionID(hash: String(repeating: "B", count: 64))),
+            recipient: sendTestAddress(),
             amountMagnitude: SendMagnitude(BigUInt("18446744073709551617")).data,
             nativeFeeMagnitude: SendMagnitude(1).data,
             memo: nil,

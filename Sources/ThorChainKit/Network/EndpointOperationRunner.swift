@@ -192,7 +192,7 @@ private final class OrphanCounter: @unchecked Sendable {
         lock.lock(); defer { lock.unlock() }
         guard orphaned.isEmpty || orphaned.count < globalMaximum else { return nil }
         if let familyID {
-            let familyOrphans = orphaned.values.compactMap({ $0 }).filter({ $0 == familyID }).count
+            let familyOrphans = orphaned.values.compactMap { $0 }.filter { $0 == familyID }.count
             guard familyOrphans == 0 || familyOrphans < familyMaximum else { return nil }
         }
         let id = UUID()

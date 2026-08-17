@@ -1,6 +1,6 @@
 import Foundation
-import XCTest
 @testable import ThorChainKit
+import XCTest
 
 final class TransactionSenderOwnershipTests: XCTestCase {
     func testPerKitLifecycleIsIndependent() async throws {
@@ -22,5 +22,4 @@ final class TransactionSenderOwnershipTests: XCTestCase {
         XCTAssertFalse(firstStopped)
         XCTAssertTrue(secondStillActive)
     }
-
 }

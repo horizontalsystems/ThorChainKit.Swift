@@ -67,7 +67,8 @@ final class SendJournal: @unchecked Sendable {
         guard !senderPayload.isEmpty, recipientPayload.map({ !$0.isEmpty }) ?? true,
               !transaction.txRaw.isEmpty, !reservationOwnerToken.isEmpty,
               generation > 0, accountNumber <= UInt64(Int64.max),
-              sequence <= UInt64(Int64.max), quoteHeight > 0 else {
+              sequence <= UInt64(Int64.max), quoteHeight > 0
+        else {
             throw SendError.storageUnavailable
         }
         let timestamp = now()
@@ -85,7 +86,7 @@ final class SendJournal: @unchecked Sendable {
                     senderPayload, recipientPayload, sender, recipient, amount, denom.rawValue,
                     quotedNativeFee, memo, String(accountNumber), String(sequence),
                     providerFamilyID, String(quoteHeight), SendJournalState.broadcasting.rawValue,
-                    Int64(generation), timestamp, timestamp
+                    Int64(generation), timestamp, timestamp,
                 ]
             )
             try db.execute(
@@ -181,7 +182,7 @@ final class SendJournal: @unchecked Sendable {
                 arguments: [
                     state.rawValue, Int64(generation), blockedReason?.rawValue, code.map { Int64($0) },
                     codespace, sanitizedLog, now(), persistenceNamespace, transactionID.hash,
-                    expectedState.rawValue, Int64(expectedGeneration)
+                    expectedState.rawValue, Int64(expectedGeneration),
                 ]
             )
             guard db.changesCount == 1 else { return false }
@@ -260,7 +261,8 @@ final class SendJournal: @unchecked Sendable {
               let heightString: String = row["quote_height"], let height = Int64(heightString),
               let stateRaw: String = row["state"], let state = SendJournalState(rawValue: stateRaw),
               let generationValue: Int64 = row["broadcast_generation"], generationValue >= 0,
-              let createdAt: Date = row["created_at"], let updatedAt: Date = row["updated_at"] else {
+              let createdAt: Date = row["created_at"], let updatedAt: Date = row["updated_at"]
+        else {
             throw SendError.storageUnavailable
         }
         let rawCode: Int64? = row["check_tx_code"]
@@ -268,10 +270,10 @@ final class SendJournal: @unchecked Sendable {
         let rawReason: String? = row["retry_blocked_reason"]
         let diagnostic: String? = row["sanitized_log"]
         let reason = rawReason.flatMap(RetryBlockedReason.init(rawValue:))
-        return SendJournalRecord(
+        return try SendJournalRecord(
             persistenceNamespace: persistenceNamespace, transactionID: transactionID, signedTxRaw: raw,
             sender: sender, recipient: recipient, amount: amount,
-            denom: try {
+            denom: {
                 // Every neighbouring field throws on unreadable data; defaulting to RUNE
                 // here would turn a stored TCY send into a displayed RUNE send.
                 guard let raw: String = row["denom"] else { throw SendError.storageUnavailable }

@@ -1,5 +1,5 @@
-import XCTest
 @testable import ThorChainKit
+import XCTest
 
 final class EndpointOperationRunnerTests: XCTestCase {
     func testHealthyOperationsDoNotConsumeOrphanQuota() async throws {
@@ -42,8 +42,7 @@ final class EndpointOperationRunnerTests: XCTestCase {
         do {
             let result = try await runner.run { 2 }
             XCTAssertEqual(result, 2)
-        }
-        catch { XCTFail("pre-cancelled ticket must be released: \(error)") }
+        } catch { XCTFail("pre-cancelled ticket must be released: \(error)") }
     }
 
     func testCancellationCreatesOrphanAndLateCompletionReleasesCapacity() async {
@@ -102,8 +101,7 @@ final class EndpointOperationRunnerTests: XCTestCase {
         do {
             let result = try await runAfterOrphansRelease(runner) { 2 }
             XCTAssertEqual(result, 2)
-        }
-        catch { XCTFail("returned dependency must release capacity: \(error)") }
+        } catch { XCTFail("returned dependency must release capacity: \(error)") }
     }
 
     func testConcurrentOrphansRemainCountedUntilBothDependenciesReturn() async {
@@ -214,7 +212,7 @@ private func runAfterOrphansRelease<T: Sendable>(
     _ runner: EndpointOperationRunner,
     operation: @escaping @Sendable () async throws -> T
 ) async throws -> T {
-    for _ in 0..<100 {
+    for _ in 0 ..< 100 {
         do {
             return try await runner.run(operation)
         } catch EndpointOperationError.orphanCapReached {
@@ -234,7 +232,9 @@ private final class AsyncGate: @unchecked Sendable {
     }
 
     func waitUntilRegistered() async {
-        while !isRegistered { await Task.yield() }
+        while !isRegistered {
+            await Task.yield()
+        }
     }
 
     func wait() async {

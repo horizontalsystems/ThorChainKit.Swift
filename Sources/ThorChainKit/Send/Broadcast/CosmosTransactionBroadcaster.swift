@@ -40,7 +40,8 @@ struct CosmosTransactionBroadcaster: ITransactionBroadcaster {
             throw BroadcastTransportError.transport
         }
         guard response.statusCode == 200,
-              Self.isJSON(response.value(forHTTPHeaderField: "Content-Type")) else {
+              Self.isJSON(response.value(forHTTPHeaderField: "Content-Type"))
+        else {
             throw BroadcastTransportError.invalidResponse
         }
         return try StrictJSONEnvelopeDecoder().decode(data, schema: .broadcast)
@@ -90,7 +91,7 @@ struct CosmosTransactionLookupClient: Sendable {
             switch response.statusCode {
             case 200: return Self.decodeFound(data: data, expected: transactionID)
             case 404: return Self.decodeNotFound(data: data, expected: transactionID, message: notFoundMessage(transactionID.hash))
-            case 429, 500...599: return .transportFailure
+            case 429, 500 ... 599: return .transportFailure
             default: return .providerInconsistent
             }
         } catch {
@@ -111,7 +112,7 @@ struct CosmosTransactionLookupClient: Sendable {
         return .found(transactionID: expected, height: height)
     }
 
-    private static func decodeNotFound(data: Data, expected: TransactionID, message: String) -> RetryLookupResponse {
+    private static func decodeNotFound(data: Data, expected _: TransactionID, message: String) -> RetryLookupResponse {
         guard (try? StrictJSONEnvelopeDecoder.validateJSONDocument(data, maximumBodyBytes: 4 * 1024)) != nil,
               data.count <= 4 * 1024,
               let object = try? JSONSerialization.jsonObject(with: data) as? [String: Any],

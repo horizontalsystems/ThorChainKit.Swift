@@ -1,6 +1,6 @@
 import Foundation
-import XCTest
 @testable import ThorChainKit
+import XCTest
 
 final class ThorNodeSendClientTests: XCTestCase {
     func testCometRequestUsesOnlyCanonicalUppercaseHex() {
@@ -13,7 +13,7 @@ final class ThorNodeSendClientTests: XCTestCase {
 
     func testRESTHeaderProofUsesHeaderHeightFromTheResponse() async throws {
         let transport = ScriptedSendTransport(data: Data(#"{"account_number":"1"}"#.utf8), headers: ["Content-Type": "application/json", "Grpc-Metadata-X-Cosmos-Block-Height": "42"])
-        let result = try await ThorNodeSendClient(transport: transport).read(route: route(.restHeader), using: try lease(), height: 42)
+        let result = try await ThorNodeSendClient(transport: transport).read(route: route(.restHeader), using: lease(), height: 42)
         XCTAssertEqual(result.value, Data(#"{"account_number":"1"}"#.utf8))
         XCTAssertEqual(result.proof, .restHeader(expected: 42, actual: 42))
         XCTAssertEqual(transport.requests.first?.value(forHTTPHeaderField: "x-cosmos-block-height"), "42")
@@ -24,7 +24,7 @@ final class ThorNodeSendClientTests: XCTestCase {
         // rather than left half-enforced. See audit finding 0.2 for what this gives up.
         for headers in [["Content-Type": "application/json"], ["Content-Type": "application/json", "Grpc-Metadata-X-Cosmos-Block-Height": "41"]] {
             let transport = ScriptedSendTransport(data: Data(#"{"account_number":"1"}"#.utf8), headers: headers)
-            let result = try await ThorNodeSendClient(transport: transport).read(route: route(.restHeader), using: try lease(), height: 42)
+            let result = try await ThorNodeSendClient(transport: transport).read(route: route(.restHeader), using: lease(), height: 42)
             XCTAssertEqual(result.proof, .restHeader(expected: 42, actual: 42))
         }
     }
@@ -33,11 +33,11 @@ final class ThorNodeSendClientTests: XCTestCase {
         let encoded = Data(#"{"account_number":"1"}"#.utf8).base64EncodedString()
         let body = Data("{\"jsonrpc\":\"2.0\",\"id\":-1,\"result\":{\"response\":{\"code\":0,\"height\":\"42\",\"value\":\"\(encoded)\"}}}".utf8)
         let transport = ScriptedSendTransport(data: body, headers: ["Content-Type": "application/json"])
-        let result = try await ThorNodeSendClient(transport: transport).read(route: route(.cometABCI, path: "/cosmos.auth.v1beta1.Query/Account"), using: try lease(), height: 42, requestData: Data([1, 2]))
+        let result = try await ThorNodeSendClient(transport: transport).read(route: route(.cometABCI, path: "/cosmos.auth.v1beta1.Query/Account"), using: lease(), height: 42, requestData: Data([1, 2]))
         XCTAssertEqual(result.value, Data(#"{"account_number":"1"}"#.utf8))
         XCTAssertEqual(result.proof, .cometABCI(expected: 42, actual: 42))
         XCTAssertNil(transport.requests.first?.value(forHTTPHeaderField: "Grpc-Metadata-X-Cosmos-Block-Height"))
-        let components = URLComponents(url: try XCTUnwrap(transport.requests.first?.url), resolvingAgainstBaseURL: false)
+        let components = try URLComponents(url: XCTUnwrap(transport.requests.first?.url), resolvingAgainstBaseURL: false)
         XCTAssertEqual(components?.path, "/abci_query")
         XCTAssertEqual(components?.queryItems?.first(where: { $0.name == "path" })?.value, "\"/cosmos.auth.v1beta1.Query/Account\"")
         XCTAssertEqual(components?.queryItems?.first(where: { $0.name == "data" })?.value, "0x0102")
@@ -58,10 +58,10 @@ final class ThorNodeSendClientTests: XCTestCase {
         for value in [
             "",
             ",\"value\":null",
-            ",\"value\":\"\""
+            ",\"value\":\"\"",
         ] {
             let response = "{\"jsonrpc\":\"2.0\",\"id\":-1,\"result\":{\"response\":{\"code\":22,\"codespace\":\"sdk\",\"height\":\"42\"" + value + "}}}"
-            let result = try await ThorNodeSendClient(transport: ScriptedSendTransport(data: Data(response.utf8), headers: ["Content-Type": "application/json"])).read(route: recipientRoute(), using: try lease(), height: 42)
+            let result = try await ThorNodeSendClient(transport: ScriptedSendTransport(data: Data(response.utf8), headers: ["Content-Type": "application/json"])).read(route: recipientRoute(), using: lease(), height: 42)
             XCTAssertEqual(result.code, 22)
             XCTAssertTrue(result.value.isEmpty)
         }
@@ -75,7 +75,7 @@ final class ThorNodeSendClientTests: XCTestCase {
 
     func testBodyHeightProofUsesAuthoritativeBodyHeight() async throws {
         let transport = ScriptedSendTransport(data: Data(#"{"evaluated_height":42,"value":"eyJhIjoxfQ=="}"#.utf8), headers: ["Content-Type": "application/json"])
-        let result = try await ThorNodeSendClient(transport: transport).read(route: route(.bodyHeight), using: try lease(), height: 42)
+        let result = try await ThorNodeSendClient(transport: transport).read(route: route(.bodyHeight), using: lease(), height: 42)
         XCTAssertEqual(result.value, Data(#"{"a":1}"#.utf8))
         XCTAssertEqual(result.proof, .body(expected: 42, actual: 42))
     }
@@ -97,7 +97,7 @@ final class ThorNodeSendClientTests: XCTestCase {
 
         let valid = Data(#"{"evaluated_height":42,"value":"AA=="}"#.utf8)
         for contentType in ["Application/JSON; charset=utf-8", "application/json; charset=\"utf-8\""] {
-            let result = try await ThorNodeSendClient(transport: ScriptedSendTransport(data: valid, headers: ["Content-Type": contentType])).read(route: route(.bodyHeight), using: try lease(), height: 42)
+            let result = try await ThorNodeSendClient(transport: ScriptedSendTransport(data: valid, headers: ["Content-Type": contentType])).read(route: route(.bodyHeight), using: lease(), height: 42)
             XCTAssertEqual(result.proof, .body(expected: 42, actual: 42))
         }
         for contentType in ["application/json-evil", "application/json;", "application/json; charset=", "application/json; charset=utf 8"] {
@@ -142,7 +142,7 @@ final class ThorNodeSendClientTests: XCTestCase {
         let mismatchRoute = SendManifestRoute(record: route(.bodyHeight).record, route: "account", path: "/fixture", requestEncoding: .protobufABCI, proofMode: .bodyHeight, schemaRevision: "s2-02-v1", capabilityStatus: .pass)
         let transport = ScriptedSendTransport(data: Data(#"{"evaluated_height":42,"value":"AA=="}"#.utf8), headers: ["Content-Type": "application/json"])
         do {
-            _ = try await ThorNodeSendClient(transport: transport).read(route: mismatchRoute, using: try lease(), height: 42)
+            _ = try await ThorNodeSendClient(transport: transport).read(route: mismatchRoute, using: lease(), height: 42)
             XCTFail("route encoding mismatch must fail before transport")
         } catch let error as SendError {
             XCTAssertEqual(error, .policyUnavailable)
@@ -157,7 +157,7 @@ final class ThorNodeSendClientTests: XCTestCase {
         for envelope in [
             "{\"jsonrpc\":\"2.0\",\"id\":1,\"result\":{\"response\":{\"code\":0,\"height\":\"42\",\"value\":\"" + validValue + "\"}}}",
             "{\"jsonrpc\":\"2.0\",\"id\":-1,\"result\":{\"response\":{\"code\":1,\"codespace\":\"sdk\",\"height\":\"42\",\"value\":\"" + validValue + "\"}}}",
-            "{\"jsonrpc\":\"2.0\",\"id\":-1,\"result\":{\"response\":{\"code\":0,\"height\":\"42\",\"value\":\"not-base64\"}}}"
+            "{\"jsonrpc\":\"2.0\",\"id\":-1,\"result\":{\"response\":{\"code\":0,\"height\":\"42\",\"value\":\"not-base64\"}}}",
         ] {
             await assertProviderFailure(ThorNodeSendClient(transport: ScriptedSendTransport(data: Data(envelope.utf8), headers: ["Content-Type": "application/json"])), route: route(.cometABCI, path: "/cosmos.auth.v1beta1.Query/Account"))
         }
@@ -165,7 +165,7 @@ final class ThorNodeSendClientTests: XCTestCase {
 
     private func assertProviderFailure(_ client: ThorNodeSendClient, route: SendManifestRoute) async {
         do {
-            _ = try await client.read(route: route, using: try lease(), height: 42)
+            _ = try await client.read(route: route, using: lease(), height: 42)
             XCTFail("invalid proof response must fail closed")
         } catch let error as SendError {
             XCTAssertTrue([.providerUnavailable, .heightUnproven].contains(error))
@@ -187,7 +187,7 @@ final class ThorNodeSendClientTests: XCTestCase {
     }
 
     private func lease() throws -> EndpointLease {
-        EndpointLease(family: try EndpointFamilyDescriptor(id: "rorcual-mainnet", cosmosRestURL: URL(string: "https://api-thorchain.rorcual.xyz/")!, cometBftURL: URL(string: "https://rpc-thorchain.rorcual.xyz/")!), verifiedChainId: "thorchain-1", cosmosReadHeight: 42, cometReferenceHeight: 42, poolGeneration: 1)
+        try EndpointLease(family: EndpointFamilyDescriptor(id: "rorcual-mainnet", cosmosRestURL: URL(string: "https://api-thorchain.rorcual.xyz/")!, cometBftURL: URL(string: "https://rpc-thorchain.rorcual.xyz/")!), verifiedChainId: "thorchain-1", cosmosReadHeight: 42, cometReferenceHeight: 42, poolGeneration: 1)
     }
 
     private func recipientRoute() -> SendManifestRoute { NativeRuneEndpointRegistry.capabilities().first!.routes.first { $0.route == "recipient-account" }! }
@@ -263,7 +263,7 @@ private final class RedirectingURLProtocol: URLProtocol {
         lock.lock(); count = 0; lock.unlock()
     }
 
-    override class func canInit(with request: URLRequest) -> Bool { true }
+    override class func canInit(with _: URLRequest) -> Bool { true }
     override class func canonicalRequest(for request: URLRequest) -> URLRequest { request }
 
     override func startLoading() {

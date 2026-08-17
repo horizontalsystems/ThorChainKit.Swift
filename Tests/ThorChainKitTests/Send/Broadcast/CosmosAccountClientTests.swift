@@ -1,6 +1,6 @@
 import Foundation
-import XCTest
 @testable import ThorChainKit
+import XCTest
 
 final class CosmosAccountClientTests: XCTestCase {
     private let address = "thor1x0jkvqdh2hlpeztd5zyyk70n3efx6mhudkmnn2"

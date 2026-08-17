@@ -1,6 +1,6 @@
 import Foundation
-import XCTest
 @testable import ThorChainKit
+import XCTest
 
 final class SendJournalOrderingTests: XCTestCase {
     func testFailedInitialCommitMakesZeroTransportCalls() throws {

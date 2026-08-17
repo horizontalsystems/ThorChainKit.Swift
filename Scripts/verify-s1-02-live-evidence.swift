@@ -1,7 +1,7 @@
 import CoreFoundation
 import Foundation
 #if canImport(FoundationNetworking)
-import FoundationNetworking
+    import FoundationNetworking
 #endif
 
 private enum VerificationFailure: Error {
@@ -110,12 +110,12 @@ private func rejectForbidden(_ value: Any) throws {
 
 private func validateOrigin(_ value: Any) throws {
     let object = try dictionary(value, keys: ["scheme", "host", "port"])
-    try require(try string(object["scheme"] as Any) == "https")
+    try require(string(object["scheme"] as Any) == "https")
     let host = try string(object["host"] as Any)
     try require(!host.isEmpty && host == host.lowercased())
     if !(object["port"] is NSNull) {
         let port = try integer(object["port"] as Any)
-        try require((1...65535).contains(port))
+        try require((1 ... 65535).contains(port))
     }
 }
 
@@ -160,10 +160,10 @@ private func validate(
         "schemaVersion", "source", "implementationHead", "generatedAt", "expectedChainId",
         "families", "selection",
     ])
-    try require(try integer(object["schemaVersion"] as Any) == 1)
-    try require(try string(object["source"] as Any) == "thorchainkit-s1-02-live")
-    try require(try string(object["implementationHead"] as Any) == head)
-    try require(try string(object["expectedChainId"] as Any) == expectedChainId)
+    try require(integer(object["schemaVersion"] as Any) == 1)
+    try require(string(object["source"] as Any) == "thorchainkit-s1-02-live")
+    try require(string(object["implementationHead"] as Any) == head)
+    try require(string(object["expectedChainId"] as Any) == expectedChainId)
     let generatedAt = try string(object["generatedAt"] as Any)
     try require(generatedAt.range(
         of: "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z$",
@@ -179,16 +179,16 @@ private func validate(
             "familyId", "cosmosOrigin", "cometOrigin", "identityClassification",
             "cosmosHeight", "cometHeight", "heightSkew", "catchingUp", "outcome",
         ])
-        try require(try string(family["familyId"] as Any) == familyIDs[index])
+        try require(string(family["familyId"] as Any) == familyIDs[index])
         try validateOrigin(family["cosmosOrigin"] as Any)
         try validateOrigin(family["cometOrigin"] as Any)
-        try require(try string(family["identityClassification"] as Any) == "expected")
-        try require(try string(family["outcome"] as Any) == "eligible")
+        try require(string(family["identityClassification"] as Any) == "expected")
+        try require(string(family["outcome"] as Any) == "eligible")
         let cosmos = try integer(family["cosmosHeight"] as Any)
         let comet = try integer(family["cometHeight"] as Any)
         let skew = try integer(family["heightSkew"] as Any)
         try require(cosmos > 0 && comet > 0 && skew == abs(cosmos - comet) && skew <= 5)
-        try require(try boolean(family["catchingUp"] as Any) == false)
+        try require(boolean(family["catchingUp"] as Any) == false)
         cometHeights.append(comet)
     }
 
@@ -196,7 +196,7 @@ private func validate(
     let generation = try integer(selection["poolGeneration"] as Any)
     try require(generation >= 0)
     let winner = cometHeights[1] > cometHeights[0] ? familyIDs[1] : familyIDs[0]
-    try require(try string(selection["familyId"] as Any) == winner)
+    try require(string(selection["familyId"] as Any) == winner)
 }
 
 private func origin(_ url: URL) throws -> Origin {
@@ -228,7 +228,7 @@ private func fetch(_ url: URL) async throws -> [String: Any] {
     var request = URLRequest(url: url)
     request.timeoutInterval = 15
     let (data, response) = try await URLSession.shared.data(for: request)
-    guard let response = response as? HTTPURLResponse, (200..<300).contains(response.statusCode),
+    guard let response = response as? HTTPURLResponse, (200 ..< 300).contains(response.statusCode),
           let object = try JSONSerialization.jsonObject(with: data) as? [String: Any]
     else {
         throw VerificationFailure.invalid
@@ -248,28 +248,28 @@ private func nested(_ object: [String: Any], _ keys: String...) throws -> Any {
 }
 
 private func probeFamily(id: String, cosmos: URL, comet: URL) async throws -> FamilyEvidence {
-    async let node = fetch(try append("cosmos/base/tendermint/v1beta1/node_info", to: cosmos))
-    async let block = fetch(try append("cosmos/base/tendermint/v1beta1/blocks/latest", to: cosmos))
-    async let status = fetch(try append("status", to: comet))
+    async let node = try fetch(append("cosmos/base/tendermint/v1beta1/node_info", to: cosmos))
+    async let block = try fetch(append("cosmos/base/tendermint/v1beta1/blocks/latest", to: cosmos))
+    async let status = try fetch(append("status", to: comet))
     let (nodeValue, blockValue, statusValue) = try await (node, block, status)
-    let identities = [
-        try string(nested(nodeValue, "default_node_info", "network")),
-        try string(nested(blockValue, "block", "header", "chain_id")),
-        try string(nested(statusValue, "result", "node_info", "network")),
+    let identities = try [
+        string(nested(nodeValue, "default_node_info", "network")),
+        string(nested(blockValue, "block", "header", "chain_id")),
+        string(nested(statusValue, "result", "node_info", "network")),
     ]
     try require(identities.allSatisfy { $0 == expectedChainId })
-    guard let cosmosHeight = Int64(try string(nested(blockValue, "block", "header", "height"))),
-          let cometHeight = Int64(try string(nested(statusValue, "result", "sync_info", "latest_block_height")))
+    guard let cosmosHeight = try Int64(string(nested(blockValue, "block", "header", "height"))),
+          let cometHeight = try Int64(string(nested(statusValue, "result", "sync_info", "latest_block_height")))
     else {
         throw VerificationFailure.invalid
     }
     let catchingUp = try boolean(nested(statusValue, "result", "sync_info", "catching_up"))
     let skew = abs(cosmosHeight - cometHeight)
     try require(cosmosHeight > 0 && cometHeight > 0 && skew <= 5 && !catchingUp)
-    return FamilyEvidence(
+    return try FamilyEvidence(
         familyId: id,
-        cosmosOrigin: try origin(cosmos),
-        cometOrigin: try origin(comet),
+        cosmosOrigin: origin(cosmos),
+        cometOrigin: origin(comet),
         identityClassification: "expected",
         cosmosHeight: cosmosHeight,
         cometHeight: cometHeight,
@@ -288,10 +288,10 @@ private func environment(_ name: String) throws -> String {
 
 private func probe(output: String, finalOutput: String, repositoryRoot: String, head: String) async throws {
     let ids = try [environment("THORCHAIN_S1_02_FAMILY_A_ID"), environment("THORCHAIN_S1_02_FAMILY_B_ID")]
-    guard let cosmosA = URL(string: try environment("THORCHAIN_S1_02_FAMILY_A_COSMOS_URL")),
-          let cometA = URL(string: try environment("THORCHAIN_S1_02_FAMILY_A_COMET_URL")),
-          let cosmosB = URL(string: try environment("THORCHAIN_S1_02_FAMILY_B_COSMOS_URL")),
-          let cometB = URL(string: try environment("THORCHAIN_S1_02_FAMILY_B_COMET_URL"))
+    guard let cosmosA = try URL(string: environment("THORCHAIN_S1_02_FAMILY_A_COSMOS_URL")),
+          let cometA = try URL(string: environment("THORCHAIN_S1_02_FAMILY_A_COMET_URL")),
+          let cosmosB = try URL(string: environment("THORCHAIN_S1_02_FAMILY_B_COSMOS_URL")),
+          let cometB = try URL(string: environment("THORCHAIN_S1_02_FAMILY_B_COMET_URL"))
     else {
         throw VerificationFailure.invalid
     }

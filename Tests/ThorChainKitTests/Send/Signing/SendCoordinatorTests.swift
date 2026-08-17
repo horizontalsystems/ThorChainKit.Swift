@@ -1,7 +1,7 @@
 import BigInt
 import Foundation
-import XCTest
 @testable import ThorChainKit
+import XCTest
 
 final class SendCoordinatorTests: XCTestCase {
     func testAnExpiredQuoteIsRejectedBeforeBroadcast() async throws {
@@ -15,7 +15,7 @@ final class SendCoordinatorTests: XCTestCase {
             familyID: "rorcual-mainnet", chainID: "thorchain-1", height: 12,
             sender: sender.raw, recipient: recipient.raw, accountNumber: 1, sequence: 2,
             amount: 100, nativeFee: 2,
-            mimir: MimirSnapshot(haltChainGlobal: -1, nodePauseChainGlobal: -1, haltTHORChain: -1, solvencyHaltTHORChain: -1),
+            mimir: MimirSnapshot(haltChainGlobal: -1, nodePauseChainGlobal: -1, haltNativeChain: -1, solvencyHaltNativeChain: -1),
             memoMaximumBytes: 256,
             accountPublicKey: "/cosmos.crypto.secp256k1.PubKey", accountPublicKeyData: publicKey
         )
@@ -40,7 +40,7 @@ final class SendCoordinatorTests: XCTestCase {
             familyID: "rorcual-mainnet", chainID: "thorchain-1", height: 12,
             sender: sender.raw, recipient: "", accountNumber: 1, sequence: 2,
             amount: 100, nativeFee: 2,
-            mimir: MimirSnapshot(haltChainGlobal: -1, nodePauseChainGlobal: -1, haltTHORChain: -1, solvencyHaltTHORChain: -1),
+            mimir: MimirSnapshot(haltChainGlobal: -1, nodePauseChainGlobal: -1, haltNativeChain: -1, solvencyHaltNativeChain: -1),
             memoMaximumBytes: 256,
             accountPublicKey: "/cosmos.crypto.secp256k1.PubKey", accountPublicKeyData: publicKey
         )
@@ -72,7 +72,7 @@ final class SendCoordinatorTests: XCTestCase {
             familyID: "rorcual-mainnet", chainID: "thorchain-1", height: 12,
             sender: sender.raw, recipient: recipient.raw, accountNumber: 1, sequence: 2,
             amount: 100, nativeFee: 2, denom: tcy,
-            mimir: MimirSnapshot(haltChainGlobal: -1, nodePauseChainGlobal: -1, haltTHORChain: -1, solvencyHaltTHORChain: -1),
+            mimir: MimirSnapshot(haltChainGlobal: -1, nodePauseChainGlobal: -1, haltNativeChain: -1, solvencyHaltNativeChain: -1),
             memoMaximumBytes: 256,
             accountPublicKey: "/cosmos.crypto.secp256k1.PubKey", accountPublicKeyData: publicKey
         )
@@ -103,7 +103,7 @@ final class SendCoordinatorTests: XCTestCase {
             familyID: "rorcual-mainnet", chainID: "thorchain-1", height: 12,
             sender: sender.raw, recipient: recipient.raw, accountNumber: 1, sequence: 2,
             amount: 100, nativeFee: 2,
-            mimir: MimirSnapshot(haltChainGlobal: -1, nodePauseChainGlobal: -1, haltTHORChain: -1, solvencyHaltTHORChain: -1),
+            mimir: MimirSnapshot(haltChainGlobal: -1, nodePauseChainGlobal: -1, haltNativeChain: -1, solvencyHaltNativeChain: -1),
             memoMaximumBytes: 256,
             accountPublicKey: "/cosmos.crypto.secp256k1.PubKey", accountPublicKeyData: publicKey
         )
@@ -128,11 +128,11 @@ final class SendCoordinatorTests: XCTestCase {
     }
 
     func testCancelledBeforeAdmissionLeavesQuoteUnused() async throws {
-        let runtime = SendRuntime(address: try sendTestAddress(), persistenceNamespace: "coordinator-pre-cancel")
+        let runtime = try SendRuntime(address: sendTestAddress(), persistenceNamespace: "coordinator-pre-cancel")
         await runtime.activate(generation: 1)
         let quote = try await runtime.issuePreflightQuote(
-            request: SendQuoteRequest(sender: try sendTestAddress(), recipient: try sendOtherAddress(), amount: .exact(100), memo: nil),
-            snapshot: try SendSnapshot.fixture(height: 12)
+            request: SendQuoteRequest(sender: sendTestAddress(), recipient: sendOtherAddress(), amount: .exact(100), memo: nil),
+            snapshot: SendSnapshot.fixture(height: 12)
         )
         let signer = CountingSigner(publicKey: Data(repeating: 0, count: 33))
         let task = Task { await SendCoordinator(runtime: runtime).execute(quote: quote, signer: signer) }
@@ -168,7 +168,7 @@ final class SendCoordinatorTests: XCTestCase {
         XCTAssertEqual(signer.lateHandoffCount, 0)
 
         let freshQuote = try await runtime.issuePreflightQuote(
-            request: SendQuoteRequest(sender: try sendOtherAddress(), recipient: try sendTestAddress(), amount: .exact(snapshot.amount), memo: nil),
+            request: SendQuoteRequest(sender: sendOtherAddress(), recipient: sendTestAddress(), amount: .exact(snapshot.amount), memo: nil),
             snapshot: snapshot
         )
         let freshSigner = CountingSigner(publicKey: publicKey)
@@ -184,7 +184,7 @@ final class SendCoordinatorTests: XCTestCase {
             familyID: "rorcual-mainnet", chainID: "thorchain-1", height: 12,
             sender: sender.raw, recipient: recipient.raw, accountNumber: 1, sequence: 2,
             amount: 100, nativeFee: 2,
-            mimir: MimirSnapshot(haltChainGlobal: -1, nodePauseChainGlobal: -1, haltTHORChain: -1, solvencyHaltTHORChain: -1),
+            mimir: MimirSnapshot(haltChainGlobal: -1, nodePauseChainGlobal: -1, haltNativeChain: -1, solvencyHaltNativeChain: -1),
             memoMaximumBytes: 256,
             accountPublicKey: "/cosmos.crypto.secp256k1.PubKey", accountPublicKeyData: publicKey
         )
@@ -214,7 +214,7 @@ final class SendCoordinatorTests: XCTestCase {
             familyID: "rorcual-mainnet", chainID: "thorchain-1", height: 12,
             sender: sender.raw, recipient: recipient.raw, accountNumber: 1, sequence: 2,
             amount: 100, nativeFee: 2,
-            mimir: MimirSnapshot(haltChainGlobal: -1, nodePauseChainGlobal: -1, haltTHORChain: -1, solvencyHaltTHORChain: -1),
+            mimir: MimirSnapshot(haltChainGlobal: -1, nodePauseChainGlobal: -1, haltNativeChain: -1, solvencyHaltNativeChain: -1),
             memoMaximumBytes: 256,
             accountPublicKey: "/cosmos.crypto.secp256k1.PubKey", accountPublicKeyData: publicKey
         )
@@ -244,7 +244,7 @@ final class SendCoordinatorTests: XCTestCase {
             familyID: "rorcual-mainnet", chainID: "thorchain-1", height: 12,
             sender: sender.raw, recipient: recipient.raw, accountNumber: 1, sequence: 2,
             amount: 100, nativeFee: 2,
-            mimir: MimirSnapshot(haltChainGlobal: -1, nodePauseChainGlobal: -1, haltTHORChain: -1, solvencyHaltTHORChain: -1),
+            mimir: MimirSnapshot(haltChainGlobal: -1, nodePauseChainGlobal: -1, haltNativeChain: -1, solvencyHaltNativeChain: -1),
             memoMaximumBytes: 256,
             accountPublicKey: "/cosmos.crypto.secp256k1.PubKey", accountPublicKeyData: publicKey
         )
@@ -277,7 +277,7 @@ final class SendCoordinatorTests: XCTestCase {
     }
 
     func testAdmissionAndOperationHoldPrecedeQuoteAccess() async throws {
-        let runtime = SendRuntime(address: try sendTestAddress(), persistenceNamespace: "coordinator-order")
+        let runtime = try SendRuntime(address: sendTestAddress(), persistenceNamespace: "coordinator-order")
         let signer = CountingSigner(publicKey: Data(repeating: 0, count: 33))
         let quote = try issueTestQuote(in: QuoteStore(), clock: TestSendClock())
         let result = await SendCoordinator(runtime: runtime).execute(quote: quote, signer: signer)
@@ -289,7 +289,7 @@ final class SendCoordinatorTests: XCTestCase {
     }
 
     func testStopDoesNotReleaseAdmittedAttemptHold() async throws {
-        let runtime = SendRuntime(address: try sendTestAddress(), persistenceNamespace: "coordinator-stop")
+        let runtime = try SendRuntime(address: sendTestAddress(), persistenceNamespace: "coordinator-stop")
         await runtime.activate(generation: 1)
         let sender = try sendTestAddress().raw
         let admitted = await runtime.beginAccountAttempt(sender)
@@ -300,7 +300,6 @@ final class SendCoordinatorTests: XCTestCase {
         XCTAssertFalse(admittedAfterStop)
         await runtime.endAccountAttempt(sender)
     }
-
 
     func testCleanupFailureReturnsRepairPending() async throws {
         let sender = try sendOtherAddress()
@@ -316,7 +315,7 @@ final class SendCoordinatorTests: XCTestCase {
             sequence: 2,
             amount: 100,
             nativeFee: 2,
-            mimir: MimirSnapshot(haltChainGlobal: -1, nodePauseChainGlobal: -1, haltTHORChain: -1, solvencyHaltTHORChain: -1),
+            mimir: MimirSnapshot(haltChainGlobal: -1, nodePauseChainGlobal: -1, haltNativeChain: -1, solvencyHaltNativeChain: -1),
             memoMaximumBytes: 256,
             accountPublicKey: "/cosmos.crypto.secp256k1.PubKey",
             accountPublicKeyData: publicKey
@@ -356,7 +355,7 @@ final class SendCoordinatorTests: XCTestCase {
             familyID: "rorcual-mainnet", chainID: "thorchain-1", height: 12,
             sender: sender.raw, recipient: recipient.raw, accountNumber: 1, sequence: 2,
             amount: 100, nativeFee: 2,
-            mimir: MimirSnapshot(haltChainGlobal: -1, nodePauseChainGlobal: -1, haltTHORChain: -1, solvencyHaltTHORChain: -1),
+            mimir: MimirSnapshot(haltChainGlobal: -1, nodePauseChainGlobal: -1, haltNativeChain: -1, solvencyHaltNativeChain: -1),
             memoMaximumBytes: 256,
             accountPublicKey: "/cosmos.crypto.secp256k1.PubKey", accountPublicKeyData: publicKey
         )
@@ -377,16 +376,16 @@ final class SendCoordinatorTests: XCTestCase {
             familyID: "thorchain-mainnet", chainID: "thorchain-1", height: 1,
             sender: sender, recipient: recipient, accountNumber: 123_456, sequence: 1,
             amount: 100_000_000, nativeFee: 0,
-            mimir: MimirSnapshot(haltChainGlobal: -1, nodePauseChainGlobal: -1, haltTHORChain: -1, solvencyHaltTHORChain: -1),
+            mimir: MimirSnapshot(haltChainGlobal: -1, nodePauseChainGlobal: -1, haltNativeChain: -1, solvencyHaltNativeChain: -1),
             memoMaximumBytes: 256,
             accountPublicKey: "/cosmos.crypto.secp256k1.PubKey", accountPublicKeyData: publicKey
         )
-        let runtime = SendRuntime(address: try Address(sender, network: .mainnet), persistenceNamespace: namespace)
+        let runtime = try SendRuntime(address: Address(sender, network: .mainnet), persistenceNamespace: namespace)
         await runtime.activate(generation: 1)
         let quote = try await runtime.issuePreflightQuote(
             request: SendQuoteRequest(
-                sender: try Address(sender, network: .mainnet),
-                recipient: try Address(recipient, network: .mainnet),
+                sender: Address(sender, network: .mainnet),
+                recipient: Address(recipient, network: .mainnet),
                 amount: .exact(snapshot.amount)
             ),
             snapshot: snapshot
@@ -445,7 +444,7 @@ private final class CoordinatorH2Provider: ISendPreflightProvider, @unchecked Se
 
     func estimateFee() async throws -> BigUInt { 2 }
 
-    func lease(minimumHeight: Int64?) async throws -> EndpointLease {
+    func lease(minimumHeight _: Int64?) async throws -> EndpointLease {
         withLock { leasesIssued += 1 }
         return EndpointLease(family: family, verifiedChainId: base.chainID, cosmosReadHeight: base.height, cometReferenceHeight: base.height, poolGeneration: 1)
     }
@@ -454,7 +453,7 @@ private final class CoordinatorH2Provider: ISendPreflightProvider, @unchecked Se
         try await snapshotResult(request: request, lease: lease, height: height, policy: policy, attempt: attempt).snapshot
     }
 
-    func snapshotResult(request: SendQuoteRequest, lease: EndpointLease, height: Int64, policy: SendPolicy, attempt: SendPreflightAttempt) async throws -> SendSnapshotResult {
+    func snapshotResult(request _: SendQuoteRequest, lease _: EndpointLease, height _: Int64, policy _: SendPolicy, attempt: SendPreflightAttempt) async throws -> SendSnapshotResult {
         let index = withLock {
             snapshotsIssued += 1
             return snapshotsIssued
@@ -493,7 +492,7 @@ private final class CountingSigner: ISigner, @unchecked Sendable {
         compressedPublicKey = publicKey
     }
 
-    func sign(digest: Data) async throws -> Data {
+    func sign(digest _: Data) async throws -> Data {
         callCount += 1
         return Data()
     }
@@ -510,7 +509,7 @@ private final class NonCooperativeSigner: ISigner, @unchecked Sendable {
 
     init(publicKey: Data) { compressedPublicKey = publicKey }
 
-    func sign(digest: Data) async throws -> Data {
+    func sign(digest _: Data) async throws -> Data {
         stateQueue.sync { callCount += 1 }
         started.signal()
         return await withCheckedContinuation { continuation in
@@ -559,8 +558,8 @@ private extension SendCoordinatorResult {
 }
 
 private final class FailingReservationStore: ISequenceReservationManager, @unchecked Sendable {
-    func acquire(_ key: SequenceReservationKey, ownerToken: Data) throws -> Bool { true }
-    func release(_ key: SequenceReservationKey, ownerToken: Data) throws -> Bool { false }
+    func acquire(_: SequenceReservationKey, ownerToken _: Data) throws -> Bool { true }
+    func release(_: SequenceReservationKey, ownerToken _: Data) throws -> Bool { false }
 }
 
 private extension Data {
@@ -570,7 +569,7 @@ private extension Data {
         self.init(stride(from: 0, to: hex.count, by: 2).map { index in
             let start = hex.index(hex.startIndex, offsetBy: index)
             let end = hex.index(start, offsetBy: 2)
-            return UInt8(hex[start..<end], radix: 16)!
+            return UInt8(hex[start ..< end], radix: 16)!
         })
     }
 }

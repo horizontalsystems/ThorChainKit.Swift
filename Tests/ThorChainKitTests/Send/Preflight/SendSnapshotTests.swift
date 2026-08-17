@@ -1,6 +1,6 @@
 import BigInt
-import XCTest
 @testable import ThorChainKit
+import XCTest
 
 final class SendSnapshotTests: XCTestCase {
     func testDigestIsStableForTheSameCanonicalSnapshot() throws {
@@ -33,7 +33,7 @@ final class SendSnapshotTests: XCTestCase {
         for (typeURL, data) in [
             ("/cosmos.crypto.secp256k1.PubKey" as String?, nil as Data?),
             (nil as String?, Data([2] + Array(repeating: 1, count: 32))),
-            ("/cosmos.crypto.secp256k1.PubKey" as String?, Data([4] + Array(repeating: 1, count: 32)))
+            ("/cosmos.crypto.secp256k1.PubKey" as String?, Data([4] + Array(repeating: 1, count: 32))),
         ] {
             XCTAssertThrowsError(try SendSnapshot(
                 familyID: base.familyID, chainID: base.chainID, height: base.height, sender: base.sender, recipient: base.recipient,

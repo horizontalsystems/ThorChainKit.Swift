@@ -1,6 +1,6 @@
-import Foundation
-import CryptoKit
 import BigInt
+import CryptoKit
+import Foundation
 
 struct SendPolicy: Equatable, Sendable {
     let memoMaximumBytes: Int
@@ -42,8 +42,8 @@ struct SendPolicy: Equatable, Sendable {
 struct MimirSnapshot: Equatable, Hashable, Sendable {
     let haltChainGlobal: Int64
     let nodePauseChainGlobal: Int64
-    let haltTHORChain: Int64
-    let solvencyHaltTHORChain: Int64
+    let haltNativeChain: Int64
+    let solvencyHaltNativeChain: Int64
 }
 
 enum HaltDecision: Equatable, Sendable {
@@ -56,14 +56,14 @@ enum HaltDecision: Equatable, Sendable {
 enum HaltEvaluator {
     static func evaluate(height: Int64, mimir: MimirSnapshot) throws -> HaltDecision {
         guard height > 0,
-              [mimir.haltChainGlobal, mimir.nodePauseChainGlobal, mimir.haltTHORChain, mimir.solvencyHaltTHORChain]
-                .allSatisfy({ $0 >= -1 })
+              [mimir.haltChainGlobal, mimir.nodePauseChainGlobal, mimir.haltNativeChain, mimir.solvencyHaltNativeChain]
+              .allSatisfy({ $0 >= -1 })
         else { throw SendError.policyUnavailable }
 
         let halted = (mimir.haltChainGlobal > 0 && mimir.haltChainGlobal <= height)
             || (mimir.nodePauseChainGlobal > 0 && mimir.nodePauseChainGlobal >= height)
-            || (mimir.haltTHORChain > 0 && mimir.haltTHORChain <= height)
-            || (mimir.solvencyHaltTHORChain > 0 && mimir.solvencyHaltTHORChain <= height)
+            || (mimir.haltNativeChain > 0 && mimir.haltNativeChain <= height)
+            || (mimir.solvencyHaltNativeChain > 0 && mimir.solvencyHaltNativeChain <= height)
         return halted ? .halted : .allowed
     }
 }
@@ -80,18 +80,43 @@ struct ForbiddenModuleAddressSet: Sendable, Equatable {
         ("thorchain", "thor1v8ppstuf6e3x0r4glqc68d5jqcs2tf38cg2q6y"),
         ("tcy_claim", "thor1ss8rrf3twa20kf9frdyru05dmu2kg9ll2efcyd"),
         ("tcy_stake", "thor128a8hqnkaxyqv7qwajpggmfyudh64jl3c32vyv"),
-        ("treasury", "thor1vmafl8f3s6uuzwnxkqz0eza47v6ecn0t086r2p")
+        ("treasury", "thor1vmafl8f3s6uuzwnxkqz0eza47v6ecn0t086r2p"),
     ]
-    let revision = "thorchain-3.19-module-addresses-v1"
+    // mayanode x/mayachain/helpers.go isModuleAccAddressV127 (protocol 1.132.3); every
+    // address verified as /cosmos.auth.v1beta1.ModuleAccount on mainnet 2026-08-17
+    static let mayaSourceTags = ["mayanode-1.132.3@develop"]
+    static let mayaPinnedModuleVectors: [(String, String)] = [
+        ("asgard", "maya1g98cy3n9mmjrpn0sxmn63lztelera37n8yyjwl"),
+        ("bond", "maya17gw75axcnr8747pkanye45pnrwk7p9c3chd5xu"),
+        ("reserve", "maya1dheycdevq39qlkxs2a6wuuzyn4aqxhve4hc8sm"),
+        ("mayachain", "maya1zxw7mpq9zc4pe97unf85lljcwnhf4h2kqrugav"),
+        ("maya_fund", "maya1577sz8j7xnthm3cl3vgfvmdmkrp7dqrhd9tafd"),
+        ("cacao_pool", "maya167q2uvp3pzqjkefx3qd275yfdgee9fadnwrchd"),
+        ("affiliate_collector", "maya1dl7un46w7l7f3ewrnrm6nq58nerjtp0dr2n7aa"),
+        ("maya_auto_buyer", "maya19764xganmndarzhn7mrls7tc0r59c7gj5twkz7"),
+    ]
+    let revision: String
     private let addresses: Set<String>
 
     init(network: Network = .mainnet) throws {
-        let names = Self.pinnedModuleVectors.map { $0.0 }
+        let vectors: [(String, String)]
+        switch network.chain {
+        case .thor:
+            vectors = Self.pinnedModuleVectors
+            revision = "thorchain-3.19-module-addresses-v1"
+        case .maya:
+            vectors = Self.mayaPinnedModuleVectors
+            revision = "mayachain-1.132-module-addresses-v1"
+        }
         var values = Set<String>()
-        for name in names {
+        for (name, pinned) in vectors {
             let digest = SHA256.hash(data: Data(name.utf8))
             let words = try BitConversion.convert(Array(digest.prefix(20)), fromBits: 8, toBits: 5, pad: true)
-            values.insert(Bech32Codec.encode(hrp: network.accountHrp, words: words))
+            let derived = Bech32Codec.encode(hrp: network.accountHrp, words: words)
+            // The pinned vector is the verification record; a derivation that disagrees
+            // with it means the hrp or the name list is wrong for this network.
+            guard derived == pinned else { throw SendError.policyUnavailable }
+            values.insert(derived)
         }
         addresses = values
     }

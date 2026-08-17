@@ -1,6 +1,6 @@
 import Foundation
-import XCTest
 @testable import ThorChainKit
+import XCTest
 
 final class MainnetReadTests: XCTestCase {
     func testOptInMainnetReadRequiresExplicitInputs() async throws {
@@ -60,8 +60,8 @@ final class MainnetReadTests: XCTestCase {
         let absent = try await coordinator.read(address: absentAddress)
         guard let rawRuneAmount = await transport.runeAmount,
               let implementationRuneAmount = existing.balances.first(where: {
-            $0.denom.rawValue == "rune"
-        })?.amountDecimal
+                  $0.denom.rawValue == "rune"
+              })?.amountDecimal
         else {
             XCTFail("Existing live account must expose a RUNE balance")
             return

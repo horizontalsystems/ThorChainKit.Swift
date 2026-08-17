@@ -1,7 +1,7 @@
 import BigInt
 import Foundation
-import XCTest
 @testable import ThorChainKit
+import XCTest
 
 final class SendQuoteTests: XCTestCase {
     func testQuoteExposesImmutableReviewProjectionAndHidesAuthority() throws {

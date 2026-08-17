@@ -28,7 +28,7 @@ struct LiveThorNodeClient: INodeApiProvider {
             cosmosHeight: lease.cosmosReadHeight
         )
         let (data, response) = try await send(request)
-        guard (200..<300).contains(response.statusCode) else {
+        guard (200 ..< 300).contains(response.statusCode) else {
             if response.statusCode == 404 {
                 try requireHeight(response, expected: lease.cosmosReadHeight)
                 if isExactAbsence(data, address: address) {
@@ -66,7 +66,7 @@ struct LiveThorNodeClient: INodeApiProvider {
         var values = [BalanceTransport]()
         var seenDenoms = Set<String>()
 
-        for page in 1...maximumBalancePageCount {
+        for page in 1 ... maximumBalancePageCount {
             var query = [URLQueryItem(name: "pagination.limit", value: "100")]
             if let nextKey, !nextKey.isEmpty {
                 query.append(URLQueryItem(name: "pagination.key", value: nextKey))
@@ -81,7 +81,7 @@ struct LiveThorNodeClient: INodeApiProvider {
                 cosmosHeight: lease.cosmosReadHeight
             )
             let (data, response) = try await send(request)
-            guard (200..<300).contains(response.statusCode) else {
+            guard (200 ..< 300).contains(response.statusCode) else {
                 throw statusError(response, operation: .balances)
             }
             try requireHeight(response, expected: lease.cosmosReadHeight)
@@ -174,16 +174,16 @@ struct LiveThorNodeClient: INodeApiProvider {
     private static func retryAfter(_ value: String?) -> Int? {
         guard let value,
               !value.isEmpty,
-              value.utf8.allSatisfy({ (48...57).contains($0) }),
+              value.utf8.allSatisfy({ (48 ... 57).contains($0) }),
               let seconds = Int(value),
-              (0...60).contains(seconds)
+              (0 ... 60).contains(seconds)
         else { return nil }
         return seconds
     }
 
     private static func isCanonicalAmount(_ value: String) -> Bool {
         guard value == "0" || (value.first != "0" && !value.isEmpty),
-              value.utf8.allSatisfy({ (48...57).contains($0) })
+              value.utf8.allSatisfy({ (48 ... 57).contains($0) })
         else { return false }
         let maximum = "115792089237316195423570985008687907853269984665640564039457584007913129639935"
         return value.count < maximum.count || (value.count == maximum.count && value <= maximum)
@@ -191,7 +191,7 @@ struct LiveThorNodeClient: INodeApiProvider {
 
     private static func isCanonicalUInt64Decimal(_ value: String) -> Bool {
         guard value == "0" || (value.first != "0" && !value.isEmpty),
-              value.utf8.allSatisfy({ (48...57).contains($0) })
+              value.utf8.allSatisfy({ (48 ... 57).contains($0) })
         else { return false }
         return UInt64(value) != nil
     }
@@ -227,6 +227,7 @@ private struct AccountEnvelope: Decodable {
             case sequence
         }
     }
+
     let account: Account?
 }
 
@@ -235,6 +236,7 @@ private struct BalancesEnvelope: Decodable {
         let denom: String
         let amount: String
     }
+
     struct Pagination: Decodable {
         let nextKey: String?
 
@@ -251,6 +253,7 @@ private struct BalancesEnvelope: Decodable {
             nextKey = try container.decodeIfPresent(String.self, forKey: .nextKey)
         }
     }
+
     let balances: [Coin]?
     let pagination: Pagination?
 }
@@ -275,11 +278,11 @@ private indirect enum JSONValue: Decodable {
             self = .null
             return
         }
-        do { self = .string(try container.decode(String.self)); return } catch { }
-        do { self = .number(try container.decode(Double.self)); return } catch { }
-        do { self = .bool(try container.decode(Bool.self)); return } catch { }
-        do { self = .object(try container.decode([String: JSONValue].self)); return } catch { }
-        self = .array(try container.decode([JSONValue].self))
+        do { self = try .string(container.decode(String.self)); return } catch {}
+        do { self = try .number(container.decode(Double.self)); return } catch {}
+        do { self = try .bool(container.decode(Bool.self)); return } catch {}
+        do { self = try .object(container.decode([String: JSONValue].self)); return } catch {}
+        self = try .array(container.decode([JSONValue].self))
     }
 }
 
@@ -359,7 +362,7 @@ private struct JSONDuplicateKeyScanner {
                 escaped = true
             } else if byte == 0x22 {
                 var token = Data([0x22])
-                token.append(contentsOf: bytes[start..<(index - 1)])
+                token.append(contentsOf: bytes[start ..< (index - 1)])
                 token.append(0x22)
                 do {
                     return try JSONSerialization.jsonObject(with: token, options: [.fragmentsAllowed]) as? String

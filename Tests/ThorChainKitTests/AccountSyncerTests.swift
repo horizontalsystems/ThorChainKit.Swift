@@ -1,6 +1,6 @@
 import Foundation
-import XCTest
 @testable import ThorChainKit
+import XCTest
 
 final class AccountSyncerTests: XCTestCase {
     func testRefreshStoresAndPublishesCompleteSnapshot() async throws {
@@ -20,7 +20,7 @@ final class AccountSyncerTests: XCTestCase {
         )
 
         _ = syncer.start()
-        for _ in 0..<100 where manager.accountState == nil {
+        for _ in 0 ..< 100 where manager.accountState == nil {
             try await Task.sleep(nanoseconds: 5_000_000)
         }
         _ = syncer.stop()
@@ -39,10 +39,10 @@ final class AccountSyncerTests: XCTestCase {
         let storage = try AccountInfoStorage(databaseDirectoryUrl: directory, databaseFileName: "account-info-storage")
         let reader = ControlledReader()
         let manager = AccountInfoManager(storage: storage)
-        let syncer = Syncer(accountInfoManager: manager, reader: reader, storage: try SyncerStorage(databaseDirectoryUrl: directory, databaseFileName: "syncer-state-storage"), address: address, schedule: SyncSchedule(normalInterval: 60, failureBackoff: 60))
+        let syncer = try Syncer(accountInfoManager: manager, reader: reader, storage: SyncerStorage(databaseDirectoryUrl: directory, databaseFileName: "syncer-state-storage"), address: address, schedule: SyncSchedule(normalInterval: 60, failureBackoff: 60))
 
         _ = syncer.start()
-        for _ in 0..<100 {
+        for _ in 0 ..< 100 {
             if await reader.didStart { break }
             await Task.yield()
         }
@@ -78,10 +78,10 @@ final class AccountSyncerTests: XCTestCase {
             address: address
         )
         let accountStorage = try AccountInfoStorage(databaseDirectoryUrl: directory, databaseFileName: "account-info")
-        let syncer = Syncer(
+        let syncer = try Syncer(
             accountInfoManager: AccountInfoManager(storage: accountStorage),
             reader: FailingReader(),
-            storage: try SyncerStorage(databaseDirectoryUrl: directory, databaseFileName: "syncer-state"),
+            storage: SyncerStorage(databaseDirectoryUrl: directory, databaseFileName: "syncer-state"),
             address: address,
             transactionSyncer: transactionSyncer,
             schedule: SyncSchedule(normalInterval: 60, failureBackoff: 60)
@@ -97,7 +97,7 @@ final class AccountSyncerTests: XCTestCase {
 }
 
 private struct ImmediateReader: IAccountProvider {
-    func read(address: Address) async throws -> AccountReadTransport {
+    func read(address _: Address) async throws -> AccountReadTransport {
         try AccountReadTransport(
             acceptedHeight: 100,
             account: AccountTransport(accountNumber: 1, sequence: 2),
@@ -116,7 +116,7 @@ private actor ControlledReader: IAccountProvider {
     private var continuation: CheckedContinuation<AccountReadTransport, Error>?
     private(set) var didStart = false
 
-    func read(address: Address) async throws -> AccountReadTransport {
+    func read(address _: Address) async throws -> AccountReadTransport {
         didStart = true
         return try await withCheckedThrowingContinuation { continuation = $0 }
     }

@@ -3,7 +3,7 @@ import Foundation
 enum SendEndpointRole: String, Sendable { case rest, rpc }
 
 enum SendRequestEncoding: String, Sendable { case jsonREST, protobufABCI }
-enum SendResponseDecoder: String, Sendable { case accountQueryAny, network, mimir }
+enum SendResponseDecoder: String, Sendable { case accountQueryAny, network, mimir, constants }
 
 enum SendCapabilityStatus: String, Sendable, Equatable { case pass, fail, unrun }
 
@@ -62,6 +62,7 @@ struct SendFamilyCapability: Equatable, Sendable {
         if routes.contains(where: { $0.capabilityStatus == .fail }) { return .fail }
         return routes.allSatisfy { $0.capabilityStatus == .pass } ? .pass : .unrun
     }
+
     var isSendCapable: Bool { status == .pass }
 }
 
@@ -72,7 +73,7 @@ enum NativeRuneEndpointRegistry {
         try [
             EndpointFamilyDescriptor(id: "rorcual-mainnet", cosmosRestURL: URL(string: "https://api-thorchain.rorcual.xyz/")!, cometBftURL: URL(string: "https://rpc-thorchain.rorcual.xyz/")!),
             EndpointFamilyDescriptor(id: "ibs-mainnet", cosmosRestURL: URL(string: "https://thorchain.ibs.team/api")!, cometBftURL: URL(string: "https://thorchain.ibs.team/rpc")!),
-            EndpointFamilyDescriptor(id: "keplr-mainnet", cosmosRestURL: URL(string: "https://lcd-thorchain.keplr.app/")!, cometBftURL: URL(string: "https://rpc-thorchain.keplr.app/")!)
+            EndpointFamilyDescriptor(id: "keplr-mainnet", cosmosRestURL: URL(string: "https://lcd-thorchain.keplr.app/")!, cometBftURL: URL(string: "https://rpc-thorchain.keplr.app/")!),
         ]
     }
 
@@ -83,7 +84,7 @@ enum NativeRuneEndpointRegistry {
             .init(familyID: "ibs-mainnet", role: .rest, scheme: "https", host: "thorchain.ibs.team", port: 443, path: "/api"),
             .init(familyID: "ibs-mainnet", role: .rpc, scheme: "https", host: "thorchain.ibs.team", port: 443, path: "/rpc"),
             .init(familyID: "keplr-mainnet", role: .rest, scheme: "https", host: "lcd-thorchain.keplr.app", port: 443, path: "/"),
-            .init(familyID: "keplr-mainnet", role: .rpc, scheme: "https", host: "rpc-thorchain.keplr.app", port: 443, path: "/")
+            .init(familyID: "keplr-mainnet", role: .rpc, scheme: "https", host: "rpc-thorchain.keplr.app", port: 443, path: "/"),
         ]
     }
 
@@ -96,7 +97,7 @@ enum NativeRuneEndpointRegistry {
                 // The node returns every mimir key in one response; reading four keys
                 // one at a time cost four requests for the same data.
                 ("mimir", "/thorchain/mimir", .jsonREST, .mimir, .restHeader, .rest, "height", nil, nil, nil),
-                ("recipient-account", "/cosmos.auth.v1beta1.Query/Account", .protobufABCI, .accountQueryAny, .cometABCI, .rpc, nil, nil, nil, nil)
+                ("recipient-account", "/cosmos.auth.v1beta1.Query/Account", .protobufABCI, .accountQueryAny, .cometABCI, .rpc, nil, nil, nil, nil),
             ]
             let routes = definitions.map { name, path, encoding, decoder, proofMode, role, historicalHeightParameter, queryKey, queryParameterName, queryParameterValue in
                 let record = familyRecords.first { $0.role == role }!
@@ -160,6 +161,91 @@ enum HeightProofValidator {
         case .restHeader: return .restHeader(expected: expected, actual: headerHeight)
         case .cometABCI: return .cometABCI(expected: expected, actual: responseHeight)
         case .bodyHeight: return .body(expected: expected, actual: bodyHeight)
+        }
+    }
+}
+
+// Maya Protocol (mayanode). Account reads share the Cosmos ABCI surface with THOR; the
+// fee comes from REST `constants` because mayanode serves no `/types.Query/Network`
+// (verified live 2026-08-17: unknown query path), matching thorchain-kit-android's
+// fetchNativeTxFee. Neither REST route declares a historical `height` query parameter —
+// mayanode ignores it; height pinning rides the x-cosmos-block-height header instead.
+enum NativeCacaoEndpointRegistry {
+    static let familyIDs = ["mayanode-mainnet"]
+    static let manifestRevision = "maya-manifest-v1"
+    static let schemaRevision = "maya-s1-v1"
+    static let nodeRevision = "mayanode-1.132"
+
+    static func families() throws -> [EndpointFamilyDescriptor] {
+        try [
+            EndpointFamilyDescriptor(id: "mayanode-mainnet", cosmosRestURL: URL(string: "https://mayanode.mayachain.info")!, cometBftURL: URL(string: "https://tendermint.mayachain.info")!),
+        ]
+    }
+
+    static func records() -> [SendManifestRecord] {
+        [
+            .init(familyID: "mayanode-mainnet", role: .rest, scheme: "https", host: "mayanode.mayachain.info", port: 443, path: "/"),
+            .init(familyID: "mayanode-mainnet", role: .rpc, scheme: "https", host: "tendermint.mayachain.info", port: 443, path: "/"),
+        ]
+    }
+
+    static func capabilities() -> [SendFamilyCapability] {
+        familyIDs.map { familyID in
+            let familyRecords = records().filter { $0.familyID == familyID }
+            let protocolPath = Network.Chain.maya.protocolPath
+            let definitions: [(String, String, SendRequestEncoding, SendResponseDecoder, HeightProofMode, SendEndpointRole)] = [
+                ("account", "/cosmos.auth.v1beta1.Query/Account", .protobufABCI, .accountQueryAny, .cometABCI, .rpc),
+                ("network-fee", "/\(protocolPath)/constants", .jsonREST, .constants, .restHeader, .rest),
+                ("mimir", "/\(protocolPath)/mimir", .jsonREST, .mimir, .restHeader, .rest),
+                ("recipient-account", "/cosmos.auth.v1beta1.Query/Account", .protobufABCI, .accountQueryAny, .cometABCI, .rpc),
+            ]
+            let routes = definitions.map { name, path, encoding, decoder, proofMode, role in
+                let record = familyRecords.first { $0.role == role }!
+                return SendManifestRoute(record: record, route: name, path: path, requestEncoding: encoding, decoder: decoder, proofMode: proofMode, schemaRevision: schemaRevision, supportedNodeRevision: nodeRevision, capabilityStatus: .unrun)
+            }
+            return SendFamilyCapability(familyID: familyID, manifestRevision: manifestRevision, routes: routes)
+        }
+    }
+
+    static func matches(_ route: SendManifestRoute, family: EndpointFamilyDescriptor) -> Bool {
+        guard let expected = capabilities().first(where: { $0.familyID == family.id })?.routes.first(where: { $0.route == route.route }) else { return false }
+        let endpoint = expected.record.role == .rest ? family.cosmosRestURL : family.cometBftURL
+        let record = SendManifestRecord(familyID: family.id, role: expected.record.role, scheme: endpoint.scheme?.lowercased() ?? "", host: endpoint.host?.lowercased() ?? "", port: endpoint.port ?? (endpoint.scheme?.lowercased() == "http" ? 80 : 443), path: endpoint.path.isEmpty ? "/" : endpoint.path)
+        return route.record == record
+            && route.path == expected.path
+            && route.requestEncoding == expected.requestEncoding
+            && route.decoder == expected.decoder
+            && route.proofMode == expected.proofMode
+            && route.schemaRevision == expected.schemaRevision
+            && route.supportedNodeRevision == expected.supportedNodeRevision
+            && route.historicalHeightParameter == expected.historicalHeightParameter
+            && route.queryKey == expected.queryKey
+            && route.queryParameterName == expected.queryParameterName
+            && route.queryParameterValue == expected.queryParameterValue
+    }
+}
+
+// THORChain and Maya carry separate pinned registries; every consumer dispatches on the
+// kit's chain so a Maya lease can never be validated against THOR routes or vice versa.
+enum SendEndpointRegistry {
+    static func familyIDs(chain: Network.Chain) -> [String] {
+        switch chain {
+        case .thor: return NativeRuneEndpointRegistry.familyIDs
+        case .maya: return NativeCacaoEndpointRegistry.familyIDs
+        }
+    }
+
+    static func capabilities(chain: Network.Chain) -> [SendFamilyCapability] {
+        switch chain {
+        case .thor: return NativeRuneEndpointRegistry.capabilities()
+        case .maya: return NativeCacaoEndpointRegistry.capabilities()
+        }
+    }
+
+    static func matches(_ route: SendManifestRoute, family: EndpointFamilyDescriptor, chain: Network.Chain) -> Bool {
+        switch chain {
+        case .thor: return NativeRuneEndpointRegistry.matches(route, family: family)
+        case .maya: return NativeCacaoEndpointRegistry.matches(route, family: family)
         }
     }
 }

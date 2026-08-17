@@ -28,7 +28,8 @@ enum BitConversion {
                 result.append(UInt8((accumulator << (toBits - bitCount)) & outputMask))
             }
         } else if bitCount >= fromBits
-                    || ((accumulator << (toBits - bitCount)) & outputMask) != 0 {
+            || ((accumulator << (toBits - bitCount)) & outputMask) != 0
+        {
             throw AddressError.invalidPadding
         }
         return result

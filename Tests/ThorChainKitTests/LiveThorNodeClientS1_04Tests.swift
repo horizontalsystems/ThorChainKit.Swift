@@ -1,12 +1,12 @@
 import Foundation
-import XCTest
 @testable import ThorChainKit
+import XCTest
 
 final class LiveThorNodeClientS1_04Tests: XCTestCase {
     func testCancellationBeforeSendDoesNotStartTransport() async throws {
         let gate = S1_04StartGate()
         let transport = S1_04HTTPTransport(responses: [
-            .json(#"{"account":{"@type":"/cosmos.auth.v1beta1.BaseAccount","address":"thor1x","pub_key":null,"account_number":"1","sequence":"1"}}"#, height: "12345678")
+            .json(#"{"account":{"@type":"/cosmos.auth.v1beta1.BaseAccount","address":"thor1x","pub_key":null,"account_number":"1","sequence":"1"}}"#, height: "12345678"),
         ])
         let testAddress = address()
         let testLease = try endpointLease()
@@ -47,7 +47,7 @@ final class LiveThorNodeClientS1_04Tests: XCTestCase {
 
         let account = try await client.account(address: address(), using: lease)
 
-        XCTAssertEqual(account, AccountTransport(accountNumber: 29_938, sequence: 607))
+        XCTAssertEqual(account, AccountTransport(accountNumber: 29938, sequence: 607))
         let requests = await transport.requests
         XCTAssertEqual(requests.count, 1)
         XCTAssertEqual(
@@ -75,7 +75,7 @@ final class LiveThorNodeClientS1_04Tests: XCTestCase {
             let account = try await LiveThorNodeClient(
                 transport: transport,
                 maximumBalancePageCount: 4
-            ).account(address: requestedAddress, using: try endpointLease())
+            ).account(address: requestedAddress, using: endpointLease())
             XCTAssertNil(account)
         }
 
@@ -99,7 +99,7 @@ final class LiveThorNodeClientS1_04Tests: XCTestCase {
                 try await LiveThorNodeClient(
                     transport: transport,
                     maximumBalancePageCount: 4
-                ).account(address: requestedAddress, using: try endpointLease())
+                ).account(address: requestedAddress, using: endpointLease())
             }
         }
 
@@ -110,7 +110,7 @@ final class LiveThorNodeClientS1_04Tests: XCTestCase {
             try await LiveThorNodeClient(
                 transport: heightMismatch,
                 maximumBalancePageCount: 4
-            ).account(address: requestedAddress, using: try endpointLease())
+            ).account(address: requestedAddress, using: endpointLease())
         }
 
         for height in [nil, "not-a-height"] {
@@ -121,7 +121,7 @@ final class LiveThorNodeClientS1_04Tests: XCTestCase {
                 try await LiveThorNodeClient(
                     transport: missingHeight,
                     maximumBalancePageCount: 4
-                ).account(address: requestedAddress, using: try endpointLease())
+                ).account(address: requestedAddress, using: endpointLease())
             }
         }
 
@@ -132,7 +132,7 @@ final class LiveThorNodeClientS1_04Tests: XCTestCase {
             try await LiveThorNodeClient(
                 transport: non404,
                 maximumBalancePageCount: 4
-            ).account(address: requestedAddress, using: try endpointLease())
+            ).account(address: requestedAddress, using: endpointLease())
         }
 
         let balances = S1_04HTTPTransport(responses: [
@@ -142,7 +142,7 @@ final class LiveThorNodeClientS1_04Tests: XCTestCase {
             try await LiveThorNodeClient(
                 transport: balances,
                 maximumBalancePageCount: 4
-            ).balances(address: requestedAddress, using: try endpointLease())
+            ).balances(address: requestedAddress, using: endpointLease())
         }
     }
 
@@ -179,7 +179,7 @@ final class LiveThorNodeClientS1_04Tests: XCTestCase {
             let transport = S1_04HTTPTransport(responses: [.json(body, height: height)])
             let client = LiveThorNodeClient(transport: transport, maximumBalancePageCount: 4)
             await XCTAssertThrowsThorNodeError(expected) {
-                try await client.account(address: address(), using: try endpointLease())
+                try await client.account(address: address(), using: endpointLease())
             }
         }
     }
@@ -197,11 +197,11 @@ final class LiveThorNodeClientS1_04Tests: XCTestCase {
         ])
         let client = LiveThorNodeClient(transport: transport, maximumBalancePageCount: 4)
 
-        let balances = try await client.balances(address: address(), using: try endpointLease())
+        let balances = try await client.balances(address: address(), using: endpointLease())
 
-        XCTAssertEqual(balances, [
+        XCTAssertEqual(balances, try [
             BalanceTransport(denom: .rune, amountDecimal: "340282366920938463463374607431768211456"),
-            BalanceTransport(denom: try Denom(rawValue: "zeta"), amountDecimal: "7"),
+            BalanceTransport(denom: Denom(rawValue: "zeta"), amountDecimal: "7"),
         ])
         let requests = await transport.requests
         XCTAssertEqual(requests.count, 2)
@@ -235,7 +235,7 @@ final class LiveThorNodeClientS1_04Tests: XCTestCase {
             let transport = S1_04HTTPTransport(responses: [.json(body, height: "12345678")])
             let client = LiveThorNodeClient(transport: transport, maximumBalancePageCount: 4)
             await XCTAssertThrowsThorNodeError(.invalidAmount) {
-                try await client.balances(address: address(), using: try endpointLease())
+                try await client.balances(address: address(), using: endpointLease())
             }
         }
 
@@ -249,7 +249,7 @@ final class LiveThorNodeClientS1_04Tests: XCTestCase {
         let accepted = try await LiveThorNodeClient(
             transport: maximumTransport,
             maximumBalancePageCount: 4
-        ).balances(address: address(), using: try endpointLease())
+        ).balances(address: address(), using: endpointLease())
         XCTAssertEqual(accepted.first?.amountDecimal, maximum)
 
         let duplicate = S1_04HTTPTransport(responses: [
@@ -262,7 +262,7 @@ final class LiveThorNodeClientS1_04Tests: XCTestCase {
             try await LiveThorNodeClient(
                 transport: duplicate,
                 maximumBalancePageCount: 4
-            ).balances(address: address(), using: try endpointLease())
+            ).balances(address: address(), using: endpointLease())
         }
 
         let cycle = S1_04HTTPTransport(responses: [
@@ -273,7 +273,7 @@ final class LiveThorNodeClientS1_04Tests: XCTestCase {
             try await LiveThorNodeClient(
                 transport: cycle,
                 maximumBalancePageCount: 4
-            ).balances(address: address(), using: try endpointLease())
+            ).balances(address: address(), using: endpointLease())
         }
 
         let pageLimit = S1_04HTTPTransport(responses: [
@@ -283,7 +283,7 @@ final class LiveThorNodeClientS1_04Tests: XCTestCase {
             try await LiveThorNodeClient(
                 transport: pageLimit,
                 maximumBalancePageCount: 1
-            ).balances(address: address(), using: try endpointLease())
+            ).balances(address: address(), using: endpointLease())
         }
     }
 
@@ -296,7 +296,7 @@ final class LiveThorNodeClientS1_04Tests: XCTestCase {
             try await LiveThorNodeClient(
                 transport: transport,
                 maximumBalancePageCount: 4
-            ).balances(address: address(), using: try endpointLease())
+            ).balances(address: address(), using: endpointLease())
         }
     }
 
@@ -305,8 +305,8 @@ final class LiveThorNodeClientS1_04Tests: XCTestCase {
     }
 
     private func endpointLease(basePath: String = "", height: Int64 = 12_345_678) throws -> EndpointLease {
-        EndpointLease(
-            family: try EndpointFamilyDescriptor(
+        try EndpointLease(
+            family: EndpointFamilyDescriptor(
                 id: "fixture-primary",
                 cosmosRestURL: URL(string: "https://cosmos.example\(basePath)")!,
                 cometBftURL: URL(string: "https://comet.example/rpc")!

@@ -1,8 +1,8 @@
-import Foundation
 import BigInt
 import Combine
-import XCTest
+import Foundation
 @testable import ThorChainKit
+import XCTest
 
 final class SendFacadeAdmissionTests: XCTestCase {
     func testRetryAdmissionIsLifecycleFirstAndDeferredEngineFailsClosed() async throws {
@@ -26,13 +26,12 @@ final class SendFacadeAdmissionTests: XCTestCase {
             XCTAssertEqual(error, .operationUnavailable)
         }
     }
-
 }
 
 private final class AdmissionSigner: ISigner, @unchecked Sendable {
     let compressedPublicKey = Data()
     private(set) var signCallCount = 0
-    func sign(digest: Data) async throws -> Data {
+    func sign(digest _: Data) async throws -> Data {
         signCallCount += 1
         return Data()
     }

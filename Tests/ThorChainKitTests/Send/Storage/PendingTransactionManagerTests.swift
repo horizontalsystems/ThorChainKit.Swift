@@ -1,7 +1,7 @@
 import Combine
 import Foundation
-import XCTest
 @testable import ThorChainKit
+import XCTest
 
 final class PendingTransactionManagerTests: XCTestCase {
     func testUnknownJournalProjectsAsAvailableAndTerminalAcceptedIsNotApplicable() throws {
@@ -52,7 +52,8 @@ final class PendingTransactionManagerTests: XCTestCase {
         var cancellable: AnyCancellable?
         cancellable = repository.publisher.sink { snapshot in
             if let transaction = snapshot.first,
-               case .notApplicable = transaction.retryAvailability {
+               case .notApplicable = transaction.retryAvailability
+            {
                 expectation.fulfill()
                 cancellable?.cancel()
             }

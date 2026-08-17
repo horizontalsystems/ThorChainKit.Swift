@@ -55,8 +55,8 @@ final class QuoteStore: Sendable {
             let deadlineDate = Date().addingTimeInterval(120)
             let (deadline, overflow) = clock.now.addingReportingOverflow(120_000_000_000)
             guard !overflow else { throw SendError.operationUnavailable }
-            for _ in 0..<8 {
-                let token = Data((0..<32).map { _ in UInt8.random(in: .min ... .max, using: &random) })
+            for _ in 0 ..< 8 {
+                let token = Data((0 ..< 32).map { _ in UInt8.random(in: .min ... .max, using: &random) })
                 let record = QuoteAuthorityRecord(
                     envelope: QuoteAuthorityEnvelope(
                         clientID: clientID,

@@ -1,7 +1,7 @@
 import BigInt
 import Foundation
-import XCTest
 @testable import ThorChainKit
+import XCTest
 
 final class PendingTransactionTests: XCTestCase {
     func testPendingStateNamesPreserveCheckTxMeaningAndUnknownOutcome() throws {
@@ -38,9 +38,9 @@ final class PendingTransactionTests: XCTestCase {
     }
 
     private func pending(id: String, createdAt: TimeInterval, state: PendingTransaction.State) throws -> PendingTransaction {
-        PendingTransaction(
-            transactionId: try XCTUnwrap(TransactionID(hash: String(repeating: id, count: 64))),
-            recipient: try sendTestAddress(),
+        try PendingTransaction(
+            transactionId: XCTUnwrap(TransactionID(hash: String(repeating: id, count: 64))),
+            recipient: sendTestAddress(),
             amountMagnitude: SendMagnitude(100).data,
             nativeFeeMagnitude: SendMagnitude(2).data,
             memo: nil,

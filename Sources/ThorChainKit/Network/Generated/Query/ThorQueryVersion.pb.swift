@@ -15,120 +15,120 @@ import SwiftProtobuf
 // incompatible with the version of SwiftProtobuf to which you are linking.
 // Please ensure that you are building against the same version of the API
 // that was used to generate this file.
-fileprivate struct _GeneratedWithProtocGenSwiftVersion: SwiftProtobuf.ProtobufAPIVersionCheck {
-  struct _2: SwiftProtobuf.ProtobufAPIVersion_2 {}
-  typealias Version = _2
+private struct _GeneratedWithProtocGenSwiftVersion: SwiftProtobuf.ProtobufAPIVersionCheck {
+    struct _2: SwiftProtobuf.ProtobufAPIVersion_2 {}
+    typealias Version = _2
 }
 
 struct Types_QueryVersionRequest: Sendable {
-  // SwiftProtobuf.Message conformance is added in an extension below. See the
-  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
-  // methods supported on all messages.
+    // SwiftProtobuf.Message conformance is added in an extension below. See the
+    // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+    // methods supported on all messages.
 
-  var height: String = String()
+    var height: String = .init()
 
-  var unknownFields = SwiftProtobuf.UnknownStorage()
+    var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  init() {}
+    init() {}
 }
 
 struct Types_QueryVersionResponse: Sendable {
-  // SwiftProtobuf.Message conformance is added in an extension below. See the
-  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
-  // methods supported on all messages.
+    // SwiftProtobuf.Message conformance is added in an extension below. See the
+    // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+    // methods supported on all messages.
 
-  /// current version
-  var current: String = String()
+    /// current version
+    var current: String = .init()
 
-  /// next version (minimum version for a node to become Active)
-  var next: String = String()
+    /// next version (minimum version for a node to become Active)
+    var next: String = .init()
 
-  /// height at which the minimum joining version last changed
-  var nextSinceHeight: Int64 = 0
+    /// height at which the minimum joining version last changed
+    var nextSinceHeight: Int64 = 0
 
-  /// querier version
-  var querier: String = String()
+    /// querier version
+    var querier: String = .init()
 
-  var unknownFields = SwiftProtobuf.UnknownStorage()
+    var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  init() {}
+    init() {}
 }
 
 // MARK: - Code below here is support for the SwiftProtobuf runtime.
 
-fileprivate let _protobuf_package = "types"
+private let _protobuf_package = "types"
 
 extension Types_QueryVersionRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  static let protoMessageName: String = _protobuf_package + ".QueryVersionRequest"
-  static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}height\0")
+    static let protoMessageName: String = _protobuf_package + ".QueryVersionRequest"
+    static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}height\0")
 
-  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
-    while let fieldNumber = try decoder.nextFieldNumber() {
-      // The use of inline closures is to circumvent an issue where the compiler
-      // allocates stack space for every case branch when no optimizations are
-      // enabled. https://github.com/apple/swift-protobuf/issues/1034
-      switch fieldNumber {
-      case 1: try { try decoder.decodeSingularStringField(value: &self.height) }()
-      default: break
-      }
+    mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+        while let fieldNumber = try decoder.nextFieldNumber() {
+            // The use of inline closures is to circumvent an issue where the compiler
+            // allocates stack space for every case branch when no optimizations are
+            // enabled. https://github.com/apple/swift-protobuf/issues/1034
+            switch fieldNumber {
+            case 1: try decoder.decodeSingularStringField(value: &height)
+            default: break
+            }
+        }
     }
-  }
 
-  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    if !self.height.isEmpty {
-      try visitor.visitSingularStringField(value: self.height, fieldNumber: 1)
+    func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+        if !height.isEmpty {
+            try visitor.visitSingularStringField(value: height, fieldNumber: 1)
+        }
+        try unknownFields.traverse(visitor: &visitor)
     }
-    try unknownFields.traverse(visitor: &visitor)
-  }
 
-  static func ==(lhs: Types_QueryVersionRequest, rhs: Types_QueryVersionRequest) -> Bool {
-    if lhs.height != rhs.height {return false}
-    if lhs.unknownFields != rhs.unknownFields {return false}
-    return true
-  }
+    static func == (lhs: Types_QueryVersionRequest, rhs: Types_QueryVersionRequest) -> Bool {
+        if lhs.height != rhs.height { return false }
+        if lhs.unknownFields != rhs.unknownFields { return false }
+        return true
+    }
 }
 
 extension Types_QueryVersionResponse: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  static let protoMessageName: String = _protobuf_package + ".QueryVersionResponse"
-  static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}current\0\u{1}next\0\u{3}next_since_height\0\u{1}querier\0")
+    static let protoMessageName: String = _protobuf_package + ".QueryVersionResponse"
+    static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}current\0\u{1}next\0\u{3}next_since_height\0\u{1}querier\0")
 
-  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
-    while let fieldNumber = try decoder.nextFieldNumber() {
-      // The use of inline closures is to circumvent an issue where the compiler
-      // allocates stack space for every case branch when no optimizations are
-      // enabled. https://github.com/apple/swift-protobuf/issues/1034
-      switch fieldNumber {
-      case 1: try { try decoder.decodeSingularStringField(value: &self.current) }()
-      case 2: try { try decoder.decodeSingularStringField(value: &self.next) }()
-      case 3: try { try decoder.decodeSingularInt64Field(value: &self.nextSinceHeight) }()
-      case 4: try { try decoder.decodeSingularStringField(value: &self.querier) }()
-      default: break
-      }
+    mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+        while let fieldNumber = try decoder.nextFieldNumber() {
+            // The use of inline closures is to circumvent an issue where the compiler
+            // allocates stack space for every case branch when no optimizations are
+            // enabled. https://github.com/apple/swift-protobuf/issues/1034
+            switch fieldNumber {
+            case 1: try decoder.decodeSingularStringField(value: &current)
+            case 2: try decoder.decodeSingularStringField(value: &next)
+            case 3: try decoder.decodeSingularInt64Field(value: &nextSinceHeight)
+            case 4: try decoder.decodeSingularStringField(value: &querier)
+            default: break
+            }
+        }
     }
-  }
 
-  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    if !self.current.isEmpty {
-      try visitor.visitSingularStringField(value: self.current, fieldNumber: 1)
+    func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+        if !current.isEmpty {
+            try visitor.visitSingularStringField(value: current, fieldNumber: 1)
+        }
+        if !next.isEmpty {
+            try visitor.visitSingularStringField(value: next, fieldNumber: 2)
+        }
+        if nextSinceHeight != 0 {
+            try visitor.visitSingularInt64Field(value: nextSinceHeight, fieldNumber: 3)
+        }
+        if !querier.isEmpty {
+            try visitor.visitSingularStringField(value: querier, fieldNumber: 4)
+        }
+        try unknownFields.traverse(visitor: &visitor)
     }
-    if !self.next.isEmpty {
-      try visitor.visitSingularStringField(value: self.next, fieldNumber: 2)
-    }
-    if self.nextSinceHeight != 0 {
-      try visitor.visitSingularInt64Field(value: self.nextSinceHeight, fieldNumber: 3)
-    }
-    if !self.querier.isEmpty {
-      try visitor.visitSingularStringField(value: self.querier, fieldNumber: 4)
-    }
-    try unknownFields.traverse(visitor: &visitor)
-  }
 
-  static func ==(lhs: Types_QueryVersionResponse, rhs: Types_QueryVersionResponse) -> Bool {
-    if lhs.current != rhs.current {return false}
-    if lhs.next != rhs.next {return false}
-    if lhs.nextSinceHeight != rhs.nextSinceHeight {return false}
-    if lhs.querier != rhs.querier {return false}
-    if lhs.unknownFields != rhs.unknownFields {return false}
-    return true
-  }
+    static func == (lhs: Types_QueryVersionResponse, rhs: Types_QueryVersionResponse) -> Bool {
+        if lhs.current != rhs.current { return false }
+        if lhs.next != rhs.next { return false }
+        if lhs.nextSinceHeight != rhs.nextSinceHeight { return false }
+        if lhs.querier != rhs.querier { return false }
+        if lhs.unknownFields != rhs.unknownFields { return false }
+        return true
+    }
 }

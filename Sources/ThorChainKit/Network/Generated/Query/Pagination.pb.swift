@@ -16,9 +16,9 @@ import SwiftProtobuf
 // incompatible with the version of SwiftProtobuf to which you are linking.
 // Please ensure that you are building against the same version of the API
 // that was used to generate this file.
-fileprivate struct _GeneratedWithProtocGenSwiftVersion: SwiftProtobuf.ProtobufAPIVersionCheck {
-  struct _2: SwiftProtobuf.ProtobufAPIVersion_2 {}
-  typealias Version = _2
+private struct _GeneratedWithProtocGenSwiftVersion: SwiftProtobuf.ProtobufAPIVersionCheck {
+    struct _2: SwiftProtobuf.ProtobufAPIVersion_2 {}
+    typealias Version = _2
 }
 
 /// PageRequest is to be embedded in gRPC request messages for efficient
@@ -29,36 +29,36 @@ fileprivate struct _GeneratedWithProtocGenSwiftVersion: SwiftProtobuf.ProtobufAP
 ///          PageRequest pagination = 2;
 ///  }
 struct Cosmos_Base_Query_V1beta1_PageRequest: Sendable {
-  // SwiftProtobuf.Message conformance is added in an extension below. See the
-  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
-  // methods supported on all messages.
+    // SwiftProtobuf.Message conformance is added in an extension below. See the
+    // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+    // methods supported on all messages.
 
-  /// key is a value returned in PageResponse.next_key to begin
-  /// querying the next page most efficiently. Only one of offset or key
-  /// should be set.
-  var key: Data = Data()
+    /// key is a value returned in PageResponse.next_key to begin
+    /// querying the next page most efficiently. Only one of offset or key
+    /// should be set.
+    var key: Data = .init()
 
-  /// offset is a numeric offset that can be used when key is unavailable.
-  /// It is less efficient than using key. Only one of offset or key should
-  /// be set.
-  var offset: UInt64 = 0
+    /// offset is a numeric offset that can be used when key is unavailable.
+    /// It is less efficient than using key. Only one of offset or key should
+    /// be set.
+    var offset: UInt64 = 0
 
-  /// limit is the total number of results to be returned in the result page.
-  /// If left empty it will default to a value to be set by each app.
-  var limit: UInt64 = 0
+    /// limit is the total number of results to be returned in the result page.
+    /// If left empty it will default to a value to be set by each app.
+    var limit: UInt64 = 0
 
-  /// count_total is set to true  to indicate that the result set should include
-  /// a count of the total number of items available for pagination in UIs.
-  /// count_total is only respected when offset is used. It is ignored when key
-  /// is set.
-  var countTotal: Bool = false
+    /// count_total is set to true  to indicate that the result set should include
+    /// a count of the total number of items available for pagination in UIs.
+    /// count_total is only respected when offset is used. It is ignored when key
+    /// is set.
+    var countTotal: Bool = false
 
-  /// reverse is set to true if results are to be returned in the descending order.
-  var reverse: Bool = false
+    /// reverse is set to true if results are to be returned in the descending order.
+    var reverse: Bool = false
 
-  var unknownFields = SwiftProtobuf.UnknownStorage()
+    var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  init() {}
+    init() {}
 }
 
 /// PageResponse is to be embedded in gRPC response messages where the
@@ -69,109 +69,109 @@ struct Cosmos_Base_Query_V1beta1_PageRequest: Sendable {
 ///          PageResponse page = 2;
 ///  }
 struct Cosmos_Base_Query_V1beta1_PageResponse: Sendable {
-  // SwiftProtobuf.Message conformance is added in an extension below. See the
-  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
-  // methods supported on all messages.
+    // SwiftProtobuf.Message conformance is added in an extension below. See the
+    // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+    // methods supported on all messages.
 
-  /// next_key is the key to be passed to PageRequest.key to
-  /// query the next page most efficiently. It will be empty if
-  /// there are no more results.
-  var nextKey: Data = Data()
+    /// next_key is the key to be passed to PageRequest.key to
+    /// query the next page most efficiently. It will be empty if
+    /// there are no more results.
+    var nextKey: Data = .init()
 
-  /// total is total number of results available if PageRequest.count_total
-  /// was set, its value is undefined otherwise
-  var total: UInt64 = 0
+    /// total is total number of results available if PageRequest.count_total
+    /// was set, its value is undefined otherwise
+    var total: UInt64 = 0
 
-  var unknownFields = SwiftProtobuf.UnknownStorage()
+    var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  init() {}
+    init() {}
 }
 
 // MARK: - Code below here is support for the SwiftProtobuf runtime.
 
-fileprivate let _protobuf_package = "cosmos.base.query.v1beta1"
+private let _protobuf_package = "cosmos.base.query.v1beta1"
 
 extension Cosmos_Base_Query_V1beta1_PageRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  static let protoMessageName: String = _protobuf_package + ".PageRequest"
-  static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}key\0\u{1}offset\0\u{1}limit\0\u{3}count_total\0\u{1}reverse\0")
+    static let protoMessageName: String = _protobuf_package + ".PageRequest"
+    static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}key\0\u{1}offset\0\u{1}limit\0\u{3}count_total\0\u{1}reverse\0")
 
-  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
-    while let fieldNumber = try decoder.nextFieldNumber() {
-      // The use of inline closures is to circumvent an issue where the compiler
-      // allocates stack space for every case branch when no optimizations are
-      // enabled. https://github.com/apple/swift-protobuf/issues/1034
-      switch fieldNumber {
-      case 1: try { try decoder.decodeSingularBytesField(value: &self.key) }()
-      case 2: try { try decoder.decodeSingularUInt64Field(value: &self.offset) }()
-      case 3: try { try decoder.decodeSingularUInt64Field(value: &self.limit) }()
-      case 4: try { try decoder.decodeSingularBoolField(value: &self.countTotal) }()
-      case 5: try { try decoder.decodeSingularBoolField(value: &self.reverse) }()
-      default: break
-      }
+    mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+        while let fieldNumber = try decoder.nextFieldNumber() {
+            // The use of inline closures is to circumvent an issue where the compiler
+            // allocates stack space for every case branch when no optimizations are
+            // enabled. https://github.com/apple/swift-protobuf/issues/1034
+            switch fieldNumber {
+            case 1: try decoder.decodeSingularBytesField(value: &key)
+            case 2: try decoder.decodeSingularUInt64Field(value: &offset)
+            case 3: try decoder.decodeSingularUInt64Field(value: &limit)
+            case 4: try decoder.decodeSingularBoolField(value: &countTotal)
+            case 5: try decoder.decodeSingularBoolField(value: &reverse)
+            default: break
+            }
+        }
     }
-  }
 
-  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    if !self.key.isEmpty {
-      try visitor.visitSingularBytesField(value: self.key, fieldNumber: 1)
+    func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+        if !key.isEmpty {
+            try visitor.visitSingularBytesField(value: key, fieldNumber: 1)
+        }
+        if offset != 0 {
+            try visitor.visitSingularUInt64Field(value: offset, fieldNumber: 2)
+        }
+        if limit != 0 {
+            try visitor.visitSingularUInt64Field(value: limit, fieldNumber: 3)
+        }
+        if countTotal != false {
+            try visitor.visitSingularBoolField(value: countTotal, fieldNumber: 4)
+        }
+        if reverse != false {
+            try visitor.visitSingularBoolField(value: reverse, fieldNumber: 5)
+        }
+        try unknownFields.traverse(visitor: &visitor)
     }
-    if self.offset != 0 {
-      try visitor.visitSingularUInt64Field(value: self.offset, fieldNumber: 2)
-    }
-    if self.limit != 0 {
-      try visitor.visitSingularUInt64Field(value: self.limit, fieldNumber: 3)
-    }
-    if self.countTotal != false {
-      try visitor.visitSingularBoolField(value: self.countTotal, fieldNumber: 4)
-    }
-    if self.reverse != false {
-      try visitor.visitSingularBoolField(value: self.reverse, fieldNumber: 5)
-    }
-    try unknownFields.traverse(visitor: &visitor)
-  }
 
-  static func ==(lhs: Cosmos_Base_Query_V1beta1_PageRequest, rhs: Cosmos_Base_Query_V1beta1_PageRequest) -> Bool {
-    if lhs.key != rhs.key {return false}
-    if lhs.offset != rhs.offset {return false}
-    if lhs.limit != rhs.limit {return false}
-    if lhs.countTotal != rhs.countTotal {return false}
-    if lhs.reverse != rhs.reverse {return false}
-    if lhs.unknownFields != rhs.unknownFields {return false}
-    return true
-  }
+    static func == (lhs: Cosmos_Base_Query_V1beta1_PageRequest, rhs: Cosmos_Base_Query_V1beta1_PageRequest) -> Bool {
+        if lhs.key != rhs.key { return false }
+        if lhs.offset != rhs.offset { return false }
+        if lhs.limit != rhs.limit { return false }
+        if lhs.countTotal != rhs.countTotal { return false }
+        if lhs.reverse != rhs.reverse { return false }
+        if lhs.unknownFields != rhs.unknownFields { return false }
+        return true
+    }
 }
 
 extension Cosmos_Base_Query_V1beta1_PageResponse: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  static let protoMessageName: String = _protobuf_package + ".PageResponse"
-  static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}next_key\0\u{1}total\0")
+    static let protoMessageName: String = _protobuf_package + ".PageResponse"
+    static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}next_key\0\u{1}total\0")
 
-  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
-    while let fieldNumber = try decoder.nextFieldNumber() {
-      // The use of inline closures is to circumvent an issue where the compiler
-      // allocates stack space for every case branch when no optimizations are
-      // enabled. https://github.com/apple/swift-protobuf/issues/1034
-      switch fieldNumber {
-      case 1: try { try decoder.decodeSingularBytesField(value: &self.nextKey) }()
-      case 2: try { try decoder.decodeSingularUInt64Field(value: &self.total) }()
-      default: break
-      }
+    mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+        while let fieldNumber = try decoder.nextFieldNumber() {
+            // The use of inline closures is to circumvent an issue where the compiler
+            // allocates stack space for every case branch when no optimizations are
+            // enabled. https://github.com/apple/swift-protobuf/issues/1034
+            switch fieldNumber {
+            case 1: try decoder.decodeSingularBytesField(value: &nextKey)
+            case 2: try decoder.decodeSingularUInt64Field(value: &total)
+            default: break
+            }
+        }
     }
-  }
 
-  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    if !self.nextKey.isEmpty {
-      try visitor.visitSingularBytesField(value: self.nextKey, fieldNumber: 1)
+    func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+        if !nextKey.isEmpty {
+            try visitor.visitSingularBytesField(value: nextKey, fieldNumber: 1)
+        }
+        if total != 0 {
+            try visitor.visitSingularUInt64Field(value: total, fieldNumber: 2)
+        }
+        try unknownFields.traverse(visitor: &visitor)
     }
-    if self.total != 0 {
-      try visitor.visitSingularUInt64Field(value: self.total, fieldNumber: 2)
-    }
-    try unknownFields.traverse(visitor: &visitor)
-  }
 
-  static func ==(lhs: Cosmos_Base_Query_V1beta1_PageResponse, rhs: Cosmos_Base_Query_V1beta1_PageResponse) -> Bool {
-    if lhs.nextKey != rhs.nextKey {return false}
-    if lhs.total != rhs.total {return false}
-    if lhs.unknownFields != rhs.unknownFields {return false}
-    return true
-  }
+    static func == (lhs: Cosmos_Base_Query_V1beta1_PageResponse, rhs: Cosmos_Base_Query_V1beta1_PageResponse) -> Bool {
+        if lhs.nextKey != rhs.nextKey { return false }
+        if lhs.total != rhs.total { return false }
+        if lhs.unknownFields != rhs.unknownFields { return false }
+        return true
+    }
 }
