@@ -115,33 +115,9 @@ public extension Kit {
             provider: ThorNodeSendPreflightProvider(
                 node: ThorNodeSendClient(transport: liveClient),
                 leaseProvider: { try await pool.lease(excludingFamilyIds: []) },
-                capabilities: SendEndpointRegistry.capabilities(chain: address.network.chain).map { capability in
-                    SendFamilyCapability(
-                        familyID: capability.familyID,
-                        manifestRevision: capability.manifestRevision,
-                        routes: capability.routes.map { route in
-                            SendManifestRoute(
-                                record: route.record,
-                                route: route.route,
-                                path: route.path,
-                                requestEncoding: route.requestEncoding,
-                                decoder: route.decoder,
-                                proofMode: route.proofMode,
-                                schemaRevision: route.schemaRevision,
-                                supportedNodeRevision: route.supportedNodeRevision,
-                                historicalHeightParameter: route.historicalHeightParameter,
-                                queryKey: route.queryKey,
-                                queryParameterName: route.queryParameterName,
-                                queryParameterValue: route.queryParameterValue,
-                                capabilityStatus: .pass
-                            )
-                        }
-                    )
-                },
                 network: address.network,
                 runtime: transactionSender
-            ),
-            network: address.network
+            )
         )
         return Kit(
             address: address,
@@ -272,33 +248,9 @@ public extension Kit {
             provider: ThorNodeSendPreflightProvider(
                 node: ThorNodeSendClient(transport: liveClient),
                 leaseProvider: { try await pool.lease(excludingFamilyIds: []) },
-                capabilities: SendEndpointRegistry.capabilities(chain: address.network.chain).map { capability in
-                    SendFamilyCapability(
-                        familyID: capability.familyID,
-                        manifestRevision: capability.manifestRevision,
-                        routes: capability.routes.map { route in
-                            SendManifestRoute(
-                                record: route.record,
-                                route: route.route,
-                                path: route.path,
-                                requestEncoding: route.requestEncoding,
-                                decoder: route.decoder,
-                                proofMode: route.proofMode,
-                                schemaRevision: route.schemaRevision,
-                                supportedNodeRevision: route.supportedNodeRevision,
-                                historicalHeightParameter: route.historicalHeightParameter,
-                                queryKey: route.queryKey,
-                                queryParameterName: route.queryParameterName,
-                                queryParameterValue: route.queryParameterValue,
-                                capabilityStatus: .pass
-                            )
-                        }
-                    )
-                },
                 network: address.network,
                 runtime: transactionSender
-            ),
-            network: address.network
+            )
         )
         return Kit(
             address: address,

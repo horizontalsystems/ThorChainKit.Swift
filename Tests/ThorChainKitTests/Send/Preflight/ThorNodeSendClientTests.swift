@@ -43,17 +43,6 @@ final class ThorNodeSendClientTests: XCTestCase {
         XCTAssertEqual(components?.queryItems?.first(where: { $0.name == "data" })?.value, "0x0102")
     }
 
-    func testEveryFamilyRouteRejectsMissingAndMismatchedContractFields() throws {
-        for family in try NativeRuneEndpointRegistry.families() {
-            let routes = NativeRuneEndpointRegistry.capabilities().first { $0.familyID == family.id }!.routes
-            for route in routes {
-                for mutation in RouteMutation.allCases {
-                    XCTAssertFalse(NativeRuneEndpointRegistry.matches(mutated(route, mutation), family: family), "\(family.id)/\(route.route)/\(mutation) must fail closed")
-                }
-            }
-        }
-    }
-
     func testAccountNotFoundAcceptsOnlyTheThreeEmptyValueEncodings() async throws {
         for value in [
             "",
@@ -67,10 +56,10 @@ final class ThorNodeSendClientTests: XCTestCase {
         }
         for codespace in ["", "baseapp"] {
             let response = "{\"jsonrpc\":\"2.0\",\"id\":-1,\"result\":{\"response\":{\"code\":22,\"codespace\":\"" + codespace + "\",\"height\":\"42\"}}}"
-            await assertProviderFailure(ThorNodeSendClient(transport: ScriptedSendTransport(data: Data(response.utf8), headers: ["Content-Type": "application/json"])), route: recipientRoute())
+            try await assertProviderFailure(ThorNodeSendClient(transport: ScriptedSendTransport(data: Data(response.utf8), headers: ["Content-Type": "application/json"])), route: recipientRoute())
         }
         let duplicate = Data(#"{"jsonrpc":"2.0","id":1,"result":{"response":{"code":22,"codespace":"sdk","height":"42","value":"","value":""}}}"#.utf8)
-        await assertProviderFailure(ThorNodeSendClient(transport: ScriptedSendTransport(data: duplicate, headers: ["Content-Type": "application/json"])), route: recipientRoute())
+        try await assertProviderFailure(ThorNodeSendClient(transport: ScriptedSendTransport(data: duplicate, headers: ["Content-Type": "application/json"])), route: recipientRoute())
     }
 
     func testBodyHeightProofUsesAuthoritativeBodyHeight() async throws {
@@ -139,7 +128,7 @@ final class ThorNodeSendClientTests: XCTestCase {
     }
 
     func testRequestEncodingAndCanonicalCometHeightArePinned() async throws {
-        let mismatchRoute = SendManifestRoute(record: route(.bodyHeight).record, route: "account", path: "/fixture", requestEncoding: .protobufABCI, proofMode: .bodyHeight, schemaRevision: "s2-02-v1", capabilityStatus: .pass)
+        let mismatchRoute = SendManifestRoute(record: route(.bodyHeight).record, route: "account", path: "/fixture", requestEncoding: .protobufABCI, proofMode: .bodyHeight, schemaRevision: "s2-02-v1")
         let transport = ScriptedSendTransport(data: Data(#"{"evaluated_height":42,"value":"AA=="}"#.utf8), headers: ["Content-Type": "application/json"])
         do {
             _ = try await ThorNodeSendClient(transport: transport).read(route: mismatchRoute, using: lease(), height: 42)
@@ -176,56 +165,20 @@ final class ThorNodeSendClientTests: XCTestCase {
 
     private func route(_ proof: HeightProofMode, path: String = "/fixture") -> SendManifestRoute {
         SendManifestRoute(
-            record: SendManifestRecord(familyID: "rorcual-mainnet", role: proof == .cometABCI ? .rpc : .rest, scheme: "https", host: proof == .cometABCI ? "rpc-thorchain.rorcual.xyz" : "api-thorchain.rorcual.xyz", port: 443, path: "/"),
+            record: SendManifestRecord(familyID: "Rorcual", role: proof == .cometABCI ? .rpc : .rest, scheme: "https", host: proof == .cometABCI ? "rpc-thorchain.rorcual.xyz" : "api-thorchain.rorcual.xyz", port: 443, path: "/"),
             route: "account",
             path: path,
             requestEncoding: proof == .cometABCI ? .protobufABCI : .jsonREST,
             proofMode: proof,
-            schemaRevision: "s2-02-v1",
-            capabilityStatus: .pass
+            schemaRevision: "s2-02-v1"
         )
     }
 
     private func lease() throws -> EndpointLease {
-        try EndpointLease(family: EndpointFamilyDescriptor(id: "rorcual-mainnet", cosmosRestURL: URL(string: "https://api-thorchain.rorcual.xyz/")!, cometBftURL: URL(string: "https://rpc-thorchain.rorcual.xyz/")!), verifiedChainId: "thorchain-1", cosmosReadHeight: 42, cometReferenceHeight: 42, poolGeneration: 1)
+        try EndpointLease(family: EndpointFamilyDescriptor(id: "Rorcual", cosmosRestURL: URL(string: "https://api-thorchain.rorcual.xyz/")!, cometBftURL: URL(string: "https://rpc-thorchain.rorcual.xyz/")!), verifiedChainId: "thorchain-1", cosmosReadHeight: 42, cometReferenceHeight: 42, poolGeneration: 1)
     }
 
-    private func recipientRoute() -> SendManifestRoute { NativeRuneEndpointRegistry.capabilities().first!.routes.first { $0.route == "recipient-account" }! }
-
-    private enum RouteMutation: CaseIterable, CustomStringConvertible {
-        case missingPath, wrongProof, heightParameter, wrongRole, wrongRecord, missingSchema
-
-        var description: String {
-            switch self {
-            case .missingPath: return "missing-path"
-            case .wrongProof: return "wrong-proof"
-            case .heightParameter: return "height-parameter"
-            case .wrongRole: return "wrong-role"
-            case .wrongRecord: return "wrong-record"
-            case .missingSchema: return "missing-schema"
-            }
-        }
-    }
-
-    private func mutated(_ route: SendManifestRoute, _ mutation: RouteMutation) -> SendManifestRoute {
-        let proof: HeightProofMode
-        let encoding: SendRequestEncoding
-        switch mutation {
-        case .wrongProof:
-            proof = route.proofMode == .cometABCI ? .restHeader : .cometABCI
-            encoding = proof == .cometABCI ? .protobufABCI : .jsonREST
-        default:
-            proof = route.proofMode
-            encoding = route.requestEncoding
-        }
-        var record = route.record
-        if mutation == .wrongRole {
-            record = SendManifestRecord(familyID: record.familyID, role: record.role == .rest ? .rpc : .rest, scheme: record.scheme, host: record.host, port: record.port, path: record.path)
-        } else if mutation == .wrongRecord {
-            record = SendManifestRecord(familyID: "wrong-family", role: record.role, scheme: record.scheme, host: record.host, port: record.port, path: record.path)
-        }
-        return SendManifestRoute(record: record, route: route.route, path: mutation == .missingPath ? "" : route.path, requestEncoding: encoding, decoder: route.decoder, proofMode: proof, schemaRevision: mutation == .missingSchema ? "" : route.schemaRevision, supportedNodeRevision: route.supportedNodeRevision, historicalHeightParameter: mutation == .heightParameter ? (route.historicalHeightParameter == nil ? "height" : nil) : route.historicalHeightParameter, queryKey: route.queryKey, queryParameterName: route.queryParameterName, queryParameterValue: route.queryParameterValue, capabilityStatus: route.capabilityStatus)
-    }
+    private func recipientRoute() throws -> SendManifestRoute { try SendRoutes.route("recipient-account", family: lease().family, chain: .thor) }
 }
 
 private final class ScriptedSendTransport: ISendTransport, @unchecked Sendable {

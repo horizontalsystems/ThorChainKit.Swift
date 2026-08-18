@@ -81,28 +81,6 @@ final class MayaChainTests: XCTestCase {
         XCTAssertEqual(ThorNodeSendPreflightProvider.nativeFee(constantsFee: 100, mimirValues: ["NATIVETRANSACTIONFEE": 2_500_000_000]), BigUInt(2_500_000_000))
     }
 
-    func testMayaRegistryRoutes() {
-        let capabilities = NativeCacaoEndpointRegistry.capabilities()
-        XCTAssertEqual(capabilities.count, 1)
-        let capability = capabilities[0]
-        XCTAssertEqual(capability.familyID, "mayanode-mainnet")
-        XCTAssertEqual(capability.routes.map(\.route), ["account", "network-fee", "mimir", "recipient-account"])
-
-        let fee = capability.routes.first { $0.route == "network-fee" }
-        XCTAssertEqual(fee?.path, "/mayachain/constants")
-        XCTAssertEqual(fee?.requestEncoding, .jsonREST)
-        // mayanode ignores a historical ?height= query; the pin rides the header
-        XCTAssertNil(fee?.historicalHeightParameter)
-
-        let mimir = capability.routes.first { $0.route == "mimir" }
-        XCTAssertEqual(mimir?.path, "/mayachain/mimir")
-        XCTAssertNil(mimir?.historicalHeightParameter)
-
-        let account = capability.routes.first { $0.route == "account" }
-        XCTAssertEqual(account?.path, "/cosmos.auth.v1beta1.Query/Account")
-        XCTAssertEqual(account?.requestEncoding, .protobufABCI)
-    }
-
     // On Maya the THOR halt keys describe THORChain as an observed external L1; the
     // native pair is keyed by the chain tag. A THOR-halt on Maya must not gate CACAO.
     func testNativeHaltKeysAreChainTagged() {

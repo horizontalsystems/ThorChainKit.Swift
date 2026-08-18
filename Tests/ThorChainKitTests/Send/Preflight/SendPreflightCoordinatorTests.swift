@@ -5,7 +5,7 @@ import XCTest
 final class SendPreflightCoordinatorTests: XCTestCase {
     func testPreparationUsesOneFamilyAndOneCommonHeight() async throws {
         let address = try sendTestAddress()
-        let family = try EndpointFamilyDescriptor(id: "rorcual-mainnet", cosmosRestURL: URL(string: "https://api-thorchain.rorcual.xyz/")!, cometBftURL: URL(string: "https://rpc-thorchain.rorcual.xyz/")!)
+        let family = try EndpointFamilyDescriptor(id: "Rorcual", cosmosRestURL: URL(string: "https://api-thorchain.rorcual.xyz/")!, cometBftURL: URL(string: "https://rpc-thorchain.rorcual.xyz/")!)
         let lease = EndpointLease(family: family, verifiedChainId: "thorchain-1", cosmosReadHeight: 42, cometReferenceHeight: 43, poolGeneration: 1)
         let snapshot = try SendSnapshot.fixture(height: 42)
         let provider = ScriptedSendProvider(leases: [lease], snapshots: [snapshot], runtime: nil)
@@ -16,7 +16,7 @@ final class SendPreflightCoordinatorTests: XCTestCase {
         let prepared = try await coordinator.prepareQuote(request: SendQuoteRequest(sender: address, recipient: sendOtherAddress(), amount: .exact(100)))
 
         XCTAssertEqual(prepared.quote.acceptedHeight, 42)
-        XCTAssertEqual(prepared.snapshot.familyID, "rorcual-mainnet")
+        XCTAssertEqual(prepared.snapshot.familyID, "Rorcual")
         XCTAssertEqual(prepared.quote.preflightContext, prepared.snapshot)
         XCTAssertEqual(prepared.quote.preflightContext?.digest.count, 32)
         XCTAssertEqual(provider.heights, [42])
@@ -24,7 +24,7 @@ final class SendPreflightCoordinatorTests: XCTestCase {
 
     func testPreparationRejectsMemoAboveExactHeightAuthLimit() async throws {
         let address = try sendTestAddress()
-        let family = try EndpointFamilyDescriptor(id: "rorcual-mainnet", cosmosRestURL: URL(string: "https://api-thorchain.rorcual.xyz/")!, cometBftURL: URL(string: "https://rpc-thorchain.rorcual.xyz/")!)
+        let family = try EndpointFamilyDescriptor(id: "Rorcual", cosmosRestURL: URL(string: "https://api-thorchain.rorcual.xyz/")!, cometBftURL: URL(string: "https://rpc-thorchain.rorcual.xyz/")!)
         let lease = EndpointLease(family: family, verifiedChainId: "thorchain-1", cosmosReadHeight: 42, cometReferenceHeight: 43, poolGeneration: 1)
         let snapshot = try changed(SendSnapshot.fixture(height: 42), memoMaximumBytes: 16)
         let provider = ScriptedSendProvider(leases: [lease], snapshots: [snapshot])
@@ -43,7 +43,7 @@ final class SendPreflightCoordinatorTests: XCTestCase {
 
     func testCrossFamilyOrCrossHeightSnapshotFailsClosed() async throws {
         let address = try sendTestAddress()
-        let family = try EndpointFamilyDescriptor(id: "rorcual-mainnet", cosmosRestURL: URL(string: "https://api-thorchain.rorcual.xyz/")!, cometBftURL: URL(string: "https://rpc-thorchain.rorcual.xyz/")!)
+        let family = try EndpointFamilyDescriptor(id: "Rorcual", cosmosRestURL: URL(string: "https://api-thorchain.rorcual.xyz/")!, cometBftURL: URL(string: "https://rpc-thorchain.rorcual.xyz/")!)
         let lease = EndpointLease(family: family, verifiedChainId: "thorchain-1", cosmosReadHeight: 42, cometReferenceHeight: 42, poolGeneration: 1)
         let wrongHeight = try SendSnapshot.fixture(height: 43)
         let runtime = SendRuntime(address: address)
@@ -62,7 +62,7 @@ final class SendPreflightCoordinatorTests: XCTestCase {
 
     func testSnapshotResultMustReturnExplicitFinalRecipientRoute() async throws {
         let sender = try sendTestAddress()
-        let family = try EndpointFamilyDescriptor(id: "rorcual-mainnet", cosmosRestURL: URL(string: "https://api-thorchain.rorcual.xyz/")!, cometBftURL: URL(string: "https://rpc-thorchain.rorcual.xyz/")!)
+        let family = try EndpointFamilyDescriptor(id: "Rorcual", cosmosRestURL: URL(string: "https://api-thorchain.rorcual.xyz/")!, cometBftURL: URL(string: "https://rpc-thorchain.rorcual.xyz/")!)
         let lease = EndpointLease(family: family, verifiedChainId: "thorchain-1", cosmosReadHeight: 42, cometReferenceHeight: 42, poolGeneration: 1)
         for routeID in [nil, "stale-route", "wrong-route"] as [String?] {
             let runtime = SendRuntime(address: sender)
@@ -82,7 +82,7 @@ final class SendPreflightCoordinatorTests: XCTestCase {
 
     func testStoppedGenerationRejectsLatePreflightResult() async throws {
         let sender = try sendTestAddress()
-        let family = try EndpointFamilyDescriptor(id: "rorcual-mainnet", cosmosRestURL: URL(string: "https://api-thorchain.rorcual.xyz/")!, cometBftURL: URL(string: "https://rpc-thorchain.rorcual.xyz/")!)
+        let family = try EndpointFamilyDescriptor(id: "Rorcual", cosmosRestURL: URL(string: "https://api-thorchain.rorcual.xyz/")!, cometBftURL: URL(string: "https://rpc-thorchain.rorcual.xyz/")!)
         let lease = EndpointLease(family: family, verifiedChainId: "thorchain-1", cosmosReadHeight: 42, cometReferenceHeight: 42, poolGeneration: 1)
         let runtime = SendRuntime(address: sender)
         await runtime.activate(generation: 1)
@@ -101,7 +101,7 @@ final class SendPreflightCoordinatorTests: XCTestCase {
     func testRapidRestartCannotReviveOldAttemptAndNewGenerationPrepares() async throws {
         let sender = try sendTestAddress()
         let recipient = try sendOtherAddress()
-        let family = try EndpointFamilyDescriptor(id: "rorcual-mainnet", cosmosRestURL: URL(string: "https://api-thorchain.rorcual.xyz/")!, cometBftURL: URL(string: "https://rpc-thorchain.rorcual.xyz/")!)
+        let family = try EndpointFamilyDescriptor(id: "Rorcual", cosmosRestURL: URL(string: "https://api-thorchain.rorcual.xyz/")!, cometBftURL: URL(string: "https://rpc-thorchain.rorcual.xyz/")!)
         let runtime = SendRuntime(address: sender)
         await runtime.activate(generation: 1)
         let delayed = try DelayedSendProvider(lease: EndpointLease(family: family, verifiedChainId: "thorchain-1", cosmosReadHeight: 42, cometReferenceHeight: 42, poolGeneration: 1), snapshot: SendSnapshot.fixture(height: 42), runtime: runtime)
