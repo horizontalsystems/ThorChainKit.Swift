@@ -5,8 +5,6 @@ enum SendEndpointRole: String, Sendable { case rest, rpc }
 enum SendRequestEncoding: String, Sendable { case jsonREST, protobufABCI }
 enum SendResponseDecoder: String, Sendable { case accountQueryAny, network, mimir, constants }
 
-enum SendCapabilityStatus: String, Sendable, Equatable { case pass, fail, unrun }
-
 struct SendManifestRecord: Equatable, Sendable {
     let familyID: String
     let role: SendEndpointRole
@@ -29,7 +27,6 @@ struct SendManifestRoute: Equatable, Sendable {
     let queryKey: String?
     let queryParameterName: String?
     let queryParameterValue: String?
-    let capabilityStatus: SendCapabilityStatus
 
     init(
         record: SendManifestRecord,
@@ -43,96 +40,100 @@ struct SendManifestRoute: Equatable, Sendable {
         historicalHeightParameter: String? = nil,
         queryKey: String? = nil,
         queryParameterName: String? = nil,
-        queryParameterValue: String? = nil,
-        capabilityStatus: SendCapabilityStatus
+        queryParameterValue: String? = nil
     ) {
         self.record = record; self.route = route; self.path = path; self.requestEncoding = requestEncoding; self.decoder = decoder
         self.proofMode = proofMode; self.schemaRevision = schemaRevision; self.supportedNodeRevision = supportedNodeRevision
         self.historicalHeightParameter = historicalHeightParameter; self.queryKey = queryKey
-        self.queryParameterName = queryParameterName; self.queryParameterValue = queryParameterValue; self.capabilityStatus = capabilityStatus
+        self.queryParameterName = queryParameterName; self.queryParameterValue = queryParameterValue
     }
 }
 
-struct SendFamilyCapability: Equatable, Sendable {
-    let familyID: String
-    let manifestRevision: String
-    let routes: [SendManifestRoute]
-    var status: SendCapabilityStatus {
-        guard routes.count == 4 else { return .unrun }
-        if routes.contains(where: { $0.capabilityStatus == .fail }) { return .fail }
-        return routes.allSatisfy { $0.capabilityStatus == .pass } ? .pass : .unrun
-    }
-
-    var isSendCapable: Bool { status == .pass }
+// Send request shapes per chain. Routes are a property of the chain's node software, not
+// of any particular provider: the app supplies the endpoints (its own hardcoded list, the
+// pool verifies their chain identity), and the kit builds every preflight request from
+// this table. Nothing here validates the app's configuration.
+struct SendRouteTemplate: Equatable, Sendable {
+    let route: String
+    let path: String
+    let requestEncoding: SendRequestEncoding
+    let decoder: SendResponseDecoder
+    let proofMode: HeightProofMode
+    let role: SendEndpointRole
+    let historicalHeightParameter: String?
 }
 
-enum NativeRuneEndpointRegistry {
-    static let familyIDs = ["rorcual-mainnet", "ibs-mainnet", "keplr-mainnet"]
-
-    static func families() throws -> [EndpointFamilyDescriptor] {
-        try [
-            EndpointFamilyDescriptor(id: "rorcual-mainnet", cosmosRestURL: URL(string: "https://api-thorchain.rorcual.xyz/")!, cometBftURL: URL(string: "https://rpc-thorchain.rorcual.xyz/")!),
-            EndpointFamilyDescriptor(id: "ibs-mainnet", cosmosRestURL: URL(string: "https://thorchain.ibs.team/api")!, cometBftURL: URL(string: "https://thorchain.ibs.team/rpc")!),
-            EndpointFamilyDescriptor(id: "keplr-mainnet", cosmosRestURL: URL(string: "https://lcd-thorchain.keplr.app/")!, cometBftURL: URL(string: "https://rpc-thorchain.keplr.app/")!),
-        ]
+enum SendRoutes {
+    static func manifestRevision(chain: Network.Chain) -> String {
+        switch chain {
+        case .thor: return "s2-03-manifest-v3"
+        case .maya: return "maya-manifest-v1"
+        }
     }
 
-    static func records() -> [SendManifestRecord] {
-        [
-            .init(familyID: "rorcual-mainnet", role: .rest, scheme: "https", host: "api-thorchain.rorcual.xyz", port: 443, path: "/"),
-            .init(familyID: "rorcual-mainnet", role: .rpc, scheme: "https", host: "rpc-thorchain.rorcual.xyz", port: 443, path: "/"),
-            .init(familyID: "ibs-mainnet", role: .rest, scheme: "https", host: "thorchain.ibs.team", port: 443, path: "/api"),
-            .init(familyID: "ibs-mainnet", role: .rpc, scheme: "https", host: "thorchain.ibs.team", port: 443, path: "/rpc"),
-            .init(familyID: "keplr-mainnet", role: .rest, scheme: "https", host: "lcd-thorchain.keplr.app", port: 443, path: "/"),
-            .init(familyID: "keplr-mainnet", role: .rpc, scheme: "https", host: "rpc-thorchain.keplr.app", port: 443, path: "/"),
-        ]
+    static func schemaRevision(chain: Network.Chain) -> String {
+        switch chain {
+        case .thor: return "s2-02-v2"
+        case .maya: return "maya-s1-v1"
+        }
     }
 
-    static func capabilities() -> [SendFamilyCapability] {
-        familyIDs.map { familyID in
-            let familyRecords = records().filter { $0.familyID == familyID }
-            let definitions: [(String, String, SendRequestEncoding, SendResponseDecoder, HeightProofMode, SendEndpointRole, String?, String?, String?, String?)] = [
-                ("account", "/cosmos.auth.v1beta1.Query/Account", .protobufABCI, .accountQueryAny, .cometABCI, .rpc, nil, nil, nil, nil),
-                ("network-fee", "/types.Query/Network", .protobufABCI, .network, .cometABCI, .rpc, nil, nil, nil, nil),
+    static func nodeRevision(chain: Network.Chain) -> String {
+        switch chain {
+        case .thor: return "3.19.0..3.19.3"
+        case .maya: return "mayanode-1.132"
+        }
+    }
+
+    static func templates(chain: Network.Chain) -> [SendRouteTemplate] {
+        switch chain {
+        case .thor:
+            return [
+                SendRouteTemplate(route: "account", path: "/cosmos.auth.v1beta1.Query/Account", requestEncoding: .protobufABCI, decoder: .accountQueryAny, proofMode: .cometABCI, role: .rpc, historicalHeightParameter: nil),
+                SendRouteTemplate(route: "network-fee", path: "/types.Query/Network", requestEncoding: .protobufABCI, decoder: .network, proofMode: .cometABCI, role: .rpc, historicalHeightParameter: nil),
                 // The node returns every mimir key in one response; reading four keys
                 // one at a time cost four requests for the same data.
-                ("mimir", "/thorchain/mimir", .jsonREST, .mimir, .restHeader, .rest, "height", nil, nil, nil),
-                ("recipient-account", "/cosmos.auth.v1beta1.Query/Account", .protobufABCI, .accountQueryAny, .cometABCI, .rpc, nil, nil, nil, nil),
+                SendRouteTemplate(route: "mimir", path: "/thorchain/mimir", requestEncoding: .jsonREST, decoder: .mimir, proofMode: .restHeader, role: .rest, historicalHeightParameter: "height"),
+                SendRouteTemplate(route: "recipient-account", path: "/cosmos.auth.v1beta1.Query/Account", requestEncoding: .protobufABCI, decoder: .accountQueryAny, proofMode: .cometABCI, role: .rpc, historicalHeightParameter: nil),
             ]
-            let routes = definitions.map { name, path, encoding, decoder, proofMode, role, historicalHeightParameter, queryKey, queryParameterName, queryParameterValue in
-                let record = familyRecords.first { $0.role == role }!
-                return SendManifestRoute(record: record, route: name, path: path, requestEncoding: encoding, decoder: decoder, proofMode: proofMode, schemaRevision: "s2-02-v2", historicalHeightParameter: historicalHeightParameter, queryKey: queryKey, queryParameterName: queryParameterName, queryParameterValue: queryParameterValue, capabilityStatus: .unrun)
-            }
-            return SendFamilyCapability(familyID: familyID, manifestRevision: "s2-03-manifest-v2", routes: routes)
+        case .maya:
+            // Account reads share the Cosmos ABCI surface with THOR; the fee comes from
+            // REST `constants` because mayanode serves no `/types.Query/Network` (verified
+            // live 2026-08-17), matching thorchain-kit-android. Neither REST route declares
+            // a historical `height` query parameter — mayanode ignores it; height pinning
+            // rides the x-cosmos-block-height header instead.
+            let protocolPath = Network.Chain.maya.protocolPath
+            return [
+                SendRouteTemplate(route: "account", path: "/cosmos.auth.v1beta1.Query/Account", requestEncoding: .protobufABCI, decoder: .accountQueryAny, proofMode: .cometABCI, role: .rpc, historicalHeightParameter: nil),
+                SendRouteTemplate(route: "network-fee", path: "/\(protocolPath)/constants", requestEncoding: .jsonREST, decoder: .constants, proofMode: .restHeader, role: .rest, historicalHeightParameter: nil),
+                SendRouteTemplate(route: "mimir", path: "/\(protocolPath)/mimir", requestEncoding: .jsonREST, decoder: .mimir, proofMode: .restHeader, role: .rest, historicalHeightParameter: nil),
+                SendRouteTemplate(route: "recipient-account", path: "/cosmos.auth.v1beta1.Query/Account", requestEncoding: .protobufABCI, decoder: .accountQueryAny, proofMode: .cometABCI, role: .rpc, historicalHeightParameter: nil),
+            ]
         }
     }
 
-    static func matches(_ route: SendManifestRoute, family: EndpointFamilyDescriptor) -> Bool {
-        guard let expected = capabilities().first(where: { $0.familyID == family.id })?.routes.first(where: { $0.route == route.route }) else { return false }
-        let endpoint = expected.record.role == .rest ? family.cosmosRestURL : family.cometBftURL
-        let record = SendManifestRecord(familyID: family.id, role: expected.record.role, scheme: endpoint.scheme?.lowercased() ?? "", host: endpoint.host?.lowercased() ?? "", port: endpoint.port ?? (endpoint.scheme?.lowercased() == "http" ? 80 : 443), path: endpoint.path.isEmpty ? "/" : endpoint.path)
-        return route.record == record
-            && route.path == expected.path
-            && route.requestEncoding == expected.requestEncoding
-            && route.decoder == expected.decoder
-            && route.proofMode == expected.proofMode
-            && route.schemaRevision == expected.schemaRevision
-            && route.supportedNodeRevision == expected.supportedNodeRevision
-            && route.historicalHeightParameter == expected.historicalHeightParameter
-            && route.queryKey == expected.queryKey
-            && route.queryParameterName == expected.queryParameterName
-            && route.queryParameterValue == expected.queryParameterValue
-    }
-
-    static func validate(_ families: [EndpointFamilyDescriptor]) -> Bool {
-        let actual = families.flatMap { family in
-            [record(family: family, role: .rest, url: family.cosmosRestURL), record(family: family, role: .rpc, url: family.cometBftURL)]
-        }
-        return actual == records()
-    }
-
-    private static func record(family: EndpointFamilyDescriptor, role: SendEndpointRole, url: URL) -> SendManifestRecord {
-        .init(familyID: family.id, role: role, scheme: url.scheme?.lowercased() ?? "", host: url.host?.lowercased() ?? "", port: url.port ?? (url.scheme?.lowercased() == "http" ? 80 : 443), path: url.path.isEmpty ? "/" : url.path)
+    static func route(_ name: String, family: EndpointFamilyDescriptor, chain: Network.Chain) throws -> SendManifestRoute {
+        guard let template = templates(chain: chain).first(where: { $0.route == name }) else { throw SendError.policyUnavailable }
+        let endpoint = template.role == .rest ? family.cosmosRestURL : family.cometBftURL
+        let record = SendManifestRecord(
+            familyID: family.id,
+            role: template.role,
+            scheme: endpoint.scheme?.lowercased() ?? "",
+            host: endpoint.host?.lowercased() ?? "",
+            port: endpoint.port ?? (endpoint.scheme?.lowercased() == "http" ? 80 : 443),
+            path: endpoint.path.isEmpty ? "/" : endpoint.path
+        )
+        return SendManifestRoute(
+            record: record,
+            route: template.route,
+            path: template.path,
+            requestEncoding: template.requestEncoding,
+            decoder: template.decoder,
+            proofMode: template.proofMode,
+            schemaRevision: schemaRevision(chain: chain),
+            supportedNodeRevision: nodeRevision(chain: chain),
+            historicalHeightParameter: template.historicalHeightParameter
+        )
     }
 }
 
@@ -161,91 +162,6 @@ enum HeightProofValidator {
         case .restHeader: return .restHeader(expected: expected, actual: headerHeight)
         case .cometABCI: return .cometABCI(expected: expected, actual: responseHeight)
         case .bodyHeight: return .body(expected: expected, actual: bodyHeight)
-        }
-    }
-}
-
-// Maya Protocol (mayanode). Account reads share the Cosmos ABCI surface with THOR; the
-// fee comes from REST `constants` because mayanode serves no `/types.Query/Network`
-// (verified live 2026-08-17: unknown query path), matching thorchain-kit-android's
-// fetchNativeTxFee. Neither REST route declares a historical `height` query parameter —
-// mayanode ignores it; height pinning rides the x-cosmos-block-height header instead.
-enum NativeCacaoEndpointRegistry {
-    static let familyIDs = ["mayanode-mainnet"]
-    static let manifestRevision = "maya-manifest-v1"
-    static let schemaRevision = "maya-s1-v1"
-    static let nodeRevision = "mayanode-1.132"
-
-    static func families() throws -> [EndpointFamilyDescriptor] {
-        try [
-            EndpointFamilyDescriptor(id: "mayanode-mainnet", cosmosRestURL: URL(string: "https://mayanode.mayachain.info")!, cometBftURL: URL(string: "https://tendermint.mayachain.info")!),
-        ]
-    }
-
-    static func records() -> [SendManifestRecord] {
-        [
-            .init(familyID: "mayanode-mainnet", role: .rest, scheme: "https", host: "mayanode.mayachain.info", port: 443, path: "/"),
-            .init(familyID: "mayanode-mainnet", role: .rpc, scheme: "https", host: "tendermint.mayachain.info", port: 443, path: "/"),
-        ]
-    }
-
-    static func capabilities() -> [SendFamilyCapability] {
-        familyIDs.map { familyID in
-            let familyRecords = records().filter { $0.familyID == familyID }
-            let protocolPath = Network.Chain.maya.protocolPath
-            let definitions: [(String, String, SendRequestEncoding, SendResponseDecoder, HeightProofMode, SendEndpointRole)] = [
-                ("account", "/cosmos.auth.v1beta1.Query/Account", .protobufABCI, .accountQueryAny, .cometABCI, .rpc),
-                ("network-fee", "/\(protocolPath)/constants", .jsonREST, .constants, .restHeader, .rest),
-                ("mimir", "/\(protocolPath)/mimir", .jsonREST, .mimir, .restHeader, .rest),
-                ("recipient-account", "/cosmos.auth.v1beta1.Query/Account", .protobufABCI, .accountQueryAny, .cometABCI, .rpc),
-            ]
-            let routes = definitions.map { name, path, encoding, decoder, proofMode, role in
-                let record = familyRecords.first { $0.role == role }!
-                return SendManifestRoute(record: record, route: name, path: path, requestEncoding: encoding, decoder: decoder, proofMode: proofMode, schemaRevision: schemaRevision, supportedNodeRevision: nodeRevision, capabilityStatus: .unrun)
-            }
-            return SendFamilyCapability(familyID: familyID, manifestRevision: manifestRevision, routes: routes)
-        }
-    }
-
-    static func matches(_ route: SendManifestRoute, family: EndpointFamilyDescriptor) -> Bool {
-        guard let expected = capabilities().first(where: { $0.familyID == family.id })?.routes.first(where: { $0.route == route.route }) else { return false }
-        let endpoint = expected.record.role == .rest ? family.cosmosRestURL : family.cometBftURL
-        let record = SendManifestRecord(familyID: family.id, role: expected.record.role, scheme: endpoint.scheme?.lowercased() ?? "", host: endpoint.host?.lowercased() ?? "", port: endpoint.port ?? (endpoint.scheme?.lowercased() == "http" ? 80 : 443), path: endpoint.path.isEmpty ? "/" : endpoint.path)
-        return route.record == record
-            && route.path == expected.path
-            && route.requestEncoding == expected.requestEncoding
-            && route.decoder == expected.decoder
-            && route.proofMode == expected.proofMode
-            && route.schemaRevision == expected.schemaRevision
-            && route.supportedNodeRevision == expected.supportedNodeRevision
-            && route.historicalHeightParameter == expected.historicalHeightParameter
-            && route.queryKey == expected.queryKey
-            && route.queryParameterName == expected.queryParameterName
-            && route.queryParameterValue == expected.queryParameterValue
-    }
-}
-
-// THORChain and Maya carry separate pinned registries; every consumer dispatches on the
-// kit's chain so a Maya lease can never be validated against THOR routes or vice versa.
-enum SendEndpointRegistry {
-    static func familyIDs(chain: Network.Chain) -> [String] {
-        switch chain {
-        case .thor: return NativeRuneEndpointRegistry.familyIDs
-        case .maya: return NativeCacaoEndpointRegistry.familyIDs
-        }
-    }
-
-    static func capabilities(chain: Network.Chain) -> [SendFamilyCapability] {
-        switch chain {
-        case .thor: return NativeRuneEndpointRegistry.capabilities()
-        case .maya: return NativeCacaoEndpointRegistry.capabilities()
-        }
-    }
-
-    static func matches(_ route: SendManifestRoute, family: EndpointFamilyDescriptor, chain: Network.Chain) -> Bool {
-        switch chain {
-        case .thor: return NativeRuneEndpointRegistry.matches(route, family: family)
-        case .maya: return NativeCacaoEndpointRegistry.matches(route, family: family)
         }
     }
 }

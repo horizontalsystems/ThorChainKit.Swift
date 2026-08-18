@@ -61,7 +61,7 @@ final class KitCompositionTests: XCTestCase {
 
     func testFixtureFactoryUsesRegisteredFamilyAndInjectedTransportAfterStart() async throws {
         let address = try sendTestAddress()
-        let family = try XCTUnwrap(NativeRuneEndpointRegistry.families().first { $0.id == "rorcual-mainnet" })
+        let family = try EndpointFamilyDescriptor(id: "Rorcual", cosmosRestURL: URL(string: "https://api-thorchain.rorcual.xyz/")!, cometBftURL: URL(string: "https://rpc-thorchain.rorcual.xyz/")!)
         let endpoints = try EndpointConfiguration(families: [family])
         let transport = CompositionTransport()
         let databaseURL = FileManager.default.temporaryDirectory
@@ -98,7 +98,7 @@ final class KitCompositionTests: XCTestCase {
             compressedPublicKey: signer.compressedPublicKey,
             network: .mainnet
         )
-        let family = try XCTUnwrap(NativeRuneEndpointRegistry.families().first { $0.id == "rorcual-mainnet" })
+        let family = try EndpointFamilyDescriptor(id: "Rorcual", cosmosRestURL: URL(string: "https://api-thorchain.rorcual.xyz/")!, cometBftURL: URL(string: "https://rpc-thorchain.rorcual.xyz/")!)
         let endpoints = try EndpointConfiguration(families: [family])
         let transport = FixtureBroadcastTransport()
         let databaseURL = FileManager.default.temporaryDirectory

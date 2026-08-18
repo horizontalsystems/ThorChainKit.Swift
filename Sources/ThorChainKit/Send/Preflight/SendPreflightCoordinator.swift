@@ -77,11 +77,10 @@ final class SendPreflightCoordinator: @unchecked Sendable {
     private let runtime: TransactionSender
     private let provider: any ISendPreflightProvider
     private let policy: SendPolicy
-    private let network: Network
     private let runner: EndpointOperationRunner
 
-    init(runtime: TransactionSender, provider: any ISendPreflightProvider, policy: SendPolicy? = nil, network: Network = .mainnet) {
-        self.runtime = runtime; self.provider = provider; self.policy = policy ?? .standard; self.network = network
+    init(runtime: TransactionSender, provider: any ISendPreflightProvider, policy: SendPolicy? = nil) {
+        self.runtime = runtime; self.provider = provider; self.policy = policy ?? .standard
         runner = EndpointOperationRunner()
     }
 
@@ -101,7 +100,7 @@ final class SendPreflightCoordinator: @unchecked Sendable {
             let lease = try await runner.run(lifecycle: { !self.runtime.isAdmissionActive(generation: generation) }) { try await self.provider.lease(minimumHeight: nil) }
             attempt = try await runtime.bindFamily(attempt, familyID: lease.family.id)
             try await runtime.guardPreflight(attempt, familyID: lease.family.id)
-            guard SendEndpointRegistry.familyIDs(chain: network.chain).contains(lease.family.id), lease.commonReadHeight > 0 else { throw SendError.policyUnavailable }
+            guard lease.commonReadHeight > 0 else { throw SendError.policyUnavailable }
             let snapshotAttempt = attempt
             let result = try await runner.run(familyID: lease.family.id, lifecycle: { !self.runtime.isAdmissionActive(generation: generation) }) {
                 try await self.provider.snapshotResult(request: request, lease: lease, height: lease.commonReadHeight, policy: self.policy, attempt: snapshotAttempt)
@@ -136,24 +135,17 @@ final class SendPreflightCoordinator: @unchecked Sendable {
 struct ThorNodeSendPreflightProvider: ISendPreflightProvider {
     let node: ThorNodeSendClient
     let leaseProvider: @Sendable () async throws -> EndpointLease
-    let capabilities: [SendFamilyCapability]
     let network: Network
     let runtime: TransactionSender?
     let runner: EndpointOperationRunner
 
-    // capabilities defaults from the network so the two can never disagree; passing an
-    // explicit set (the factory pins statuses to .pass) is the caller's responsibility.
-    init(node: ThorNodeSendClient, leaseProvider: @escaping @Sendable () async throws -> EndpointLease, capabilities: [SendFamilyCapability]? = nil, network: Network = .mainnet, runtime: TransactionSender? = nil, operationDeadline: TimeInterval? = nil) {
-        self.node = node; self.leaseProvider = leaseProvider; self.capabilities = capabilities ?? SendEndpointRegistry.capabilities(chain: network.chain); self.network = network; self.runtime = runtime; runner = EndpointOperationRunner(deadline: operationDeadline)
+    init(node: ThorNodeSendClient, leaseProvider: @escaping @Sendable () async throws -> EndpointLease, network: Network = .mainnet, runtime: TransactionSender? = nil, operationDeadline: TimeInterval? = nil) {
+        self.node = node; self.leaseProvider = leaseProvider; self.network = network; self.runtime = runtime; runner = EndpointOperationRunner(deadline: operationDeadline)
     }
 
     func lease(minimumHeight: Int64?) async throws -> EndpointLease {
         let lease = try await leaseProvider()
-        guard SendEndpointRegistry.familyIDs(chain: network.chain).contains(lease.family.id), minimumHeight.map({ lease.commonReadHeight >= $0 }) ?? true else { throw SendError.policyUnavailable }
-        guard let capability = capabilities.first(where: { $0.familyID == lease.family.id }),
-              capability.manifestRevision == SendEndpointRegistry.capabilities(chain: network.chain).first(where: { $0.familyID == lease.family.id })?.manifestRevision,
-              capability.isSendCapable,
-              capability.routes.allSatisfy({ SendEndpointRegistry.matches($0, family: lease.family, chain: network.chain) }) else { throw SendError.policyUnavailable }
+        guard minimumHeight.map({ lease.commonReadHeight >= $0 }) ?? true else { throw SendError.policyUnavailable }
         return lease
     }
 
@@ -161,9 +153,7 @@ struct ThorNodeSendPreflightProvider: ISendPreflightProvider {
     // display value, not the fee a quote is signed against.
     func estimateFee() async throws -> BigUInt {
         let lease = try await lease(minimumHeight: nil)
-        guard let capability = capabilities.first(where: { $0.familyID == lease.family.id }),
-              let route = capability.routes.first(where: { $0.route == "network-fee" })
-        else { throw SendError.policyUnavailable }
+        let route = try SendRoutes.route("network-fee", family: lease.family, chain: network.chain)
         let height = lease.commonReadHeight
         switch network.chain {
         case .thor:
@@ -177,7 +167,7 @@ struct ThorNodeSendPreflightProvider: ISendPreflightProvider {
             // non-negative mimir NATIVETRANSACTIONFEE overrides it (GetConfigInt64).
             let response = try await node.read(route: route, using: lease, height: height, requestData: Data())
             let constantsFee = try SendRouteDecoders.constantsNativeFee(response.value)
-            guard let mimirRoute = capability.routes.first(where: { $0.route == "mimir" }) else { throw SendError.policyUnavailable }
+            let mimirRoute = try SendRoutes.route("mimir", family: lease.family, chain: network.chain)
             let mimirValues = try SendRouteDecoders.mimir(await node.read(route: mimirRoute, using: lease, height: height, requestData: Data()).value)
             return Self.nativeFee(constantsFee: constantsFee, mimirValues: mimirValues)
         }
@@ -197,11 +187,10 @@ struct ThorNodeSendPreflightProvider: ISendPreflightProvider {
 
     func snapshotResult(request: SendQuoteRequest, lease: EndpointLease, height: Int64, policy: SendPolicy, attempt: SendPreflightAttempt) async throws -> SendSnapshotResult {
         guard height == lease.commonReadHeight else { throw SendError.heightUnproven }
-        let capability = capabilities.first(where: { $0.familyID == lease.family.id })
-        let routes = capability?.routes ?? []
+        let chain = network.chain
+        let family = lease.family
         let route: @Sendable (String) throws -> SendManifestRoute = { name in
-            guard let route = routes.first(where: { $0.route == name }) else { throw SendError.policyUnavailable }
-            return route
+            try SendRoutes.route(name, family: family, chain: chain)
         }
         var routeAttempt = attempt
         func read(_ name: String, address: String? = nil, requestData: Data = Data(), queryParameterValue: String? = nil) async throws -> SendRouteResponse {
@@ -264,7 +253,7 @@ struct ThorNodeSendPreflightProvider: ISendPreflightProvider {
         }
         let amount = try policy.resolve(amount: request.amount)
         try policy.validate(memo: request.memo)
-        return try SendSnapshotResult(snapshot: SendSnapshot(familyID: lease.family.id, chainID: lease.verifiedChainId, height: height, sender: request.sender.raw, recipient: request.recipient?.raw ?? "", accountNumber: accountValue.accountNumber, sequence: accountValue.sequence, amount: amount, nativeFee: nativeFee, denom: request.denom, mimir: mimirSnapshot, memoMaximumBytes: memoMaximum, recipientClassification: classification, policyRevision: forbidden.revision, accountPublicKey: accountValue.publicKeyTypeURL, accountPublicKeyData: accountValue.publicKeyData, restEndpoint: lease.family.cosmosRestURL.absoluteString, rpcEndpoint: lease.family.cometBftURL.absoluteString, manifestRevision: capability?.manifestRevision ?? ""), attempt: routeAttempt)
+        return try SendSnapshotResult(snapshot: SendSnapshot(familyID: lease.family.id, chainID: lease.verifiedChainId, height: height, sender: request.sender.raw, recipient: request.recipient?.raw ?? "", accountNumber: accountValue.accountNumber, sequence: accountValue.sequence, amount: amount, nativeFee: nativeFee, denom: request.denom, mimir: mimirSnapshot, memoMaximumBytes: memoMaximum, recipientClassification: classification, policyRevision: forbidden.revision, accountPublicKey: accountValue.publicKeyTypeURL, accountPublicKeyData: accountValue.publicKeyData, restEndpoint: lease.family.cosmosRestURL.absoluteString, rpcEndpoint: lease.family.cometBftURL.absoluteString, manifestRevision: SendRoutes.manifestRevision(chain: chain)), attempt: routeAttempt)
     }
 
     // The map omits keys that were never set; the per-key route reported those as -1.

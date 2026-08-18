@@ -12,7 +12,7 @@ final class SendCoordinatorTests: XCTestCase {
         let recipient = try sendTestAddress()
         let publicKey = Data(hex: "02a9ac9f7a97da41559e1684011b6a9b0b9c0445297d5f51dea0897fd4a39c31c7")
         let snapshot = try SendSnapshot(
-            familyID: "rorcual-mainnet", chainID: "thorchain-1", height: 12,
+            familyID: "Rorcual", chainID: "thorchain-1", height: 12,
             sender: sender.raw, recipient: recipient.raw, accountNumber: 1, sequence: 2,
             amount: 100, nativeFee: 2,
             mimir: MimirSnapshot(haltChainGlobal: -1, nodePauseChainGlobal: -1, haltNativeChain: -1, solvencyHaltNativeChain: -1),
@@ -37,7 +37,7 @@ final class SendCoordinatorTests: XCTestCase {
         let sender = try sendOtherAddress()
         let publicKey = Data(hex: "02a9ac9f7a97da41559e1684011b6a9b0b9c0445297d5f51dea0897fd4a39c31c7")
         let snapshot = try SendSnapshot(
-            familyID: "rorcual-mainnet", chainID: "thorchain-1", height: 12,
+            familyID: "Rorcual", chainID: "thorchain-1", height: 12,
             sender: sender.raw, recipient: "", accountNumber: 1, sequence: 2,
             amount: 100, nativeFee: 2,
             mimir: MimirSnapshot(haltChainGlobal: -1, nodePauseChainGlobal: -1, haltNativeChain: -1, solvencyHaltNativeChain: -1),
@@ -69,7 +69,7 @@ final class SendCoordinatorTests: XCTestCase {
         let publicKey = Data(hex: "02a9ac9f7a97da41559e1684011b6a9b0b9c0445297d5f51dea0897fd4a39c31c7")
         let tcy = try Denom(rawValue: "tcy")
         let snapshot = try SendSnapshot(
-            familyID: "rorcual-mainnet", chainID: "thorchain-1", height: 12,
+            familyID: "Rorcual", chainID: "thorchain-1", height: 12,
             sender: sender.raw, recipient: recipient.raw, accountNumber: 1, sequence: 2,
             amount: 100, nativeFee: 2, denom: tcy,
             mimir: MimirSnapshot(haltChainGlobal: -1, nodePauseChainGlobal: -1, haltNativeChain: -1, solvencyHaltNativeChain: -1),
@@ -100,7 +100,7 @@ final class SendCoordinatorTests: XCTestCase {
         let recipient = try sendTestAddress()
         let publicKey = Data(hex: "02a9ac9f7a97da41559e1684011b6a9b0b9c0445297d5f51dea0897fd4a39c31c7")
         let snapshot = try SendSnapshot(
-            familyID: "rorcual-mainnet", chainID: "thorchain-1", height: 12,
+            familyID: "Rorcual", chainID: "thorchain-1", height: 12,
             sender: sender.raw, recipient: recipient.raw, accountNumber: 1, sequence: 2,
             amount: 100, nativeFee: 2,
             mimir: MimirSnapshot(haltChainGlobal: -1, nodePauseChainGlobal: -1, haltNativeChain: -1, solvencyHaltNativeChain: -1),
@@ -181,7 +181,7 @@ final class SendCoordinatorTests: XCTestCase {
         let recipient = try sendTestAddress()
         let publicKey = Data(hex: "02a9ac9f7a97da41559e1684011b6a9b0b9c0445297d5f51dea0897fd4a39c31c7")
         let snapshot = try SendSnapshot(
-            familyID: "rorcual-mainnet", chainID: "thorchain-1", height: 12,
+            familyID: "Rorcual", chainID: "thorchain-1", height: 12,
             sender: sender.raw, recipient: recipient.raw, accountNumber: 1, sequence: 2,
             amount: 100, nativeFee: 2,
             mimir: MimirSnapshot(haltChainGlobal: -1, nodePauseChainGlobal: -1, haltNativeChain: -1, solvencyHaltNativeChain: -1),
@@ -211,7 +211,7 @@ final class SendCoordinatorTests: XCTestCase {
         let recipient = try sendTestAddress()
         let publicKey = Data(hex: "02a9ac9f7a97da41559e1684011b6a9b0b9c0445297d5f51dea0897fd4a39c31c7")
         let snapshot = try SendSnapshot(
-            familyID: "rorcual-mainnet", chainID: "thorchain-1", height: 12,
+            familyID: "Rorcual", chainID: "thorchain-1", height: 12,
             sender: sender.raw, recipient: recipient.raw, accountNumber: 1, sequence: 2,
             amount: 100, nativeFee: 2,
             mimir: MimirSnapshot(haltChainGlobal: -1, nodePauseChainGlobal: -1, haltNativeChain: -1, solvencyHaltNativeChain: -1),
@@ -241,7 +241,7 @@ final class SendCoordinatorTests: XCTestCase {
         let recipient = try sendTestAddress()
         let publicKey = Data(hex: "02a9ac9f7a97da41559e1684011b6a9b0b9c0445297d5f51dea0897fd4a39c31c7")
         let snapshot = try SendSnapshot(
-            familyID: "rorcual-mainnet", chainID: "thorchain-1", height: 12,
+            familyID: "Rorcual", chainID: "thorchain-1", height: 12,
             sender: sender.raw, recipient: recipient.raw, accountNumber: 1, sequence: 2,
             amount: 100, nativeFee: 2,
             mimir: MimirSnapshot(haltChainGlobal: -1, nodePauseChainGlobal: -1, haltNativeChain: -1, solvencyHaltNativeChain: -1),
@@ -306,7 +306,7 @@ final class SendCoordinatorTests: XCTestCase {
         let recipient = try sendTestAddress()
         let publicKey = Data(hex: "02a9ac9f7a97da41559e1684011b6a9b0b9c0445297d5f51dea0897fd4a39c31c7")
         let snapshot = try SendSnapshot(
-            familyID: "rorcual-mainnet",
+            familyID: "Rorcual",
             chainID: "thorchain-1",
             height: 12,
             sender: sender.raw,
@@ -352,7 +352,7 @@ final class SendCoordinatorTests: XCTestCase {
         let recipient = try sendTestAddress()
         let publicKey = Data(hex: "02a9ac9f7a97da41559e1684011b6a9b0b9c0445297d5f51dea0897fd4a39c31c7")
         let snapshot = try SendSnapshot(
-            familyID: "rorcual-mainnet", chainID: "thorchain-1", height: 12,
+            familyID: "Rorcual", chainID: "thorchain-1", height: 12,
             sender: sender.raw, recipient: recipient.raw, accountNumber: 1, sequence: 2,
             amount: 100, nativeFee: 2,
             mimir: MimirSnapshot(haltChainGlobal: -1, nodePauseChainGlobal: -1, haltNativeChain: -1, solvencyHaltNativeChain: -1),
