@@ -1,6 +1,8 @@
 import Foundation
 
 struct LiveThorNodeClient: INodeApiProvider {
+    private static let heightHeader = "Grpc-Metadata-X-Cosmos-Block-Height"
+
     private let transport: any IHttpTransport
     private let requestTimeout: TimeInterval
     private let clientId: String?
@@ -30,7 +32,11 @@ struct LiveThorNodeClient: INodeApiProvider {
         let (data, response) = try await send(request)
         guard (200 ..< 300).contains(response.statusCode) else {
             if response.statusCode == 404 {
-                try requireHeight(response, expected: lease.cosmosReadHeight)
+                // Mayanode leaves the height header off a 404; an exact absence body is then enough, since the
+                // balances read at the same pinned height must also be empty (absentAccountWithBalances)
+                if response.value(forHTTPHeaderField: Self.heightHeader) != nil {
+                    try requireHeight(response, expected: lease.cosmosReadHeight)
+                }
                 if isExactAbsence(data, address: address) {
                     return nil
                 }
@@ -139,7 +145,7 @@ struct LiveThorNodeClient: INodeApiProvider {
     }
 
     private func requireHeight(_ response: HTTPURLResponse, expected: Int64) throws {
-        let actual = response.value(forHTTPHeaderField: "Grpc-Metadata-X-Cosmos-Block-Height")
+        let actual = response.value(forHTTPHeaderField: Self.heightHeader)
         guard actual.flatMap(Int64.init) == expected else {
             throw ThorNodeReadError.heightMismatch(expected: expected, actual: actual)
         }

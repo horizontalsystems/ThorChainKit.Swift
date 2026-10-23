@@ -113,11 +113,33 @@ final class LiveThorNodeClientS1_04Tests: XCTestCase {
             ).account(address: requestedAddress, using: endpointLease())
         }
 
-        for height in [nil, "not-a-height"] {
+        let invalidHeight = S1_04HTTPTransport(responses: [
+            .status(404, body: #"{"code":5,"message":"\#(shortMessage)","details":[]}"#, height: "not-a-height"),
+        ])
+        await XCTAssertThrowsThorNodeError(.heightMismatch(expected: 12_345_678, actual: "not-a-height")) {
+            try await LiveThorNodeClient(
+                transport: invalidHeight,
+                maximumBalancePageCount: 4
+            ).account(address: requestedAddress, using: endpointLease())
+        }
+
+        // Mayanode answers an unseen account with no height header at all
+        for body in acceptedBodies {
             let missingHeight = S1_04HTTPTransport(responses: [
-                .status(404, body: #"{"code":5,"message":"\#(shortMessage)","details":[]}"#, height: height),
+                .status(404, body: body, height: nil),
             ])
-            await XCTAssertThrowsThorNodeError(.heightMismatch(expected: 12_345_678, actual: height)) {
+            let account = try await LiveThorNodeClient(
+                transport: missingHeight,
+                maximumBalancePageCount: 4
+            ).account(address: requestedAddress, using: endpointLease())
+            XCTAssertNil(account)
+        }
+
+        for body in rejectedBodies {
+            let missingHeight = S1_04HTTPTransport(responses: [
+                .status(404, body: body, height: nil),
+            ])
+            await XCTAssertThrowsThorNodeError(.httpStatus(operation: .account, code: 404, retryAfterSeconds: nil)) {
                 try await LiveThorNodeClient(
                     transport: missingHeight,
                     maximumBalancePageCount: 4
